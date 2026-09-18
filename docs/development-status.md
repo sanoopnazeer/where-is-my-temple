@@ -89,12 +89,115 @@
   visually confirm the embed in a browser once a temple page exists to
   mount `TempleMap` in.
 
+- Public Temple Detail Page implemented (2026-09-18), route
+  `src/app/(frontend)/temples/[slug]/page.tsx`. Server-rendered (no client
+  data fetching); resolves the Temple by slug via the Local API with
+  `overrideAccess: false` and no `user`, so it enforces the exact same
+  `publishedOrAdmin` rule the public REST API uses — unpublished/draft/
+  review/archived Temples and unknown slugs both 404 (`notFound()`), with no
+  separate access-control logic duplicated in the route. `generateMetadata`
+  and the page share one DB call per request via `getTemple.ts` (wrapped in
+  React `cache()`).
+  - Sections implemented, in design order: hero (image + name, with an
+    `?lang=en|ml` locale switch — plain `<Link>`, no client JS), Darshan
+    Timings/Dress Code/Important Rules quick-info cards, History (rendered
+    via `@payloadcms/richtext-lexical/react`'s `RichText`), Daily Rituals,
+    Gallery, Plan Your Visit (`howToReach` + transit points + a "Get
+    Directions" link built from the Temple's own lat/lng — no extra
+    geocoding request) with `TempleMap` alongside it, Contact/social links,
+    and the "List your temple" CTA (non-functional, labeled "Coming Soon"
+    per CLAUDE.md §4).
+  - Components: `src/components/temple/` (`TempleHero`, `TempleQuickInfo`,
+    `TempleHistory`, `TempleDailyRituals`, `TempleGallery`,
+    `TemplePlanYourVisit`, `TempleContact`) and `src/components/layout/`
+    (`SiteHeader`, `SiteFooter`, `ComingSoonCta`) — new, since no site
+    chrome existed yet. Each Temple section hides itself entirely when its
+    underlying field(s) are empty, rather than rendering an empty container.
+  - `next.config.ts`: added `images.remotePatterns` for
+    `media.whereismytemple.com` (the R2 public domain from ADR-007) — needed
+    for `next/image` to optimize Temple hero/gallery images; not a new
+    architectural decision, just wiring already-approved R2 media through
+    Next's image pipeline.
+  - Localization: only the fields listed in `docs/architecture.md` §10 /
+    `docs/content-model.md` §5 switch language (name, historyNarrative,
+    dailyRituals name/description, dressCode, importantRules), via the
+    `locale` param on the Local API call. Static section headings/labels are
+    intentionally kept English-only (not translated) to avoid introducing
+    unreviewed Malayalam UI copy beyond the approved localized-fields list.
+  - Verified end-to-end against the local dev server with temporary,
+    clearly-labeled TEST content (created and fully deleted after
+    verification — see below): published Temple renders (200); unpublished
+    (draft) Temple 404s; invalid slug 404s; `?lang=ml` renders only
+    Malayalam content (zero English strings present) and `?lang=en`/default
+    renders only English; hero/gallery images load through `next/image`
+    from the real R2 URL; `TempleMap` renders with valid coordinates and
+    with the real embed key already present in local `.env`; a Temple with
+    only the required fields (no hero/gallery/rituals/darshan/dress
+    code/rules/contact) renders with every optional section cleanly absent
+    (no empty cards/containers) and the map still renders since coordinates
+    are always required on Temple.
+  - Assumptions made (flagged here per CLAUDE.md §10, not decided
+    unilaterally as new architecture): the route is `/temples/[slug]`
+    (content-model has no explicit URL scheme); header/footer nav items and
+    footer links with no corresponding page yet (About Us, Districts wise
+    Temples, Contact, Temple Directory, Cultural Festivals, Preservation
+    Initiatives, Privacy Policy, Terms of Service) render as inactive labels
+    rather than dead links; the footer newsletter field is presentational
+    only (no subscription backend exists); canonical/OG URLs use a
+    hardcoded `https://whereismytemple.com` constant instead of a new
+    `NEXT_PUBLIC_SITE_URL` env var, since the canonical domain is already a
+    fixed decision and should point at production regardless of which
+    environment renders the page.
+  - Not done in this task (explicitly out of scope): pixel-perfect mobile
+    layout matching `design/mobile/` (a basic CSS-based responsive review
+    was done — grids/flex wrap, no fixed pixel widths beyond `max-width`, no
+    horizontal overflow expected — but not a rendered-browser mobile visual
+    pass); Districts-listing and other public pages; search/filtering; SEO
+    beyond this one page (sitemap/robots.txt); Excel import.
+  - Corrections applied (2026-09-18): the initial pass incorrectly used
+    "Ambalam" (the label literally shown in the design mock) as the site
+    brand in `SiteHeader`/`SiteFooter`; replaced with the correct product
+    name "Where Is My Temple" (`src/components/layout/SiteHeader.tsx`,
+    `SiteFooter.tsx`). Also reworked `TempleGallery` from a generic
+    responsive grid into a desktop mosaic that matches
+    `design/desktop/Temple Page.jpg`'s asymmetric layout — every full group
+    of 4 gallery images renders as one tall left image + two uneven images
+    top-right + one wide image bottom-right (CSS Grid `grid-template-areas`,
+    `TempleGallery.module.css`); any leftover images that don't complete a
+    group of 4 fall back to a plain even grid so no images are ever dropped
+    or invented. Below a 720px viewport the mosaic collapses to a single
+    stacked column (an interim responsive fallback — the real
+    `design/mobile/` arrangement is still a later pass). No schema, routing,
+    access control, localization, map, R2, or SEO code was touched for this
+    correction; re-ran `pnpm lint`, `tsc --noEmit`, `pnpm test:int`,
+    `pnpm build` — all pass.
+
+## CMS test data (currently in the dev database)
+
+Per owner instruction, temporary TEST content created while verifying the
+Temple Detail Page is being **kept** (not deleted) for ongoing frontend
+review — this supersedes the earlier "clean up after verification" pattern
+for this specific record set. All content is clearly prefixed `TEST` and
+uses placeholder contact info (`*@example.invalid` / `+91-00000-00000`) and
+placeholder coordinates, never real temple data:
+
+| Collection | Identifier | Notes |
+|---|---|---|
+| Districts | slug `test-district-temple-page` | published |
+| Temples | slug `test-temple-page-preview` | published; 5 gallery images (4 form the mosaic, 1 is the leftover-grid case), hero image, daily ritual, darshan timing, dress code, important rule, transit point, contact, one social link |
+
+View it at `/temples/test-temple-page-preview` (and `?lang=ml` for the
+Malayalam pass, though this record's Malayalam translations were not
+filled in — English will show via locale fallback). To remove later:
+delete the Temple first (it references the District), then the District,
+via Payload Admin or `DELETE /api/temples/<id>` / `DELETE /api/districts/<id>`.
+
 ## Not Started
 
-- Public website (including the temple detail page `TempleMap` will be
-  mounted in)
+- Public website beyond the Temple detail page (district listing, landing
+  page, about/contact pages)
 - Search
-- SEO
+- Sitewide SEO (sitemap, robots.txt)
 - Excel importer
 - Production deployment
 

@@ -13,6 +13,15 @@ const nextConfig: NextConfig = {
         pathname: '/api/media/file/**',
       },
     ],
+    // Media files are served from Cloudflare R2 via the public domain
+    // configured in ADR-007 (`R2_PUBLIC_URL` / `docs/deployment.md`).
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'media.whereismytemple.com',
+        pathname: '/**',
+      },
+    ],
   },
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {

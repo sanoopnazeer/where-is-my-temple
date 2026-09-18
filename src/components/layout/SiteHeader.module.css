@@ -1,0 +1,40 @@
+.header {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #222;
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.9rem;
+  flex-wrap: wrap;
+}
+
+.nav a {
+  color: #222;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.disabled {
+  color: #999;
+  cursor: default;
+}

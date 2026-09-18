@@ -46,10 +46,53 @@
   work started. Fixed a stale CLAUDE.md pointer (was referencing a
   non-existent spec filename; now points to `docs/content-model.md`).
 
+- R2 media storage integration completed (2026-09-18, ADR-007): the
+  existing `media` collection now stores files in Cloudflare R2 via
+  `@payloadcms/storage-s3` (R2's S3-compatible API, not the Workers
+  R2-binding adapter). Verified end-to-end against the real bucket/domain:
+  upload succeeds, resulting `url` is `https://media.whereismytemple.com/<filename>`,
+  the file is fetchable at that URL, no local disk copy is created,
+  unauthenticated write stays `403`/read stays `200`, and delete actually
+  removes the object from R2 (confirmed after the CDN cache entry
+  expired). See `docs/deployment.md` for details and env vars.
+
+- Google Maps Embed API map component built (2026-09-18, ADR-008):
+  `src/components/TempleMap.tsx` (+ `TempleMap.module.css`). Reusable,
+  presentational — takes `latitude`/`longitude` props (from
+  `Temple.latitude`/`Temple.longitude`, no new fields, no extra DB
+  request), renders a responsive Google Maps Embed "place" iframe
+  (`loading="lazy"`, `allowFullScreen`,
+  `referrerPolicy="strict-origin-when-cross-origin"`, no border,
+  16:9 aspect ratio). Renders nothing if coordinates are missing/invalid;
+  renders a clean placeholder (no error stack, no implementation details)
+  if `NEXT_PUBLIC_GOOGLE_MAPS_EMBED_API_KEY` is unset. No mapping package
+  was added — plain iframe only. **Not yet wired into a page** — there is
+  no temple detail page/route in the frontend yet (see "Not Started"
+  below); this was scoped as component-only per owner confirmation.
+  Required env var: `NEXT_PUBLIC_GOOGLE_MAPS_EMBED_API_KEY` (added to
+  `.env.example`, no real value committed).
+
+  Manual verification performed (via a temporary, uncommitted
+  `@testing-library/react` test, run once and deleted):
+  1. Valid `latitude`/`longitude` + a key → renders an iframe with
+     `src` exactly `https://www.google.com/maps/embed/v1/place?key=<key>&q=<lat>,<lng>&zoom=15`
+     (the marker is inherent to Embed API "place" mode for a single
+     coordinate — nothing further to configure).
+  2. Missing/NaN coordinates → component renders `null` (nothing).
+  3. Missing API key → renders a placeholder `div` (`role="img"`), no
+     `<iframe>`, no error thrown, no implementation detail in the message.
+  4. `tsc --noEmit`, `pnpm lint`, `pnpm generate:types`, `pnpm test:int`,
+     `pnpm build` all pass with the component present.
+  Remaining manual step (owner): obtain a real
+  `NEXT_PUBLIC_GOOGLE_MAPS_EMBED_API_KEY` (restricted to the production
+  domain(s) in Google Cloud Console) and set it in the real environment;
+  visually confirm the embed in a browser once a temple page exists to
+  mount `TempleMap` in.
+
 ## Not Started
 
-- R2 integration
-- Public website
+- Public website (including the temple detail page `TempleMap` will be
+  mounted in)
 - Search
 - SEO
 - Excel importer

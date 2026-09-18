@@ -43,7 +43,11 @@ Database:
 - MongoDB Atlas
 
 Media:
-- Cloudflare R2
+- Cloudflare R2, via Payload's S3-compatible storage adapter
+  (`@payloadcms/storage-s3`), not the Cloudflare Workers R2-binding
+  adapter (`@payloadcms/storage-r2`) — this app runs on a Node.js-compatible
+  managed host, not Workers. See `docs/decisions.md` ADR-007 and
+  `docs/deployment.md`.
 
 DNS / Edge:
 - Cloudflare
@@ -124,6 +128,16 @@ Event state is derived from dates:
 Spotlight/Featured is manually selected by the internal team.
 
 V1 does not include annual recurrence or Malayalam-calendar conversion.
+
+### Media Storage Rule
+
+All application file/media storage must use Payload's official storage-adapter architecture.
+
+For the current deployment architecture:
+- Cloudflare R2 is the media provider.
+- `@payloadcms/storage-s3` is used through R2's S3-compatible API.
+- Do not implement custom upload/delete/storage logic when the Payload adapter can handle it.
+- Do not switch to `@payloadcms/storage-r2` unless the application is intentionally moved to Cloudflare Workers.
 
 ---
 

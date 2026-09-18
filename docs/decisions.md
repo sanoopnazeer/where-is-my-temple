@@ -65,3 +65,71 @@ Implemented:
 Reason: Owner decision (follow-up to ADR-005) plus explicit instruction to
 proceed with implementing Districts, Temples and Events per the approved
 specification.
+
+## ADR-007 — Cloudflare R2 media storage via the S3-compatible adapter
+Date: 2026-09-18
+Decision: Configure the existing `media` collection to store files in
+Cloudflare R2 using Payload's `@payloadcms/storage-s3` adapter (R2's
+S3-compatible API), pinned to `3.89.0` to match the rest of the
+`@payloadcms/*` packages. Explicitly NOT using `@payloadcms/storage-r2`
+(the Cloudflare Workers R2-binding adapter) — this app targets a
+Node.js-compatible managed Next.js host, not the Workers runtime.
+Implemented:
+- `src/payload.config.ts` — added the `s3Storage` plugin: `region: 'auto'`,
+  `endpoint: R2_ENDPOINT`, `forcePathStyle: true`,
+  `disableLocalStorage: true`, credentials from `R2_ACCESS_KEY_ID` /
+  `R2_SECRET_ACCESS_KEY`. Public URLs are generated from `R2_PUBLIC_URL`
+  via a custom `generateFileURL`, so stored URLs are always
+  `https://media.whereismytemple.com/<filename>`, independent of the R2
+  endpoint's own URL shape.
+- `package.json` — added `@payloadcms/storage-s3@3.89.0`.
+- `.env.example` — already had `R2_BUCKET`, `R2_ACCESS_KEY_ID`,
+  `R2_SECRET_ACCESS_KEY`, `R2_ENDPOINT`, `R2_PUBLIC_URL` (no change needed).
+- `Media` collection (`src/collections/Media.ts`) and its ADR-005 access
+  rules (public read, authenticated-admin create/update/delete) are
+  unchanged — the storage backend is transparent to access control and to
+  Payload's built-in upload metadata (filename, mimeType, filesize,
+  width/height).
+Reason: Owner decision, explicit instruction on which adapter to use, and
+the approved architecture's existing "Media: Cloudflare R2" decision
+(`docs/architecture.md` §3). See `docs/deployment.md` for environment
+variables and verification results.
+
+## ADR-008 — Google Maps Embed API for the V1 temple map
+Date: 2026-09-18
+Decision: Use the Google Maps Embed API, via a plain `<iframe>` in "place"
+mode, as the V1 map provider for individual temple location pages.
+Reason:
+- Simplest possible implementation — no client-side mapping library, no
+  JS SDK, no API-key-scoped billing surface beyond the Embed API itself.
+- Reliable, well-established provider; a single-marker "place" embed is
+  exactly what a single temple's location needs for V1.
+- No mapping library required: not Leaflet, Mapbox, MapLibre, the Google
+  Maps JavaScript API, Places API, or Geocoding API — only the Embed API's
+  URL-based iframe interface.
+Implemented:
+- `src/components/TempleMap.tsx` (+ `TempleMap.module.css`) — a
+  presentational, reusable component. Takes `latitude`/`longitude` as
+  props (sourced directly from `Temple.latitude`/`Temple.longitude` —
+  no new coordinate model, no extra database request). Renders nothing if
+  either coordinate is missing or not a finite number. Builds the embed
+  URL as `.../maps/embed/v1/place?key=...&q=<lat>,<lng>&zoom=15` — the
+  coordinates themselves are the location query; no geocoding or places
+  lookup is performed.
+- Reads the key from `NEXT_PUBLIC_GOOGLE_MAPS_EMBED_API_KEY` at render
+  time; never hardcoded. If the key is unset: renders a plain placeholder
+  instead of the iframe — a generic "Map is currently unavailable" message
+  in production, a more descriptive local-dev hint otherwise — so a
+  missing key never crashes the page or exposes implementation details to
+  public users.
+- No page currently exists to mount this component in (`docs/development-status.md`
+  — "Public website" is still Not Started); building the Temple detail
+  page and its "Map + temple marker" section is a separate, later task.
+Scope excluded from V1 (per this decision): routing/directions, address
+geocoding, place search/autocomplete, and any additional map markers
+(nearby temples, transit points, etc.).
+Future: if product requirements later need routing, multi-marker maps, or
+custom map styling, this can be swapped for another provider — the
+`TempleMap` component's props (`latitude`, `longitude`) stay the same
+either way, since it already isolates the map from `Temple`'s stored
+coordinates.

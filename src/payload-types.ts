@@ -69,6 +69,9 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    districts: District;
+    temples: Temple;
+    events: Event;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,6 +81,9 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    districts: DistrictsSelect<false> | DistrictsSelect<true>;
+    temples: TemplesSelect<false> | TemplesSelect<true>;
+    events: EventsSelect<false> | EventsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -86,10 +92,10 @@ export interface Config {
   db: {
     defaultIDType: string;
   };
-  fallbackLocale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'ml') | ('en' | 'ml')[];
   globals: {};
   globalsSelect: {};
-  locale: null;
+  locale: 'en' | 'ml';
   widgets: {
     collections: CollectionsWidget;
   };
@@ -163,6 +169,169 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "districts".
+ */
+export interface District {
+  id: string;
+  name: string;
+  slug: string;
+  publicationStatus: 'draft' | 'review' | 'published' | 'archived';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "temples".
+ */
+export interface Temple {
+  id: string;
+  name: string;
+  slug: string;
+  district: string | District;
+  locality?: string | null;
+  taluk?: string | null;
+  address: string;
+  latitude: number;
+  longitude: number;
+  historyNarrative: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  dailyRituals?:
+    | {
+        name: string;
+        description: string;
+        startTime: string;
+        endTime?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  heroImage?: (string | null) | Media;
+  gallery?: (string | Media)[] | null;
+  howToReach?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  transitPoints?:
+    | {
+        type: string;
+        name: string;
+        distance: number;
+        unit: 'm' | 'km';
+        id?: string | null;
+      }[]
+    | null;
+  darshanTimings?:
+    | {
+        label: string;
+        openTime: string;
+        closeTime: string;
+        id?: string | null;
+      }[]
+    | null;
+  dressCode?: {
+    men?: string | null;
+    women?: string | null;
+  };
+  importantRules?:
+    | {
+        rule: string;
+        id?: string | null;
+      }[]
+    | null;
+  contact?: {
+    phone?: string | null;
+    email?: string | null;
+    whatsapp?: string | null;
+    website?: string | null;
+  };
+  socialLinks?: {
+    instagram?: string | null;
+    facebook?: string | null;
+    youtube?: string | null;
+  };
+  publicationStatus: 'draft' | 'review' | 'published' | 'archived';
+  verificationStatus: 'unverified' | 'verified';
+  sourceType?: string | null;
+  sourceUrl?: string | null;
+  lastVerifiedAt?: string | null;
+  verifiedBy?: (string | null) | User;
+  seo?: {
+    seoTitle?: string | null;
+    metaDescription?: string | null;
+    socialImage?: (string | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events".
+ */
+export interface Event {
+  id: string;
+  name: string;
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  temple: string | Temple;
+  keyRitual?: string | null;
+  startDate: string;
+  endDate: string;
+  keywords?:
+    | {
+        keyword: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Manually selected featured event.
+   */
+  spotlight?: boolean | null;
+  /**
+   * Derived automatically from start/end dates.
+   */
+  status?: ('past' | 'ongoing' | 'upcoming') | null;
+  publicationStatus: 'draft' | 'review' | 'published' | 'archived';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -192,6 +361,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'districts';
+        value: string | District;
+      } | null)
+    | ({
+        relationTo: 'temples';
+        value: string | Temple;
+      } | null)
+    | ({
+        relationTo: 'events';
+        value: string | Event;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -274,6 +455,126 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "districts_select".
+ */
+export interface DistrictsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  publicationStatus?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "temples_select".
+ */
+export interface TemplesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  district?: T;
+  locality?: T;
+  taluk?: T;
+  address?: T;
+  latitude?: T;
+  longitude?: T;
+  historyNarrative?: T;
+  dailyRituals?:
+    | T
+    | {
+        name?: T;
+        description?: T;
+        startTime?: T;
+        endTime?: T;
+        id?: T;
+      };
+  heroImage?: T;
+  gallery?: T;
+  howToReach?: T;
+  transitPoints?:
+    | T
+    | {
+        type?: T;
+        name?: T;
+        distance?: T;
+        unit?: T;
+        id?: T;
+      };
+  darshanTimings?:
+    | T
+    | {
+        label?: T;
+        openTime?: T;
+        closeTime?: T;
+        id?: T;
+      };
+  dressCode?:
+    | T
+    | {
+        men?: T;
+        women?: T;
+      };
+  importantRules?:
+    | T
+    | {
+        rule?: T;
+        id?: T;
+      };
+  contact?:
+    | T
+    | {
+        phone?: T;
+        email?: T;
+        whatsapp?: T;
+        website?: T;
+      };
+  socialLinks?:
+    | T
+    | {
+        instagram?: T;
+        facebook?: T;
+        youtube?: T;
+      };
+  publicationStatus?: T;
+  verificationStatus?: T;
+  sourceType?: T;
+  sourceUrl?: T;
+  lastVerifiedAt?: T;
+  verifiedBy?: T;
+  seo?:
+    | T
+    | {
+        seoTitle?: T;
+        metaDescription?: T;
+        socialImage?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_select".
+ */
+export interface EventsSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  temple?: T;
+  keyRitual?: T;
+  startDate?: T;
+  endDate?: T;
+  keywords?:
+    | T
+    | {
+        keyword?: T;
+        id?: T;
+      };
+  spotlight?: T;
+  status?: T;
+  publicationStatus?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

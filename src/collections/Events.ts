@@ -1,0 +1,127 @@
+import type { CollectionConfig } from 'payload'
+
+import { isAdmin } from '../access/isAdmin'
+import { publishedOrAdmin } from '../access/publishedOrAdmin'
+import { publicationStatusField } from '../fields/publicationStatus'
+
+export const Events: CollectionConfig = {
+  slug: 'events',
+  admin: {
+    useAsTitle: 'name',
+    defaultColumns: ['name', 'temple', 'startDate', 'endDate', 'status', 'publicationStatus'],
+  },
+  access: {
+    read: publishedOrAdmin,
+    create: isAdmin,
+    update: isAdmin,
+    delete: isAdmin,
+  },
+  fields: [
+    {
+      name: 'name',
+      type: 'text',
+      required: true,
+    },
+    {
+      name: 'description',
+      type: 'richText',
+      required: true,
+    },
+    {
+      name: 'temple',
+      type: 'relationship',
+      relationTo: 'temples',
+      required: true,
+    },
+    {
+      name: 'keyRitual',
+      type: 'text',
+    },
+    {
+      name: 'startDate',
+      type: 'date',
+      required: true,
+      admin: {
+        date: {
+          pickerAppearance: 'dayOnly',
+        },
+      },
+    },
+    {
+      name: 'endDate',
+      type: 'date',
+      required: true,
+      admin: {
+        date: {
+          pickerAppearance: 'dayOnly',
+        },
+      },
+      validate: (value, { siblingData }) => {
+        if (!value) return 'End date is required'
+
+        const startDate = (siblingData as { startDate?: string } | undefined)?.startDate
+        if (startDate && new Date(value).getTime() < new Date(startDate).getTime()) {
+          return 'End date must not be before start date'
+        }
+
+        return true
+      },
+    },
+    // Simple tag values — no separate Keyword collection in V1
+    {
+      name: 'keywords',
+      type: 'array',
+      fields: [
+        {
+          name: 'keyword',
+          type: 'text',
+          required: true,
+        },
+      ],
+    },
+    {
+      name: 'spotlight',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Manually selected featured event.',
+      },
+    },
+    // Derived from startDate/endDate — never stored (no isUpcoming field)
+    {
+      name: 'status',
+      type: 'select',
+      virtual: true,
+      options: [
+        { label: 'Past', value: 'past' },
+        { label: 'Ongoing', value: 'ongoing' },
+        { label: 'Upcoming', value: 'upcoming' },
+      ],
+      admin: {
+        readOnly: true,
+        position: 'sidebar',
+        description: 'Derived automatically from start/end dates.',
+      },
+      hooks: {
+        afterRead: [
+          ({ siblingData }) => {
+            const data = siblingData as { startDate?: string; endDate?: string } | undefined
+            const start = data?.startDate ? new Date(data.startDate) : null
+            const end = data?.endDate ? new Date(data.endDate) : null
+            const now = new Date()
+
+            if (end && end.getTime() < now.getTime()) return 'past'
+            if (start && end && start.getTime() <= now.getTime() && now.getTime() <= end.getTime()) {
+              return 'ongoing'
+            }
+            if (start && start.getTime() > now.getTime()) return 'upcoming'
+
+            return undefined
+          },
+        ],
+      },
+    },
+    publicationStatusField(),
+  ],
+}

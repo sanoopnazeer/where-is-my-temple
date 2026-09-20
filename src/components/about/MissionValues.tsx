@@ -1,12 +1,7 @@
 import { BuildingIcon, ShieldCheckIcon, SparkleIcon } from '@/components/icons/TempleIcons'
 import styles from './MissionValues.module.css'
 
-/**
- * Copy matches the design verbatim (owner decision — see AboutHero). The
- * design's small photo strip under "Our Mission" has no real photo asset
- * for this decorative section, so it's a plain gradient rather than an
- * unrelated Temple photo.
- */
+/** Copy matches the design verbatim (owner decision — see AboutHero). */
 export function MissionValues() {
   return (
     <section className={styles.section}>
@@ -24,7 +19,6 @@ export function MissionValues() {
             documentation, sustainable restoration projects, and community-led cultural
             preservation initiatives that bridge the gap between antiquity and the future.
           </p>
-          <div className={styles.cardImage} />
         </div>
 
         <div className={styles.card}>

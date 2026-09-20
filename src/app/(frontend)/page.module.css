@@ -1,13 +1,16 @@
 .page {
   background: #fdf6f0;
   min-height: 100vh;
-  overflow-x: hidden;
   /* The shared (frontend) stylesheet defaults body text to white for the
      original Payload starter homepage this page replaces; override it here
      so headings/text are legible against this page's light background. */
   color: #222;
 }
 
+/* overflow-x is scoped to `main`, not `.page` — an overflow value other
+   than `visible` on any ancestor of the sticky `SiteHeader` (including
+   `.page` itself) breaks `position: sticky`, since it becomes the
+   header's nearest scrolling ancestor instead of the viewport. */
 .page main {
-  padding-bottom: 1rem;
+  overflow-x: hidden;
 }

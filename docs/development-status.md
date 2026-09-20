@@ -723,16 +723,59 @@ via Payload Admin or `DELETE /api/temples/<id>` / `DELETE /api/districts/<id>`.
     `pnpm build` all pass (`/events` builds as ISR, matching `/`). No new
     npm dependency was added.
   - Not done in this task: linking this page from the shared nav (per
-    instruction); a real Event Detail page; filtering/search (not present
-    in this design); a rendered-browser mobile pass (same Playwright-binary
-    limitation as prior tasks — a CSS-based review found only
-    `max-width`/media-query usage, no fixed pixel widths, in the new files).
+    instruction at the time — a `/events` link was added to `SiteHeader` in
+    a later task, see "Shared header/navigation update" below); a real
+    Event Detail page; filtering/search (not present in this design); a
+    rendered-browser mobile pass (same Playwright-binary limitation as
+    prior tasks — a CSS-based review found only `max-width`/media-query
+    usage, no fixed pixel widths, in the new files).
+
+- **Shared header/navigation update** (2026-09-20): `SiteHeader` (used
+  unchanged by all seven public pages) updated to match
+  `design/desktop/`'s and `design/mobile/`'s header:
+  - Renamed the Districts nav item from "Districts wise Temples" to
+    "District" (href unchanged, still `/districts`) and added a
+    "Festivals & Events" item (`/events`) — both requested explicitly,
+    reversing the earlier "don't link `/events` from the shared nav"
+    instruction from the Events task above.
+  - Desktop: `.header` changed from static to `position: sticky; top: 0;
+    z-index: 100` so it stays visible while scrolling, with its existing
+    opaque `#fff` background carried over so page content scrolls behind
+    it rather than showing through. Desktop nav items/destinations
+    otherwise unchanged.
+  - Mobile (`max-width: 768px`): added a hamburger button and a
+    presentational search icon (reusing the existing `SearchIcon`; two new
+    icons added to `TempleIcons.tsx` — `MenuIcon`, `CloseIcon`) next to it,
+    matching `design/mobile/*.jpg`'s header. The hamburger toggles a
+    collapsible mobile nav panel (same five nav items/destinations as
+    desktop, no duplicated route logic) via a single `useState` in
+    `SiteHeader`, which is now a Client Component
+    (`'use client'`) — the only client-side state added. Button has
+    `aria-expanded`/`aria-controls`/an `aria-label` that switches between
+    "Open menu"/"Close menu", and the panel is `hidden` (not just
+    visually collapsed) when closed, so it's keyboard/screen-reader
+    correct and unreachable via Tab while closed. No new npm dependency,
+    no state-management library.
+  - No search backend/route was added — the search icon has no `href`/
+    `onClick` and doesn't render on any page that lacks one already
+    (CLAUDE.md §6, deferred feature).
+  - Removed an already-dead `.disabled` CSS rule left over from before all
+    nav items had real pages.
+  - Verified against the local dev server: all seven public pages (Home,
+    About, Districts directory, District Temple List, Temple detail,
+    Contact, Events) still return `200` with the new header; the mobile
+    nav panel and menu button render in the HTML (`id="mobile-nav"`,
+    `aria-label="Open menu"`). `tsc --noEmit`, `pnpm lint` (0 errors, same
+    5 pre-existing warnings), `pnpm test:int`, and `pnpm build` all pass.
+  - Not done in this task: a rendered-browser/visual mobile pass (same
+    Playwright-binary limitation as prior tasks) — the hamburger's
+    open/close behavior and the `768px` breakpoint were verified by
+    reading the rendered markup/CSS, not a live browser screenshot.
 
 ## Not Started
 
 - Public website beyond the Home, Temple detail, Districts directory,
   District Temple List, Contact, About Us, and Events & Festivals pages
-  (the Events page isn't linked from the shared nav yet, per instruction)
 - Search
 - Sitewide SEO (sitemap, robots.txt)
 - Excel importer

@@ -179,20 +179,30 @@ export function SparkleIcon(props: SVGProps<SVGSVGElement>) {
   )
 }
 
-export function EyeIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <IconBase {...props}>
-      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
-      <circle cx="12" cy="12" r="3" />
-    </IconBase>
-  )
-}
-
 export function LeafIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <IconBase {...props}>
       <path d="M5 20c9 0 14-5 14-14 0-1 0-2-.2-3C10 3.5 5 8.5 5 17c0 1 0 2 .2 3z" />
       <path d="M6 19C10 15 14 11 18.5 6.5" />
+    </IconBase>
+  )
+}
+
+export function MenuIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBase {...props}>
+      <line x1="4" y1="7" x2="20" y2="7" />
+      <line x1="4" y1="12" x2="20" y2="12" />
+      <line x1="4" y1="17" x2="20" y2="17" />
+    </IconBase>
+  )
+}
+
+export function CloseIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBase {...props}>
+      <line x1="5" y1="5" x2="19" y2="19" />
+      <line x1="19" y1="5" x2="5" y2="19" />
     </IconBase>
   )
 }

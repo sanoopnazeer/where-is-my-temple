@@ -8,6 +8,12 @@ interface ComingSoonCtaProps {
    * Media/R2. Overridable per-caller if a page ever needs a different
    * image, but defaults to the shared "List your temple" banner. */
   backgroundImageSrc?: string
+  /** Set on pages short enough that this banner renders above the fold
+   * (e.g. the Districts directory), so Next.js can eagerly load/preload
+   * it instead of flagging it as an unoptimized LCP image. Defaults to
+   * false since on most pages this banner is the last section, below
+   * the fold, where lazy-loading is preferred. */
+  priority?: boolean
 }
 
 const DEFAULT_BACKGROUND_IMAGE_SRC = '/images/home/list-temple-banner.jpg'
@@ -15,12 +21,20 @@ const DEFAULT_BACKGROUND_IMAGE_SRC = '/images/home/list-temple-banner.jpg'
 /** "List your temple" CTA — Coming Soon per CLAUDE.md §4; not a functional submission flow. */
 export function ComingSoonCta({
   backgroundImageSrc = DEFAULT_BACKGROUND_IMAGE_SRC,
+  priority = false,
 }: ComingSoonCtaProps = {}) {
   return (
     <section className={styles.banner}>
       {backgroundImageSrc && (
         <div className={styles.bgWrapper}>
-          <Image src={backgroundImageSrc} alt="" fill sizes="100vw" className={styles.bgImage} />
+          <Image
+            src={backgroundImageSrc}
+            alt=""
+            fill
+            sizes="100vw"
+            priority={priority}
+            className={styles.bgImage}
+          />
           <div className={styles.overlay} />
         </div>
       )}

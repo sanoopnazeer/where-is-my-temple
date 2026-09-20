@@ -6,7 +6,6 @@ import { ComingSoonCta } from '@/components/layout/ComingSoonCta'
 import { AboutHero } from '@/components/about/AboutHero'
 import { AboutIntro } from '@/components/about/AboutIntro'
 import { MissionValues } from '@/components/about/MissionValues'
-import { AccessibilityBand } from '@/components/about/AccessibilityBand'
 import { SanctuaryBand } from '@/components/about/SanctuaryBand'
 import { SITE_URL } from '@/utilities/site'
 import styles from './page.module.css'
@@ -35,7 +34,6 @@ export default function AboutPage() {
         <AboutHero />
         <AboutIntro />
         <MissionValues />
-        <AccessibilityBand />
         <SanctuaryBand />
         <ComingSoonCta />
       </main>

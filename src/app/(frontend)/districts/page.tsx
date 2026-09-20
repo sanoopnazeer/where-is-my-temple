@@ -38,7 +38,11 @@ export default async function DistrictsPage() {
       <SiteHeader />
       <main>
         <DistrictsDirectory items={items} />
-        <ComingSoonCta />
+        {/* This directory has little content above it (a heading plus one
+            grid), so this banner is likely the Largest Contentful Paint
+            element — priority makes Next.js load it eagerly instead of
+            flagging it as an unoptimized LCP image. */}
+        <ComingSoonCta priority />
       </main>
       <SiteFooter />
     </div>

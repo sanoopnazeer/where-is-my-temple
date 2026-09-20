@@ -74,13 +74,3 @@
   line-height: 1.6;
   color: #666;
 }
-
-.cardImage {
-  margin-top: 1.25rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid #f0e9df;
-  height: 90px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #e2c9a0, #8a5a2b);
-  background-clip: padding-box;
-}

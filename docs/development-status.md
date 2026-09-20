@@ -631,10 +631,108 @@ via Payload Admin or `DELETE /api/temples/<id>` / `DELETE /api/districts/<id>`.
     only `max-width`/media-query usage, no fixed pixel widths, in the new
     files).
 
+- Events & Festivals page implemented (2026-09-20), route `/events`
+  (`src/app/(frontend)/events/page.tsx`) —
+  `design/desktop/Events & Festivals.jpg`. Uses the existing Events
+  collection only; no schema change (`pnpm generate:types` diff confirmed
+  empty). ISR (`revalidate = 60`), same rationale as Home/Districts.
+  - **Per explicit owner instruction, this page is not linked from
+    `SiteHeader`** — the shared nav stays exactly as it was before this
+    task (unlike the Districts/Contact/About pages in earlier tasks, which
+    did get nav entries). The route exists and works; it's just not
+    surfaced in the global nav yet.
+  - **Two things omitted outright, not asked about** — both explicitly
+    ruled out already, not genuinely ambiguous: the design's header
+    user-account avatar icon (public user accounts are a deferred feature,
+    CLAUDE.md §6) and the hero's "Malayalam Era 1199 / Medam–Edavam Season"
+    widget plus the spotlight card's "(Medam - Edavam)" date annotation
+    (CLAUDE.md §4 explicitly excludes Malayalam-calendar conversion from
+    V1).
+  - **Asked before building — event card links**: the design gives every
+    card a differently-labeled link ("View Guide", "Virtual Queue", "Route
+    Map", "Event Details", "Darshan Info"), implying several features that
+    don't exist (no Event Detail route, no queue system, no route-map
+    feature). Owner chose: every card links to its Event's linked Temple's
+    real page (`/temples/[slug]`), labeled consistently "View Temple" —
+    no new route created.
+  - Sections, in design order: hero (static copy, no CMS/no search box —
+    none was shown in this design, unlike Home/Contact/District), a
+    "Spotlight Celebration" for the Event `spotlight` field (existing
+    field — no new ranking/popularity mechanism), an "Upcoming Temple
+    Utsavams" grid, and the shared "List your temple" `ComingSoonCta`. No
+    pagination or filter/search UI was built — neither appears in this
+    design (the grid's repeated cards in the mockup are a Figma placeholder
+    artifact, not real pagination).
+  - Data: `src/app/(frontend)/events/getEventsData.ts`, two Local API
+    queries total (not one per card): the spotlighted Event (`spotlight:
+    true`, `endDate` not yet passed) and the next batch of upcoming Events
+    (`startDate: { greater_than: now }`, `sort: 'startDate'`, `depth: 2` so
+    `temple.district` resolves). Both `overrideAccess: false`, so
+    draft/review/archived Events are excluded automatically — same public
+    `publishedOrAdmin` rule as the REST API. "Upcoming" reuses the exact
+    condition the Event collection's own virtual `status` field already
+    uses for `'upcoming'` (virtual fields aren't queryable, so this is the
+    DB-query form of that rule, not a second definition) — no `isUpcoming`
+    field added. District is never stored on Event; every District shown
+    on this page is read from the populated `temple.district`
+    (`docs/content-model.md` §4.1).
+  - **Private-Temple defense in depth**: because Payload's relationship
+    population inside `find` wasn't assumed to enforce the same access
+    check a direct `find` would, every Event is re-checked in memory after
+    fetching — `hasPublicTemple()` in `getEventsData.ts` drops any Event
+    whose linked Temple isn't a populated, `published` document, before it
+    ever reaches a component. This is the only path any Temple-derived data
+    (name, locality, District) reaches this page.
+  - Components: `src/components/events/` (`EventsHero`, `SpotlightEvent`,
+    `EventsGrid`), all Server Components, no client JS on this page.
+    `src/utilities/eventDate.ts` (new): `formatEventDateRange()` and
+    `eventDurationLabel()` — both computed directly from the real stored
+    `startDate`/`endDate`, not invented durations (the design's per-event
+    duration phrases like "36-Hour Continuous Ritual" or "41-Day Vratham"
+    have no backing field and aren't reproducible from day-only dates, so
+    they're replaced with a generic computed "N-Day Event" instead).
+    Reused `SiteHeader`/`SiteFooter`/`ComingSoonCta`/`PinIcon`/`excerpt()`/
+    `resolveMediaUrl()` unchanged.
+  - **Card category badges/pills**: the design's per-card labels ("MAJOR
+    FESTIVAL", "WORLD RECORD GATHERING", "Palakkad District", etc.) have no
+    dedicated field — they're rendered from the Event's own `keywords`
+    array (real editor-entered tags, existing field), the first keyword as
+    the prominent image badge and the rest as pills. Not a new taxonomy.
+  - **Location**: the design shows some events spanning multiple
+    temples/"Statewide" claims, which the schema doesn't support (an Event
+    belongs to exactly one Temple, `docs/content-model.md` §4). Each card
+    shows that Event's one real linked Temple's name plus its District.
+  - Verified against the local dev server, using the two real published
+    upcoming Events already in the CMS (`TEST Upcoming Event — Home Page
+    Preview`, `Vishu Festival`, both linked to a Kozhikode temple) plus one
+    new temporary spotlighted Event created via the Local API for this
+    verification and left in place, not deleted, per standing instruction
+    (`TEST Spotlight Event — Verification`): the spotlight section renders
+    only when a qualifying spotlighted Event exists, correctly excluded
+    from the grid below it; the grid shows both real upcoming Events with
+    correctly derived District ("Tali Shiva Temple, Kozhikode"), correct
+    keyword-derived badges/pills, and a correctly computed date range/day
+    count; a 2020-dated past Event (from an earlier task, still in the CMS)
+    never appears; every card's "View Temple" link resolves to the real
+    Temple page; unauthenticated `POST /api/events` still returns `403`;
+    the shared header was not modified (no `/events` link was added, per
+    instruction); Home, About, Districts directory, the District Temple
+    List page, the Temple detail page, and the Contact page all still
+    return 200. `pnpm generate:types` (no diff), `tsc --noEmit`,
+    `pnpm lint` (0 errors, same 5 pre-existing warnings), `pnpm test:int`,
+    `pnpm build` all pass (`/events` builds as ISR, matching `/`). No new
+    npm dependency was added.
+  - Not done in this task: linking this page from the shared nav (per
+    instruction); a real Event Detail page; filtering/search (not present
+    in this design); a rendered-browser mobile pass (same Playwright-binary
+    limitation as prior tasks — a CSS-based review found only
+    `max-width`/media-query usage, no fixed pixel widths, in the new files).
+
 ## Not Started
 
 - Public website beyond the Home, Temple detail, Districts directory,
-  District Temple List, Contact, and About Us pages
+  District Temple List, Contact, About Us, and Events & Festivals pages
+  (the Events page isn't linked from the shared nav yet, per instruction)
 - Search
 - Sitewide SEO (sitemap, robots.txt)
 - Excel importer

@@ -1,0 +1,146 @@
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 3rem;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1.25rem;
+}
+
+.headingIcon {
+  width: 1.1rem;
+  height: 1.1rem;
+  color: #f5841f;
+}
+
+.headingText {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #222;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+}
+
+@media (max-width: 860px) {
+  .card {
+    grid-template-columns: 1fr;
+  }
+}
+
+.imageWrapper {
+  position: relative;
+  min-height: 260px;
+  background: #eee;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.imageFallback {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #e2c9a0, #8a5a2b);
+}
+
+.body {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #888;
+}
+
+.locationIcon {
+  width: 0.9rem;
+  height: 0.9rem;
+  flex-shrink: 0;
+  color: #f5841f;
+}
+
+.name {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #b5651d;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.metaPill {
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: #fdf0e2;
+  color: #b5651d;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.description {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+.ritual {
+  padding-top: 0.85rem;
+  border-top: 1px solid #f0e9df;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.ritualLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #888;
+}
+
+.ritualValue {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #222;
+}
+
+.link {
+  margin-top: 0.4rem;
+  align-self: flex-start;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f5841f;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

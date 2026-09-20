@@ -1,0 +1,31 @@
+.hero {
+  background: #fdf6f0;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem 2.5rem;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #b5651d;
+}
+
+.title {
+  margin: 0 0 1rem;
+  font-size: clamp(2rem, 4.5vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: #222;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #666;
+}

@@ -1,0 +1,154 @@
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3.5rem;
+}
+
+.heading {
+  margin: 0 0 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #222;
+}
+
+.empty {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.imageWrapper {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: #eee;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.imageFallback {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #e2c9a0, #8a5a2b);
+}
+
+.badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.3rem 0.75rem;
+  background: #f5841f;
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.dateBadge {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  padding: 0.3rem 0.75rem;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.body {
+  padding: 1.1rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  font-size: 0.78rem;
+  color: #888;
+}
+
+.locationIcon {
+  width: 0.8rem;
+  height: 0.8rem;
+  flex-shrink: 0;
+  color: #f5841f;
+}
+
+.name {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #222;
+}
+
+.description {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #666;
+}
+
+.pillRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
+}
+
+.pill {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: #f0e9fb;
+  color: #6b4fa0;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.link {
+  margin-top: auto;
+  padding-top: 0.6rem;
+  align-self: flex-start;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f5841f;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

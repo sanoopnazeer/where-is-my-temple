@@ -6,6 +6,16 @@ import styles from './TempleGallery.module.css'
 
 const MOSAIC_GROUP_SIZE = 4
 const MOSAIC_TILE_CLASSES = [styles.tileA, styles.tileB, styles.tileC, styles.tileD]
+// Tiles A/D stay full-width on mobile (the mosaic's wide tiles); B/C sit
+// side by side at half width there — matches the `grid-template-areas`
+// mobile override in TempleGallery.module.css.
+const MOSAIC_TILE_SIZES = [
+  '(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 33vw',
+  '(max-width: 720px) 50vw, (max-width: 1100px) 50vw, 33vw',
+  '(max-width: 720px) 50vw, (max-width: 1100px) 50vw, 33vw',
+  '(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 33vw',
+]
+const SIMPLE_TILE_SIZES = '(max-width: 720px) 50vw, (max-width: 1100px) 50vw, 33vw'
 
 function chunk<T>(items: T[], size: number): T[][] {
   const groups: T[][] = []
@@ -15,20 +25,21 @@ function chunk<T>(items: T[], size: number): T[][] {
   return groups
 }
 
-function GalleryTile({ media, className }: { media: Media; className: string }) {
+function GalleryTile({
+  media,
+  className,
+  sizes,
+}: {
+  media: Media
+  className: string
+  sizes: string
+}) {
   const url = resolveMediaUrl(media)
   if (!url) return null
 
   return (
     <div className={className}>
-      <Image
-        src={url}
-        alt={media.alt}
-        fill
-        loading="lazy"
-        sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 33vw"
-        className={styles.image}
-      />
+      <Image src={url} alt={media.alt} fill loading="lazy" sizes={sizes} className={styles.image} />
     </div>
   )
 }
@@ -52,7 +63,12 @@ export function TempleGallery({ temple }: { temple: Temple }) {
             // bottom-right. Falls back to a single column on small viewports.
             <div key={groupIndex} className={styles.mosaic}>
               {group.map((media, index) => (
-                <GalleryTile key={media.id} media={media} className={MOSAIC_TILE_CLASSES[index]} />
+                <GalleryTile
+                  key={media.id}
+                  media={media}
+                  className={MOSAIC_TILE_CLASSES[index]}
+                  sizes={MOSAIC_TILE_SIZES[index]}
+                />
               ))}
             </div>
           ) : (
@@ -60,7 +76,12 @@ export function TempleGallery({ temple }: { temple: Temple }) {
             // other than a multiple of 4) — plain even grid, no invented images.
             <div key={groupIndex} className={styles.simpleGrid}>
               {group.map((media) => (
-                <GalleryTile key={media.id} media={media} className={styles.simpleTile} />
+                <GalleryTile
+                  key={media.id}
+                  media={media}
+                  className={styles.simpleTile}
+                  sizes={SIMPLE_TILE_SIZES}
+                />
               ))}
             </div>
           ),

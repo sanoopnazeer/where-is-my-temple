@@ -14,6 +14,16 @@
   font-size: 0.95rem;
 }
 
+/* Mobile design stacks phone/email on their own lines instead of a
+   wrapped inline row. */
+@media (max-width: 480px) {
+  .contactRow {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
+}
+
 .contactLink {
   color: #333;
   text-decoration: none;

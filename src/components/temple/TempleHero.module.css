@@ -78,6 +78,16 @@ h1.title {
   flex-shrink: 0;
 }
 
+/* The 80px desktop ceiling and the 2.25rem floor both come from the fixed
+   80px design-brief size — at narrow widths that floor is too large for
+   long temple names to wrap comfortably, so mobile gets its own, smaller
+   clamp instead of just shrinking the same one. */
+@media (max-width: 480px) {
+  h1.title {
+    font-size: clamp(1.75rem, 8vw, 2.75rem);
+  }
+}
+
 .localeSwitch {
   position: absolute;
   z-index: 1;

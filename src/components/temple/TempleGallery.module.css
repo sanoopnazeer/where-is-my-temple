@@ -72,20 +72,30 @@
   object-fit: cover;
 }
 
-/* Mobile arrangement is a later pass (design/mobile/) — stack the mosaic
-   into a single column here so it stays usable, not broken, in the meantime. */
+/* Mobile design (design/mobile/Temple single.jpg) keeps the same varied
+   big/small rhythm as the desktop mosaic instead of one flat column: a
+   wide tile, a 2-up pair below it, then another wide tile. */
 @media (max-width: 720px) {
   .mosaic {
-    grid-template-columns: 1fr;
-    grid-template-rows: none;
-    grid-template-areas: 'a' 'b' 'c' 'd';
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: 'a a' 'b c' 'd d';
+    gap: 0.6rem;
     height: auto;
   }
 
   .tileA,
-  .tileB,
-  .tileC,
   .tileD {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 16 / 9;
+  }
+
+  .tileB,
+  .tileC {
+    aspect-ratio: 1 / 1;
+  }
+
+  .simpleGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
   }
 }

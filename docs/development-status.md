@@ -933,6 +933,70 @@ via Payload Admin or `DELETE /api/temples/<id>` / `DELETE /api/districts/<id>`.
     no-overflow behavior was verified by CSS inspection, not a live
     multi-page render.
 
+- **Temple Detail mobile implementation** (2026-09-20): adapted
+  `TempleHero`, `TempleDailyRituals`, `TempleGallery`,
+  `TemplePlanYourVisit`, and `TempleContact` with responsive CSS to match
+  `design/mobile/Temple single.jpg` at 375/390/430px — same components,
+  same `getTemple()` data fetching/localization, no schema/access-control
+  change. The `/temples/[slug]` route, Temple → District/Event
+  relationships, `TempleMap`, R2/media handling, and the `?lang=en`/`?lang=ml`
+  switcher (verified still rendering both links and still one language at
+  a time — no dual-language display was added) are all unchanged.
+  - `TempleHero`: added a mobile-only, smaller font clamp for the temple
+    name (`clamp(1.75rem, 8vw, 2.75rem)` vs desktop's `clamp(2.25rem, 6vw,
+    80px)`) so long temple names (English or Malayalam) get more relative
+    shrinking room on narrow screens instead of sitting at the same large
+    floor size desktop uses.
+  - `TempleDailyRituals` — a "don't just shrink" fix: the ritual grid's
+    `auto-fit, minmax(220px, 1fr)` was collapsing to 1 column at phone
+    widths (2×220px doesn't fit in ~340px), but the mobile design keeps
+    these as 2 compact columns. Added an explicit `repeat(2, 1fr)`
+    override with tightened card padding/font sizes for mobile.
+  - `TempleGallery` — the other "don't just shrink" fix, and the one the
+    component's own code comment already flagged as deferred to this
+    task: replaced the placeholder single-column mobile stack with a
+    `grid-template-areas` of `'a a' / 'b c' / 'd d'` — a wide tile, a 2-up
+    pair, then another wide tile — preserving the same big/small rhythm
+    as the desktop mosaic instead of flattening it. Each tile's `Image`
+    `sizes` attribute was split per tile (wide tiles request `100vw` on
+    mobile, the paired tiles request `50vw`) so this doesn't over-fetch.
+  - `TemplePlanYourVisit`: "Get Directions" becomes a full-width button on
+    mobile (`align-self: stretch`) instead of content-width — the map's
+    existing ≤720px stacking (single column, 16:9 aspect-ratio fallback)
+    already handled the map/columns adaptation correctly and needed no
+    change.
+  - `TempleContact`: phone/email links stack vertically on mobile instead
+    of a wrapped inline row, matching the design's stacked treatment
+    there (desktop's plain-text, no-icon presentation is unchanged).
+  - Verified against the local dev server: `/temples/test-temple-page-preview`
+    returns `200` for both `?lang=en` and `?lang=ml`; the locale-switch
+    links (`EN` / `മലയാളം`) still render correctly; all 7 public pages
+    still return `200`; every new mobile rule (`TempleDailyRituals`
+    `.grid`, `TempleGallery` `.mosaic`, `TemplePlanYourVisit`
+    `.directionsButton`, `TempleContact` `.contactRow`) was confirmed
+    compiled in the built CSS bundle. `tsc --noEmit`, `pnpm lint` (0
+    errors, same 5 pre-existing warnings), `pnpm test:int`, and `pnpm
+    build` all pass with an unchanged route table.
+  - Known, pre-existing gaps present on *both* mobile and desktop (not
+    fixed here since they aren't mobile-specific): the social-link row
+    renders plain "IG"/"FB"/"YT" text-abbreviation badges rather than
+    brand icon glyphs (confirmed against `design/desktop/Temple Page.jpg`,
+    which shows real WhatsApp/Instagram/Facebook icons — this is a
+    pre-existing simplification on desktop too, not something this task
+    introduced or should silently redesign); there is no "History &
+    Significance" section heading (confirmed absent from the desktop
+    design too — the narrative just follows the quick-info cards
+    directly). Not implemented, per the task's own "no data source"
+    precedent (same reasoning as District Temple List's filter tabs):
+    transit-type-specific icons (all transit points use one generic bus
+    icon regardless of "Rail"/"Road"), and the design's "View Full
+    Archive (26+ Photos)" gallery-expansion affordance — the gallery
+    already renders every real photo inline; adding a count-limiting
+    "view more" interaction would be new UI behavior beyond a responsive
+    CSS adaptation. Not done in this task: a rendered-browser/visual
+    mobile pass at exact pixel widths (same Playwright-binary limitation
+    as prior tasks) — verified via compiled CSS inspection instead.
+
 ## Not Started
 
 - Public website beyond the Home, Temple detail, Districts directory,

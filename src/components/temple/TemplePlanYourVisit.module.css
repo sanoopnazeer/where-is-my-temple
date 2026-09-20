@@ -36,6 +36,13 @@
   }
 }
 
+@media (max-width: 480px) {
+  .directionsButton {
+    align-self: stretch;
+    justify-content: center;
+  }
+}
+
 .leftColumn {
   display: flex;
   flex-direction: column;

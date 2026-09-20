@@ -40,10 +40,11 @@ Reusable Kerala district reference data.
 |---|---|---:|---:|---|
 | `name` | text | Yes | No | English district name |
 | `slug` | text | Yes | No | Stable public identifier |
+| `description` | textarea | No | No | Editorial description shown on the district page hero. English only for V1. Added once the district page design required it (2026-09-20). |
 | `publicationStatus` | select | Yes | No | `draft` / `review` / `published` / `archived` — same model as Temple (§3.13). Public read requires `published`. |
 
 V1 Malayalam localization is limited to the confirmed Temple-page fields. District names remain English-only for now.
-Do not add descriptions/images/SEO fields unless required by the final district page design.
+Do not add further descriptions/images/SEO fields beyond `description` unless required by the final district page design.
 
 # 3. Temples
 

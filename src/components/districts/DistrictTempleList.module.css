@@ -1,0 +1,148 @@
+.section {
+  min-width: 0;
+}
+
+.heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem;
+  color: #222;
+}
+
+.empty {
+  color: #666;
+  font-size: 0.95rem;
+  padding: 2rem 0 3rem;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.cardLink {
+  display: flex;
+  flex-wrap: wrap;
+  color: inherit;
+  text-decoration: none;
+}
+
+.imageWrapper {
+  position: relative;
+  flex: 0 0 220px;
+  min-height: 160px;
+  background: #eee;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.imageFallback {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #e2c9a0, #8a5a2b);
+}
+
+.body {
+  flex: 1 1 260px;
+  min-width: 0;
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.name {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #222;
+}
+
+.locality {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.localityIcon {
+  width: 0.85rem;
+  height: 0.85rem;
+  flex-shrink: 0;
+  color: #f5841f;
+}
+
+.description {
+  margin: 0.2rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #666;
+}
+
+.viewDetails {
+  margin-top: auto;
+  padding-top: 0.5rem;
+  align-self: flex-end;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f5841f;
+}
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 2.5rem 0 1rem;
+}
+
+.pageLink {
+  min-width: 2.25rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #444;
+  background: #fff;
+  border: 1px solid #e6dcd0;
+  text-decoration: none;
+}
+
+.pageLinkActive {
+  background: #222;
+  border-color: #222;
+  color: #fff;
+}
+
+.pageLinkDisabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 560px) {
+  .imageWrapper {
+    flex-basis: 100%;
+    aspect-ratio: 16 / 9;
+    min-height: 0;
+  }
+
+  .viewDetails {
+    align-self: flex-start;
+  }
+}

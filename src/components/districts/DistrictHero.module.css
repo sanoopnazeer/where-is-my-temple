@@ -1,0 +1,139 @@
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 62vh;
+  padding: 3rem 1.5rem;
+  color: #fff;
+  text-align: center;
+  overflow: hidden;
+}
+
+.bgWrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.bgImage {
+  object-fit: cover;
+  object-position: center;
+}
+
+.bgFallback {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 30%, #ffd27a, transparent 45%),
+    linear-gradient(160deg, #f7b955 0%, #e8722c 45%, #7a3b1e 100%);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(20, 12, 6, 0.55) 0%, rgba(20, 12, 6, 0.72) 100%);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 900px;
+}
+
+.location {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.locationIcon {
+  width: 0.9rem;
+  height: 0.9rem;
+  flex-shrink: 0;
+}
+
+.title {
+  margin: 0 0 1rem;
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+.description {
+  width: 88%;
+  margin: 1.25rem auto 2rem;
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #fff;
+  border-radius: 999px;
+  padding: 0.5rem 0.5rem 0.5rem 1.25rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.searchIcon {
+  flex-shrink: 0;
+  width: 1.2rem;
+  height: 1.2rem;
+  color: #999;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+  color: #333;
+  background: transparent;
+}
+
+.searchInput::placeholder {
+  color: #999;
+}
+
+.exploreButton {
+  flex-shrink: 0;
+  padding: 0.65rem 1.5rem;
+  background: #f5841f;
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .searchBar {
+    flex-wrap: wrap;
+    border-radius: 20px;
+    padding: 1rem;
+  }
+
+  .searchInput {
+    flex-basis: 100%;
+    order: 1;
+  }
+
+  .exploreButton {
+    order: 2;
+    flex: 1;
+    text-align: center;
+  }
+}

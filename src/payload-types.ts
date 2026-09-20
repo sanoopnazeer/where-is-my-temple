@@ -175,6 +175,10 @@ export interface District {
   id: string;
   name: string;
   slug: string;
+  /**
+   * Editorial description shown on the district page. English only for V1.
+   */
+  description?: string | null;
   publicationStatus: 'draft' | 'review' | 'published' | 'archived';
   updatedAt: string;
   createdAt: string;
@@ -463,6 +467,7 @@ export interface MediaSelect<T extends boolean = true> {
 export interface DistrictsSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
+  description?: T;
   publicationStatus?: T;
   updatedAt?: T;
   createdAt?: T;

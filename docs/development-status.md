@@ -333,11 +333,169 @@ via Payload Admin or `DELETE /api/temples/<id>` / `DELETE /api/districts/<id>`.
     substituted a CSS-based review, which found only `max-width`/media-query
     usage and no fixed pixel widths in the new files).
 
+- District-specific Temple List page implemented (2026-09-20), route
+  `/districts/[slug]` (`src/app/(frontend)/districts/[slug]/page.tsx`) —
+  `design/desktop/District Temple.jpg`. Reuses the exact route convention
+  the Districts directory page already established (`district.slug`), so
+  Directory cards' existing `/districts/<slug>` links now resolve to a real
+  page instead of a placeholder 404.
+  - **Route decision**: none needed — the Districts directory task (just
+    before this one) already asked the owner and settled on
+    `/districts/[slug]`; this task reused it as instructed, no second
+    routing decision was made.
+  - Data: `src/app/(frontend)/districts/[slug]/getDistrictTemples.ts` — 2–3
+    Local API queries per request (not one per Temple card): `getDistrictBySlug`
+    (District lookup, wrapped in React `cache()` so `generateMetadata` and
+    the page share one call), `getDistrictTemples` (published Temples
+    `where: { district: { equals } }`, server-side paged via Payload's own
+    `page`/`limit`, 8 per page), and `getDistrictHeroImage` (a `select`-narrowed,
+    single-field query for one representative Temple photo, independent of
+    the current page so the hero image doesn't change as you paginate). All
+    three use `overrideAccess: false` with no `user`, so the public
+    `publishedOrAdmin` rule excludes draft/review/archived Temples and
+    excludes an unpublished District automatically — no manual status
+    filtering needed, access control isn't bypassed. An out-of-range
+    `?page=` (e.g. a stale link) re-fetches at the last real page instead of
+    showing a false empty state — only in that edge case, not on normal
+    requests.
+  - Components: `src/components/districts/DistrictHero.tsx` (district name,
+    a static "Kerala, India" label, the same presentational/disabled search
+    bar pattern as the Home hero) and `DistrictTempleList.tsx` (the Temple
+    list, empty state, and page-number pagination). Reused
+    `SiteHeader`/`SiteFooter`/`ComingSoonCta` unchanged, and the existing
+    `excerpt()` utility (already used by the Home page's Featured Temples)
+    for each card's description line. Pagination is plain `<Link
+    href="?page=N">`s — no client-side fetching, matching the design's
+    numbered-pages layout exactly.
+  - This route is naturally **dynamic** (`ƒ`), not ISR like the Home/
+    Districts-directory pages — reading `searchParams` for `?page=` forces
+    per-request rendering in Next.js, so no `revalidate` export was needed;
+    every request already resolves fresh data.
+  - Content-model gaps resolved by owner decision (asked before building,
+    not assumed): (1) the design's bold "Main Deity: ..." line has no field
+    anywhere in the Temple content model (`historyNarrative` is free-text
+    richText, not structured deity data) — omitted entirely rather than
+    invented; the card's description line is a real `historyNarrative`
+    excerpt instead. (2) the design's district-hero paragraph made specific
+    unverified claims about each district (e.g. "Known as the Cultural
+    Capital of Kerala...") with no data source (District has no description
+    field) — omitted; the hero shows only the district name and a generic
+    "Kerala, India" label.
+  - Other assumptions: the design's category badges ("ANCIENT", "POPULAR",
+    etc.) and small icon badges have no backing field and are omitted, same
+    reasoning as the Districts directory page's omitted region tags; the
+    design's sidebar ("Most Visited", "Upcoming Festivals") was not part of
+    this task's own functional description (which scoped the page to the
+    Temple list itself) and was not built — happy to take on as a separate,
+    explicitly-scoped task if wanted; the hero photo is borrowed from one of
+    the district's Temples, same precedent as the Districts directory page.
+  - Verified against the local dev server: both currently-published
+    Districts ("Kozhikode", "TEST District") each show only their own
+    Temple(s) — no cross-district leakage — linking correctly to
+    `/temples/<slug>`; a nonexistent district slug 404s; the draft District
+    from the Home page task (`test-district-draft-home-check`) 404s (not
+    publicly accessible); a temporary published District with zero Temples
+    (`test-district-zero-temples`, created via the Local API for this
+    verification and left in place, not deleted, per standing instruction)
+    renders the clean empty state instead of an error or false 404; an
+    out-of-range `?page=99` on a 1-page district still returns 200 via the
+    fallback above; the Home page, Districts directory, Temple detail page,
+    and unauthenticated-write 403 all still work unchanged.
+    `pnpm generate:types` (no diff), `tsc --noEmit`, `pnpm lint` (0 errors,
+    same 5 pre-existing warnings), `pnpm test:int`, `pnpm build` all pass.
+  - Not done in this task: the "Most Visited"/"Upcoming Festivals" sidebar
+    shown in the design (see assumptions above — **Upcoming Festivals was
+    added in a follow-up task below; Most Visited remains intentionally
+    unbuilt**); a rendered-browser mobile pass (same Playwright-binary
+    limitation as prior tasks — substituted a CSS-based review, which found
+    only `max-width`/media-query/flex-basis usage, no fixed pixel widths, in
+    the new files).
+
+- District Temple List page updated (2026-09-20) with a District
+  `description` field and an "Upcoming Festivals" sidebar.
+  - **Schema change**: added `description` (`textarea`, optional, not
+    localized) to the Districts collection (`src/collections/Districts.ts`),
+    per explicit owner instruction — documented in
+    `docs/content-model.md` §2. No other field was added or changed;
+    `pnpm generate:types` diff touched only this one field
+    (`District.description?: string | null`), confirming no unintended
+    schema drift. Shown in `DistrictHero` directly below the district name
+    when populated; renders nothing (no empty block) when absent — no
+    invented fallback text. Also used, when present, as the page's SEO
+    `description`/OG description in place of the previous generic sentence.
+  - **Upcoming Festivals sidebar**: Events don't store a District
+    (`docs/content-model.md` §4.1 — derived via Event → Temple → District,
+    by design, not a gap); `getDistrictTemplesMeta()`
+    (`src/app/(frontend)/districts/[slug]/getDistrictTemples.ts`) already
+    collects every published Temple ID in the district for the hero-image
+    lookup, so `getUpcomingFestivals(templeIds)` reuses that same ID list to
+    query `events` with `where: { temple: { in: templeIds }, startDate: {
+    greater_than: now } }, sort: 'startDate'` — one query, not one per Event
+    or per Temple. `overrideAccess: false` (same public `publishedOrAdmin`
+    rule) excludes draft/review/archived Events automatically; because
+    `templeIds` itself only ever contains published Temples, an Event
+    linked to a non-public Temple can never match the `in` filter, so no
+    private Temple data can leak through this path. "Upcoming" is expressed
+    as `startDate: { greater_than: now }` — the same condition the Events
+    collection's own virtual `status` field (`src/collections/Events.ts`)
+    already uses for its `'upcoming'` value, reused rather than
+    reimplemented differently (virtual fields aren't queryable, so this is
+    the DB-query form of that same rule, not a second definition). No
+    `isUpcoming` field was added.
+  - Component: `src/components/districts/UpcomingFestivalsSidebar.tsx` (+
+    `.module.css`) — heading, one card per festival (day-of-month badge,
+    name, formatted date, a real excerpt of the Event's own `description`
+    via the existing `excerpt()` utility), hides itself entirely when there
+    are no upcoming festivals. Non-interactive (no link) — there is no
+    public Event Detail route, and the design doesn't present these items
+    as clickable (no "View Details"-style affordance, unlike the Temple
+    cards next to them) — per the task brief, no new route was invented.
+    Added `CalendarIcon` to the existing
+    `src/components/icons/TempleIcons.tsx` set for the heading.
+  - **Most Visited is intentionally not implemented** — explicit owner
+    instruction to leave it out entirely rather than show placeholder data
+    (it would need view-count analytics that don't exist in this
+    architecture, same gap already resolved elsewhere in this project by
+    omission).
+  - Layout: `page.tsx` now wraps `DistrictTempleList` and
+    `UpcomingFestivalsSidebar` in a two-column CSS Grid (`.contentGrid` in
+    `page.module.css`), collapsing to one column at `max-width: 900px`.
+    `DistrictTempleList.module.css`'s `.section` had its own
+    `max-width`/centering/side-padding removed in favor of the shared grid
+    wrapper — a layout-only change; its rendering logic, pagination, and
+    data are unchanged. `DistrictHero`, the Districts directory page, the
+    Home page, Temple schema, Event schema (aside from the new query, no
+    field changes), access control, R2, and the Google Maps integration
+    were **not** touched.
+  - Verified against the local dev server, using the two real published
+    Events already in the CMS from a prior task (`TEST Upcoming Event —
+    Home Page Preview`, 2026-10-04, and `Vishu Festival`, 2027-05-01, both
+    linked to a Kozhikode temple) plus three new temporary records created
+    via the Local API for this verification and left in place, not deleted,
+    per standing instruction (a `description` value on the existing `TEST
+    District` record; a `TEST Past Event — Verification` dated 2020 on a
+    Kozhikode temple; both used solely to test the negative cases below):
+    the description renders below the district name on `TEST District` and
+    is absent (no empty element) on `Kozhikode`, which has none; Kozhikode's
+    sidebar shows both real upcoming festivals sorted nearest-first
+    (Oct 2026 before May 2027); `TEST District` (a different district, zero
+    events of its own) shows no festivals — confirming cross-district
+    exclusion; the 2020 past Event never appears; "Most Visited" text
+    appears on neither page; existing pagination (including the
+    out-of-range `?page=` fallback), the Districts directory, the Temple
+    detail page, and unauthenticated-write `403` all still work unchanged.
+    `pnpm generate:types` (diff limited to the one new field),
+    `tsc --noEmit`, `pnpm lint` (0 errors, same 5 pre-existing warnings),
+    `pnpm test:int`, `pnpm build` all pass. No new npm dependency was added
+    (`package.json`/`pnpm-lock.yaml` unchanged).
+  - Not done in this task: the "Most Visited" sidebar (explicitly excluded,
+    see above); a rendered-browser mobile pass (same Playwright-binary
+    limitation as prior tasks).
+
 ## Not Started
 
-- Public website beyond the Home, Temple detail, and Districts directory
-  pages (per-district Temple List page at `/districts/[slug]`, about/contact
-  pages)
+- Public website beyond the Home, Temple detail, Districts directory, and
+  District Temple List pages (about/contact pages)
 - Search
 - Sitewide SEO (sitemap, robots.txt)
 - Excel importer

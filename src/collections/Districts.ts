@@ -29,6 +29,13 @@ export const Districts: CollectionConfig = {
       unique: true,
       index: true,
     },
+    {
+      name: 'description',
+      type: 'textarea',
+      admin: {
+        description: 'Editorial description shown on the district page. English only for V1.',
+      },
+    },
     publicationStatusField(),
   ],
 }

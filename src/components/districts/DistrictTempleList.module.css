@@ -135,14 +135,40 @@
   cursor: not-allowed;
 }
 
-@media (max-width: 560px) {
+/* Mobile design keeps this the same horizontal, image-left composition as
+   desktop (not stacked full-width image on top) — just with a smaller,
+   square thumbnail and tighter text sizing to fit a narrow column. */
+@media (max-width: 480px) {
+  .cardLink {
+    flex-wrap: nowrap;
+  }
+
   .imageWrapper {
-    flex-basis: 100%;
-    aspect-ratio: 16 / 9;
+    flex: 0 0 6rem;
+    aspect-ratio: 1 / 1;
     min-height: 0;
+  }
+
+  .body {
+    flex: 1 1 auto;
+    padding: 0.85rem 0.9rem;
+    gap: 0.3rem;
+  }
+
+  .name {
+    font-size: 1rem;
+  }
+
+  .description {
+    font-size: 0.85rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .viewDetails {
     align-self: flex-start;
+    font-size: 0.8rem;
   }
 }

@@ -87,6 +87,14 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
+.searchField {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
 .searchIcon {
   flex-shrink: 0;
   width: 1.2rem;
@@ -119,21 +127,30 @@
   cursor: not-allowed;
 }
 
+/* Mobile design shows the search field and the Explore button as two
+   separate stacked pills, not one white bar split into rows (same fix as
+   the Home hero's search bar). */
 @media (max-width: 480px) {
   .searchBar {
-    flex-wrap: wrap;
-    border-radius: 20px;
-    padding: 1rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+    background: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
   }
 
-  .searchInput {
-    flex-basis: 100%;
-    order: 1;
+  .searchField {
+    background: #fff;
+    border-radius: 999px;
+    padding: 0.85rem 1.25rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
   }
 
   .exploreButton {
-    order: 2;
-    flex: 1;
+    width: 100%;
     text-align: center;
+    padding: 0.85rem 1.5rem;
   }
 }

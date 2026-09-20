@@ -877,6 +877,62 @@ via Payload Admin or `DELETE /api/temples/<id>` / `DELETE /api/districts/<id>`.
     a rendered-browser/visual mobile pass at exact pixel widths (same
     Playwright-binary limitation as prior tasks).
 
+- **District Temple List mobile implementation** (2026-09-20): adapted
+  `DistrictHero`, `DistrictTempleList`, and the `[slug]` page's layout with
+  responsive CSS to match `design/mobile/Single Districts.jpg` at
+  375/390/430px — same components, same data fetching
+  (`getDistrictBySlug`/`getDistrictTemples`/`getDistrictTemplesMeta`/
+  `getUpcomingFestivals`), no schema/query/access-control change. The
+  `/districts/[slug]` route, Temple links (`/temples/[slug]`), the
+  District → Temple filtering, and the Event → Temple → District
+  "Upcoming Festivals" filtering are all unchanged. "Most Visited" is not
+  implemented, per instruction (also absent from the content model).
+  - `DistrictHero`: same two-pill mobile search bar fix as the Home hero
+    and the Districts directory search field (`searchField` wrapper
+    carries the white background/shadow on mobile only, so the Explore
+    button becomes a separate full-width pill below it instead of both
+    sharing one split white bar).
+  - `DistrictTempleList` — the key "don't just shrink" fix: the previous
+    mobile rule stacked each temple card's image full-width on top of the
+    text (`flex-basis: 100%`), which the mobile design does *not* show —
+    it keeps the same horizontal, image-left composition as desktop, just
+    with a smaller square thumbnail (~96px) instead of a full-width one.
+    Replaced the old ≤560px stacking rule with one that keeps `.cardLink`
+    as a non-wrapping row, shrinks `.imageWrapper` to a `6rem` square, and
+    tightens `.body`/`.name`/`.description`/`.viewDetails` sizing to fit
+    the narrower column; the `Image`'s `sizes` attribute was corrected
+    from `100vw` (a leftover from the old full-width rule) to `96px` at
+    that breakpoint so it doesn't request an oversized image. The
+    description now also gets a 2-line `-webkit-line-clamp` so a long
+    excerpt can't push a card taller than its thumbnail.
+  - Pagination and the `UpcomingFestivalsSidebar` needed no changes:
+    pagination already wraps (`flex-wrap: wrap`) so it can't overflow
+    however many pages exist, and the sidebar's flex/`min-width: 0` layout
+    already reads correctly at any width. Both already stack in the
+    design's order (temple list → pagination → Upcoming Festivals) below
+    900px via the page's existing `.contentGrid` single-column breakpoint
+    — no reordering was needed.
+  - Verified against the local dev server: `/districts/kozhikode-district`
+    returns `200`; its one real published Temple's card still links to
+    `/temples/test-temple-page-preview`; all 7 public pages still return
+    `200`; the new `searchField`/`cardLink` mobile rules were confirmed
+    compiled in the built CSS bundle. `tsc --noEmit`, `pnpm lint` (0
+    errors, same 5 pre-existing warnings), `pnpm test:int`, and `pnpm
+    build` all pass with an unchanged route table.
+  - Known, intentionally out-of-scope gaps: the mobile design's "All
+    Temples / Ancient / Popular" filter tabs and the per-card category
+    badges ("ANCIENT", "POPULAR", "CULTURAL HUB") are not implemented —
+    there's no category/classification field anywhere on Temple
+    (`docs/content-model.md` §3) to back either a filter or a badge, and
+    building interactive-looking tabs with no real filtering behind them
+    would be misleading; this mirrors the already-established "Main
+    Deity" omission in this same component. Not done in this task: a
+    rendered-browser/visual mobile pass at exact pixel widths, and testing
+    with a district that actually has multiple pages of temples (current
+    test data has at most one page per district) — pagination's
+    no-overflow behavior was verified by CSS inspection, not a live
+    multi-page render.
+
 ## Not Started
 
 - Public website beyond the Home, Temple detail, Districts directory,

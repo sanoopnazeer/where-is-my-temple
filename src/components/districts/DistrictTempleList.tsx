@@ -60,7 +60,7 @@ export function DistrictTempleList({
                           alt={heroImage?.alt ?? temple.name}
                           fill
                           loading="lazy"
-                          sizes="(max-width: 720px) 100vw, 220px"
+                          sizes="(max-width: 480px) 96px, 220px"
                           className={styles.image}
                         />
                       ) : (

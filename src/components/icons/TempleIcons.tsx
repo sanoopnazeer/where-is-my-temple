@@ -160,3 +160,39 @@ export function LinkIcon(props: SVGProps<SVGSVGElement>) {
     </IconBase>
   )
 }
+
+export function ShieldCheckIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBase {...props}>
+      <path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6z" />
+      <path d="m9 12 2 2 4-4" />
+    </IconBase>
+  )
+}
+
+export function SparkleIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBase {...props}>
+      <path d="M12 3v4M12 17v4M3 12h4M17 12h4" />
+      <path d="m6.5 6.5 2 2M15.5 15.5l2 2M6.5 17.5l2-2M15.5 8.5l2-2" />
+    </IconBase>
+  )
+}
+
+export function EyeIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBase {...props}>
+      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
+      <circle cx="12" cy="12" r="3" />
+    </IconBase>
+  )
+}
+
+export function LeafIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBase {...props}>
+      <path d="M5 20c9 0 14-5 14-14 0-1 0-2-.2-3C10 3.5 5 8.5 5 17c0 1 0 2 .2 3z" />
+      <path d="M6 19C10 15 14 11 18.5 6.5" />
+    </IconBase>
+  )
+}

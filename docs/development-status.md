@@ -566,10 +566,75 @@ via Payload Admin or `DELETE /api/temples/<id>` / `DELETE /api/districts/<id>`.
     review found only `max-width`/media-query usage, no fixed pixel widths,
     in the new files).
 
+- About Us page implemented (2026-09-20), route `/about`
+  (`src/app/(frontend)/about/page.tsx`) — `design/desktop/About us.jpg`.
+  Fully static (no CMS query — every section is static copy or a reused
+  static image asset), builds as prerendered content (`○`), same as `/`
+  and `/contact`.
+  - **Content decision — asked before writing anything**: this design is
+    almost entirely organizational narrative copy (an origin story, mission
+    statement, and specific program claims — restoration projects, "Vastu
+    expert" partnerships, educational festivals) that isn't confirmed fact
+    about this project (CLAUDE.md §4 scopes V1 to a temple directory/info
+    site) and CLAUDE.md §7 / this task's own brief both explicitly forbid
+    inventing mission statements, history, or program claims. Asked the
+    owner how to handle it; **decision: publish the design's copy
+    verbatim**, replacing only the brand name ("Ambalam" → "Where Is My
+    Temple") — not the minimal/generic-copy default that was offered as
+    the recommended option. One exception made unilaterally: the design's
+    CTA button read "Support the Us" (an evident typo), corrected to
+    "Support Us" — publishing an obvious typo verbatim wasn't treated as
+    part of "the copy" the owner was deciding on.
+  - Sections, in design order: hero ("Preserving the Spiritual Architecture
+    of Kerala"), "Guardian of Sacred Legacies" intro, "Mission & Core
+    Values" (Our Mission / Authenticity / Preservation cards), an
+    "Accessibility" band, a closing "A Living Sanctuary of Knowledge" quote
+    band with a non-functional "Support Us" CTA, and the shared "List your
+    temple" `ComingSoonCta`. Reused `SiteHeader`/`SiteFooter`/`ComingSoonCta`
+    unchanged.
+  - Components: `src/components/about/` (`AboutHero`, `AboutIntro`,
+    `MissionValues`, `AccessibilityBand`, `SanctuaryBand`) — all Server
+    Components, no client JS on this page at all. Added `ShieldCheckIcon`,
+    `SparkleIcon`, `EyeIcon`, `LeafIcon` to the existing
+    `src/components/icons/TempleIcons.tsx` set (`BuildingIcon`, already
+    existing, was reused for "Our Mission").
+  - **Images**: the hero background reuses the existing static asset
+    `public/images/home/hero-banner.jpg` (already used on the Home hero) —
+    no new asset added, nothing uploaded to R2, no new CMS field. The
+    design's small "Our Mission" photo strip and the "Accessibility"
+    band's right-side image (a screenshot of a website mockup in the
+    original design — not a real photo the project has) both stay plain
+    decorative panels rather than substituting an unrelated Temple photo,
+    which would misrepresent it — same reasoning as the Contact page's
+    Heritage Headquarters photo panel decision.
+  - **"Support Us" CTA**: no donation/support backend exists or was
+    created; the button is non-functional (`aria-disabled`) with a "Coming
+    Soon" badge, the same treatment as the "List your temple" CTA.
+  - `SiteHeader`'s "About Us" nav item and the footer's "About Us" Quick
+    Link, both previously disabled placeholders, now link to `/about`
+    (same treatment "Districts wise Temples" and "Contact" got in earlier
+    tasks). All four header nav items now have real pages; the footer's
+    "Temple Directory" and "Cultural Festivals" links remain inactive —
+    not part of this task, no confirmed matching route for either.
+  - Verified against the local dev server: `/about` returns 200, zero
+    "Ambalam" occurrences, "Where Is My Temple Heritage Trust" appears
+    correctly, the CTA reads "Support Us" (not the design's typo) with its
+    "Coming Soon" badge, all Mission & Core Values / Accessibility copy
+    renders; the header and footer "About Us" links both resolve to
+    `/about`; Home, Districts directory, the District Temple List page,
+    the Temple detail page, and the Contact page all still return 200.
+    `tsc --noEmit`, `pnpm lint` (0 errors, same 5 pre-existing warnings),
+    `pnpm test:int`, `pnpm build` all pass (`/about` builds static). No new
+    npm dependency was added; no schema/collection change.
+  - Not done in this task: a rendered-browser mobile pass (same
+    Playwright-binary limitation as prior tasks — a CSS-based review found
+    only `max-width`/media-query usage, no fixed pixel widths, in the new
+    files).
+
 ## Not Started
 
 - Public website beyond the Home, Temple detail, Districts directory,
-  District Temple List, and Contact pages (an About Us page)
+  District Temple List, Contact, and About Us pages
 - Search
 - Sitewide SEO (sitemap, robots.txt)
 - Excel importer

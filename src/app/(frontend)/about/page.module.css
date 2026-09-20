@@ -1,0 +1,14 @@
+.page {
+  background: #fdf6f0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  /* The shared (frontend) stylesheet defaults body text to white; override
+     it here so headings/text are legible against this page's light
+     background (same fix as the Home, Districts, Temple detail, and
+     Contact pages). */
+  color: #222;
+}
+
+.page main {
+  padding-bottom: 1rem;
+}

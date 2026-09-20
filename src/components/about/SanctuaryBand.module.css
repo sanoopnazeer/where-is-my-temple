@@ -1,0 +1,48 @@
+.band {
+  background: linear-gradient(135deg, #241a14, #16110d);
+  color: #fff;
+  text-align: center;
+  padding: 4rem 1.5rem;
+}
+
+.icon {
+  width: 2rem;
+  height: 2rem;
+  color: #f5841f;
+  margin-bottom: 1rem;
+}
+
+.heading {
+  margin: 0 0 1rem;
+  font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+  font-weight: 800;
+}
+
+.body {
+  max-width: 640px;
+  margin: 0 auto 2rem;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  opacity: 0.85;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 2rem;
+  background: #f5841f;
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: not-allowed;
+}
+
+.badge {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+}

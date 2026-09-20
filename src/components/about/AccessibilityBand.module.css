@@ -1,0 +1,59 @@
+.band {
+  background: #fdf0e2;
+  padding: 0 1.5rem 3.5rem;
+}
+
+.inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #b5651d, #8a4a12);
+  border-radius: 18px;
+  padding: 2.5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 2rem;
+  align-items: center;
+  color: #fff;
+}
+
+@media (max-width: 720px) {
+  .inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+.iconBadge {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  color: #fff;
+}
+
+.heading {
+  margin: 0 0 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.body {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  opacity: 0.92;
+}
+
+.imagePanel {
+  min-height: 180px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.15);
+}

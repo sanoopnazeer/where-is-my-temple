@@ -2,12 +2,8 @@ import Link from 'next/link'
 
 import styles from './SiteHeader.module.css'
 
-/**
- * Minimal global nav matching design/desktop's header. "About Us" has no
- * page yet (see docs/development-status.md), so it renders as an inactive
- * label rather than a dead link. "Districts wise Temples" and "Contact"
- * link to their respective pages.
- */
+/** Minimal global nav matching design/desktop's header. All four nav items
+ * now have pages. */
 export function SiteHeader() {
   return (
     <header className={styles.header}>
@@ -17,7 +13,7 @@ export function SiteHeader() {
         </Link>
         <nav className={styles.nav} aria-label="Primary">
           <Link href="/">Home</Link>
-          <span className={styles.disabled}>About Us</span>
+          <Link href="/about">About Us</Link>
           <Link href="/districts">Districts wise Temples</Link>
           <Link href="/contact">Contact</Link>
         </nav>

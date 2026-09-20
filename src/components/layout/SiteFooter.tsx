@@ -1,10 +1,13 @@
+import Link from 'next/link'
+
 import styles from './SiteFooter.module.css'
 
 /**
- * Minimal global footer matching design/desktop. Link targets other than
- * the brand (About/Directory/Festivals/Preservation/Privacy/Terms) have no
- * pages yet, so they render as inactive labels rather than dead links. The
- * newsletter field is presentational only — no subscription backend exists.
+ * Minimal global footer matching design/desktop. "About Us" links to the
+ * About page. Other link targets (Directory/Festivals/Preservation/Privacy/
+ * Terms) have no pages yet, so they render as inactive labels rather than
+ * dead links. The newsletter field is presentational only — no
+ * subscription backend exists.
  */
 export function SiteFooter() {
   return (
@@ -20,7 +23,9 @@ export function SiteFooter() {
         <div>
           <h3 className={styles.columnTitle}>Quick Links</h3>
           <ul className={styles.linkList}>
-            <li>About Us</li>
+            <li>
+              <Link href="/about">About Us</Link>
+            </li>
             <li>Temple Directory</li>
             <li>Cultural Festivals</li>
           </ul>

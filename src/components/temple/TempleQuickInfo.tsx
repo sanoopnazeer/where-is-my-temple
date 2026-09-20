@@ -1,4 +1,5 @@
 import type { Temple } from '@/payload-types'
+import { ClockIcon, RuleIcon, ShirtIcon } from '@/components/icons/TempleIcons'
 import styles from './TempleQuickInfo.module.css'
 
 function formatTime(value: string): string {
@@ -19,7 +20,12 @@ export function TempleQuickInfo({ temple, locale }: { temple: Temple; locale: st
     <section className={styles.grid}>
       {darshanTimings.length > 0 && (
         <div className={styles.card}>
-          <h2 className={styles.cardTitle}>Darshan Timings</h2>
+          <div className={styles.cardHeader}>
+            <span className={styles.iconBadge}>
+              <ClockIcon className={styles.icon} />
+            </span>
+            <h2 className={styles.cardTitle}>Darshan Timings</h2>
+          </div>
           <ul className={styles.list}>
             {darshanTimings.map((timing, index) => (
               <li key={timing.id ?? index}>
@@ -33,7 +39,12 @@ export function TempleQuickInfo({ temple, locale }: { temple: Temple; locale: st
 
       {hasDressCode && (
         <div className={styles.card}>
-          <h2 className={styles.cardTitle}>Dress Code</h2>
+          <div className={styles.cardHeader}>
+            <span className={styles.iconBadge}>
+              <ShirtIcon className={styles.icon} />
+            </span>
+            <h2 className={styles.cardTitle}>Dress Code</h2>
+          </div>
           <ul className={styles.list}>
             {dressCode?.men && (
               <li lang={locale}>
@@ -51,7 +62,12 @@ export function TempleQuickInfo({ temple, locale }: { temple: Temple; locale: st
 
       {importantRules.length > 0 && (
         <div className={styles.card}>
-          <h2 className={styles.cardTitle}>Important Rules</h2>
+          <div className={styles.cardHeader}>
+            <span className={styles.iconBadge}>
+              <RuleIcon className={styles.icon} />
+            </span>
+            <h2 className={styles.cardTitle}>Important Rules</h2>
+          </div>
           <ul className={styles.list}>
             {importantRules.map((item, index) => (
               <li key={item.id ?? index} lang={locale}>

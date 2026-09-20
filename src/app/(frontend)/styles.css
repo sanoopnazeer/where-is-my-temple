@@ -21,7 +21,7 @@ body,
 }
 
 body {
-  font-family: system-ui;
+  font-family: var(--font-english), system-ui, sans-serif;
   font-size: 18px;
   line-height: 32px;
 
@@ -32,6 +32,12 @@ body {
     font-size: 15px;
     line-height: 24px;
   }
+}
+
+/* Anek Malayalam for Malayalam-language content, Plus Jakarta Sans (set as
+   --font-english in the root layout) for everything else, site-wide. */
+:lang(ml) {
+  font-family: var(--font-malayalam), sans-serif;
 }
 
 img {

@@ -2,6 +2,10 @@
   background: #fdf6f0;
   min-height: 100vh;
   overflow-x: hidden;
+  /* The shared (frontend) stylesheet sets body's default text color to
+     white for the unrelated Payload starter homepage; override it here so
+     headings/text on this page are legible against its light background. */
+  color: #222;
 }
 
 .page main {

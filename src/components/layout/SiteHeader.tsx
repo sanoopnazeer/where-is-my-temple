@@ -3,10 +3,10 @@ import Link from 'next/link'
 import styles from './SiteHeader.module.css'
 
 /**
- * Minimal global nav matching design/desktop's header. "About Us" and
- * "Contact" have no pages yet (see docs/development-status.md), so they
- * render as inactive labels rather than dead links. "Districts wise
- * Temples" links to the Districts directory page.
+ * Minimal global nav matching design/desktop's header. "About Us" has no
+ * page yet (see docs/development-status.md), so it renders as an inactive
+ * label rather than a dead link. "Districts wise Temples" and "Contact"
+ * link to their respective pages.
  */
 export function SiteHeader() {
   return (
@@ -19,7 +19,7 @@ export function SiteHeader() {
           <Link href="/">Home</Link>
           <span className={styles.disabled}>About Us</span>
           <Link href="/districts">Districts wise Temples</Link>
-          <span className={styles.disabled}>Contact</span>
+          <Link href="/contact">Contact</Link>
         </nav>
       </div>
     </header>

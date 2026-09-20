@@ -1,0 +1,158 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.photoPanel {
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e5e0d8;
+}
+
+.photoIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: #8a5a2b;
+}
+
+.cardBody {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.cardHeading {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #b5651d;
+}
+
+.infoRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.infoIconWrapper {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 8px;
+  background: #f0e9fb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.infoIcon {
+  width: 1.1rem;
+  height: 1.1rem;
+  color: #7c5cbf;
+}
+
+.infoLabel {
+  margin: 0 0 0.15rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #222;
+}
+
+.infoValue {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #666;
+}
+
+.infoLink {
+  font-size: 0.9rem;
+  color: #7c5cbf;
+  text-decoration: none;
+  word-break: break-word;
+}
+
+.infoLink:hover {
+  text-decoration: underline;
+}
+
+.quoteCard {
+  background: linear-gradient(135deg, #5b3f8c, #3f2c66);
+  border-radius: 14px;
+  padding: 1.5rem;
+  color: #fff;
+}
+
+.quoteHeading {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.quoteText {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  font-style: italic;
+  opacity: 0.95;
+}
+
+.quoteAttribution {
+  margin: 0;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.75;
+}
+
+.followCard {
+  background: #fdf0e2;
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.followLabel {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #b5651d;
+}
+
+.followIcons {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.followIconButton {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  border: 1px solid #e0c9a6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: not-allowed;
+}
+
+.followIcon {
+  width: 1rem;
+  height: 1rem;
+  color: #b5651d;
+}

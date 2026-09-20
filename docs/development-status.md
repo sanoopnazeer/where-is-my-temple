@@ -492,10 +492,84 @@ via Payload Admin or `DELETE /api/temples/<id>` / `DELETE /api/districts/<id>`.
     see above); a rendered-browser mobile pass (same Playwright-binary
     limitation as prior tasks).
 
+- Contact page implemented (2026-09-20), route `/contact`
+  (`src/app/(frontend)/contact/page.tsx`) — `design/desktop/Contact us.jpg`.
+  Fully static (no CMS query — everything on this page is either static
+  copy or the hardcoded contact details below), so it builds as prerendered
+  static content (`○`), same as `/`.
+  - Sections, in design order: hero ("Connect with Where Is My Temple" —
+    "Ambalam" replaced per the standing branding rule, CLAUDE.md §1/prior
+    task), a "Send us a Message" form, a "Frequently Asked Questions"
+    accordion, a "Heritage Headquarters" contact card, a "Preserving
+    Sanctity" quote block, a "Follow Our Journey" social row, and the
+    shared "List your temple" `ComingSoonCta`. Reused
+    `SiteHeader`/`SiteFooter`/`ComingSoonCta` unchanged.
+  - Components: `src/components/contact/` (`ContactHero`, `ContactForm`,
+    `FaqSection`, `ContactSidebar`). `FaqSection` is the only Client
+    Component on this page (a small `useState` expand/collapse for 3 FAQ
+    items — no data fetching); everything else is a Server Component.
+    Added `MailIcon`, `PhoneIcon`, `ChevronDownIcon`, `ShareIcon`,
+    `CameraIcon`, `LinkIcon` to the existing
+    `src/components/icons/TempleIcons.tsx` set.
+  - **Real contact details, asked and provided by the owner before
+    building** (the design's office address/email/phone were placeholder
+    mockup values — CLAUDE.md §7/§8 forbid inventing factual contact
+    info): Office — "Hilite Business Park, Kozhikode, Kerala"; Email —
+    `contact@whereismytemple.com` (real `mailto:` link); Phone —
+    `+91 9746105647` (real `tel:` link). Hardcoded as constants in
+    `ContactSidebar.tsx`, the same pattern as the existing `SITE_URL`
+    constant — there is no site-wide contact-info collection/field in the
+    content model, and none was added (no schema change).
+  - **No functional form/backend was built**, per the task's explicit
+    instruction: no email service, API route, or new collection exists for
+    contact submissions. `ContactForm` renders every field and the submit
+    button `disabled`, with an explicit "Coming Soon" badge — the same
+    non-functional pattern already used for the search bars and the
+    newsletter form (`SiteFooter`), with the extra badge because a
+    non-functional *form* could otherwise mislead a visitor into thinking a
+    message was actually sent (unlike a disabled search box, where nothing
+    is lost).
+  - **FAQ answers**: the design shows the three questions collapsed with no
+    answer text visible anywhere, and there's no CMS-backed FAQ content —
+    each answer honestly renders "Answer coming soon" rather than inventing
+    factual claims about temple rules, timings, or visitor access.
+  - **"Follow Our Journey" social icons**: rendered as non-interactive
+    (`aria-disabled`, no `href`) — there are no confirmed real social
+    profile URLs to link to, and CLAUDE.md §7 forbids inventing them.
+  - **"Preserving Sanctity" quote / "Heritage Archives" attribution**: kept
+    as static decorative copy, the same treatment already established for
+    the Home page's Heritage Banner quote — not presented as a claim about
+    a real, named source.
+  - **Heritage Headquarters photo panel**: the design's gray box has no
+    real office photo behind it in the content model; rather than borrow an
+    unrelated Temple photo (which would misrepresent it as a photo of the
+    office — a different situation from District cards, where the borrowed
+    photo genuinely depicts something in that district), it stays a plain
+    decorative panel with a pin icon.
+  - `SiteHeader`'s "Contact" nav item, previously a disabled placeholder,
+    now links to `/contact` (same treatment as "Districts wise Temples" in
+    an earlier task). "About Us" remains disabled — still no page for it.
+  - Verified against the local dev server: `/contact` returns 200 with the
+    real office address/email/phone (correct `mailto:`/`tel:` hrefs), zero
+    "Ambalam" occurrences anywhere on the page, the "Coming Soon" badge and
+    disabled fields on the form, all three FAQ questions present, and the
+    header's Contact link resolving correctly; Home, Districts directory,
+    the District Temple List page, and the Temple detail page all still
+    return 200. `tsc --noEmit`, `pnpm lint` (0 errors, same 5 pre-existing
+    warnings), `pnpm test:int`, `pnpm build` all pass (`/contact` builds
+    static). No new npm dependency was added; no schema/collection change
+    (`pnpm generate:types` wasn't needed — nothing in this task touched
+    Payload collections).
+  - Not done in this task: a real contact-form backend/email service; real
+    FAQ answer content; real social media URLs; a rendered-browser mobile
+    pass (same Playwright-binary limitation as prior tasks — a CSS-based
+    review found only `max-width`/media-query usage, no fixed pixel widths,
+    in the new files).
+
 ## Not Started
 
-- Public website beyond the Home, Temple detail, Districts directory, and
-  District Temple List pages (about/contact pages)
+- Public website beyond the Home, Temple detail, Districts directory,
+  District Temple List, and Contact pages (an About Us page)
 - Search
 - Sitewide SEO (sitemap, robots.txt)
 - Excel importer

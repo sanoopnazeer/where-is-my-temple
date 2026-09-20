@@ -272,10 +272,72 @@ via Payload Admin or `DELETE /api/temples/<id>` / `DELETE /api/districts/<id>`.
     a rendered-browser mobile pass); a real districts-listing page; real
     search; sitewide SEO (sitemap/robots.txt).
 
+- Public Districts directory page implemented (2026-09-20), route
+  `/districts` (`src/app/(frontend)/districts/page.tsx`) —
+  `design/desktop/District wise temples.jpg`. This is a directory of
+  **Districts only**; it does not render individual Temple cards or links
+  (`design/desktop/District Temple.jpg`, the per-district Temple List page,
+  is explicitly out of scope — "implemented separately" per the task brief).
+  - **Route for the future per-district Temple List page**: asked the
+    owner before building anything, since neither the project nor the
+    design established this URL yet. Owner chose `/districts/[slug]`
+    (recommended: matches the existing `/temples/[slug]` convention exactly,
+    using District's existing `slug` field, `docs/content-model.md` §2).
+    Each District card here links to `/districts/<slug>` now, even though
+    that route doesn't exist yet (will 404 until built) — that page is a
+    separate, not-yet-started task.
+  - Data: `src/app/(frontend)/districts/getDistrictsData.ts`, two Local API
+    queries total (not one per District, not a full Temple fetch): all
+    published Districts, and every published Temple's `district` +
+    `heroImage` references only (`select: { district: true, heroImage:
+    true }`, no other Temple fields returned) to derive a per-district
+    published-Temple count and a representative photo in memory — lighter
+    than the Home page's equivalent query, which fetches full Temple
+    documents. Both queries use `overrideAccess: false` with no `user`,
+    applying the same public `publishedOrAdmin` rule as the REST API, so
+    draft/review/archived Temples and Districts are excluded automatically
+    (no manual status filtering needed).
+  - Component: `src/components/districts/DistrictsDirectory.tsx` — page
+    heading/subheading + a grid of District cards, each a `<Link
+    href="/districts/<slug>">` wrapping the whole card (not a per-temple
+    link, since no Temples are shown here). Uses the same "borrow a
+    Temple's photo, no schema change" precedent already approved for the
+    Home page's district teaser, since District still has no image field
+    (`docs/content-model.md` §2); the design's decorative region tags
+    ("SOUTH KERALA", etc.) have no data source and are omitted, same
+    reasoning as the Home page's district taglines. Added `BuildingIcon` to
+    the existing `src/components/icons/TempleIcons.tsx` set for the Temple
+    count.
+  - Reused `SiteHeader`/`SiteFooter`/`ComingSoonCta` unchanged; `export
+    const revalidate = 60` (ISR), same rationale as the Home page.
+  - Required by this task's own user-flow spec, not incidental: SiteHeader's
+    "Districts wise Temples" nav item and the Home page's "View All
+    Districts" button were previously disabled placeholders (no page to
+    link to) — both now link to `/districts`, since the brief explicitly
+    states "The Home Page 'View All Districts' action opens this District
+    directory page."
+  - Verified against the local dev server: `/districts` returns 200 and
+    lists exactly the two currently-published Districts ("Kozhikode",
+    "TEST District"), each showing an accurate published-Temple count (1
+    each); the previously-created draft District
+    (`test-district-draft-home-check`) does not appear; no `/temples/*`
+    links appear anywhere on the page; the Home page, Temple detail page,
+    invalid-slug 404, and unauthenticated-write 403 all still work
+    unchanged. `pnpm generate:types` (no diff — confirms no schema change),
+    `tsc --noEmit`, `pnpm lint` (0 errors, same 5 pre-existing warnings),
+    `pnpm test:int`, `pnpm build` all pass (`/districts` builds as ISR,
+    matching `/`).
+  - Not done in this task: the per-district Temple List page at
+    `/districts/[slug]` itself (separate task, per the brief); a rendered-
+    browser mobile pass (same Playwright-binary limitation as prior tasks —
+    substituted a CSS-based review, which found only `max-width`/media-query
+    usage and no fixed pixel widths in the new files).
+
 ## Not Started
 
-- Public website beyond the Home and Temple detail pages (district
-  listing, about/contact pages)
+- Public website beyond the Home, Temple detail, and Districts directory
+  pages (per-district Temple List page at `/districts/[slug]`, about/contact
+  pages)
 - Search
 - Sitewide SEO (sitemap, robots.txt)
 - Excel importer

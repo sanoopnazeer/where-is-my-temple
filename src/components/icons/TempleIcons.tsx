@@ -79,3 +79,18 @@ export function DirectionsIcon(props: SVGProps<SVGSVGElement>) {
     </IconBase>
   )
 }
+
+export function BuildingIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBase {...props}>
+      <rect x="4" y="3" width="16" height="18" rx="1" />
+      <line x1="9" y1="7" x2="9" y2="7.01" />
+      <line x1="15" y1="7" x2="15" y2="7.01" />
+      <line x1="9" y1="11" x2="9" y2="11.01" />
+      <line x1="15" y1="11" x2="15" y2="11.01" />
+      <line x1="9" y1="15" x2="9" y2="15.01" />
+      <line x1="15" y1="15" x2="15" y2="15.01" />
+      <path d="M10 21v-4h4v4" />
+    </IconBase>
+  )
+}

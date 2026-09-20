@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
 import type { DistrictCard } from '@/app/(frontend)/getHomeData'
 import { resolveMediaUrl } from '@/utilities/media'
@@ -10,9 +11,7 @@ import styles from './DistrictsGrid.module.css'
  * that district (existing relationship, no schema change). The decorative
  * taglines shown in the design ("Northern Gate", etc.) have no data source
  * and are intentionally omitted rather than invented.
- * "View All Districts" has no listing page yet, so it's a disabled label
- * rather than a dead link — same treatment as SiteHeader's other
- * not-yet-built nav items.
+ * "View All Districts" links to the Districts directory page (/districts).
  */
 export function DistrictsGrid({ cards }: { cards: DistrictCard[] }) {
   if (cards.length === 0) return null
@@ -54,9 +53,9 @@ export function DistrictsGrid({ cards }: { cards: DistrictCard[] }) {
         })}
       </div>
 
-      <span className={styles.viewAllButton} aria-disabled="true">
+      <Link href="/districts" className={styles.viewAllButton}>
         View All Districts
-      </span>
+      </Link>
     </section>
   )
 }

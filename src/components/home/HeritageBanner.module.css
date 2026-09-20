@@ -36,6 +36,10 @@
   text-align: center;
 }
 
+.eyebrow {
+  display: none;
+}
+
 .title {
   margin: 0 0 1.25rem;
   font-size: 1.5rem;
@@ -47,4 +51,19 @@
   font-size: 0.95rem;
   line-height: 1.8;
   color: rgba(255, 255, 255, 0.85);
+}
+
+@media (max-width: 480px) {
+  .eyebrow {
+    display: inline-block;
+    margin: 0 auto 1rem;
+    padding: 0.3rem 0.9rem;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #f5a35f;
+  }
 }

@@ -19,6 +19,10 @@ export function HeritageBanner() {
         <div className={styles.overlay} />
       </div>
       <div className={styles.inner}>
+        {/* Shown only on mobile (CSS), matching design/mobile's small
+            "SACRED LEGACY" eyebrow badge — design/desktop's version of this
+            section doesn't have one, so it stays hidden there. */}
+        <p className={styles.eyebrow}>Sacred Legacy</p>
         <h2 className={styles.title}>The Sacred Heritage of Where Is My Temple</h2>
         <p className={styles.quote}>
           &ldquo;Where Is My Temple is more than just a directory &mdash; it is a living archive

@@ -772,6 +772,65 @@ via Payload Admin or `DELETE /api/temples/<id>` / `DELETE /api/districts/<id>`.
     open/close behavior and the `768px` breakpoint were verified by
     reading the rendered markup/CSS, not a live browser screenshot.
 
+- **Home Page mobile implementation** (2026-09-20): adapted the existing
+  Home page components with responsive CSS to match `design/mobile/Home.jpg`
+  at common phone widths (375/390/430px), reusing every component
+  unchanged at the JSX/data level — no new page, no new data fetching, no
+  schema change. All changes are scoped to a `@media (max-width: 480px)`
+  (or narrower) query per component, so desktop is visually unchanged;
+  `SiteHeader`'s existing sticky/hamburger/search behavior
+  (`768px` breakpoint) was left untouched.
+  - `HomeHero`: the search field and "Explore" button are now two visually
+    separate stacked pills on mobile (matching the design) instead of one
+    white bar split into rows — `searchField` (icon+input) is a new inner
+    wrapper carrying the white background on mobile only; desktop's single
+    pill bar is unchanged.
+  - `UpcomingEvents`: grid stays at 2 columns down to 360px (was collapsing
+    to 1 column at ≤520px, which covered the required 375-430px test
+    range and didn't match the design). Added a mobile-only "More →" link
+    to `/events` and a subheading next to a left-aligned heading — both
+    `display: none` above 480px, matching design/desktop's plain centered
+    heading with neither.
+  - `HeritageBanner`: added a mobile-only "Sacred Legacy" eyebrow badge
+    (`display: none` on desktop) — present in design/mobile, absent from
+    design/desktop's version of this section.
+  - `DistrictsGrid`: same 2-column-down-to-360px grid fix as
+    `UpcomingEvents`; "View All Districts" button becomes full-width on
+    mobile (was content-width, centered).
+  - `ComingSoonCta` ("List your temple", shared by all 7 pages): added a
+    mobile-only subtitle line and uppercase title (both present in
+    design/mobile, absent from design/desktop), and a mobile-only
+    alignment override back to left/full-width-button — this banner was
+    changed to right-aligned for desktop in an earlier task; that
+    right-alignment is preserved here and only overridden below 480px to
+    match design/mobile's left-aligned treatment. Being a shared
+    component, this also affects the mobile view of the other 6 pages
+    that reuse it, which is a consistency improvement, not a regression.
+  - `SiteFooter` (shared): "Quick Links" and "Resources" pair up
+    side-by-side below 480px via `grid-template-areas` (new
+    `brandColumn`/`quickColumn`/`resourcesColumn`/`newsletterColumn`
+    classes on the existing four wrapper `div`s), with the brand block and
+    newsletter each spanning the full width — matching design/mobile;
+    desktop's existing `auto-fit` grid is unchanged.
+  - Verified against the local dev server: Home and all other 6 public
+    pages still return `200`; the compiled CSS bundle was inspected
+    directly to confirm every new class and `@media (max-width: 480px)` /
+    `359px` rule compiled as written (`searchField`, `headingRow`,
+    `eyebrow`, `subtitle`, the footer's `grid-template-areas` and column
+    classes). `tsc --noEmit`, `pnpm lint` (0 errors, same 5 pre-existing
+    warnings), `pnpm test:int`, and `pnpm build` all pass with an
+    unchanged route table.
+  - Known, intentionally out-of-scope gaps: the design's per-district
+    tagline overlays ("Northern Gate", etc.) remain omitted (no data
+    source, established precedent from the Districts directory task); the
+    "Top Visited Temples" subheading ("Most revered spiritual centers in
+    God's Own Country") is missing from *both* mobile and desktop designs
+    in the current implementation — left alone here since it isn't a
+    mobile-specific gap this task should fix. Not done in this task: a
+    rendered-browser/visual mobile pass at exact pixel widths (same
+    Playwright-binary limitation as prior tasks) — verified via computed
+    CSS/media-query logic and the compiled bundle, not a live screenshot.
+
 ## Not Started
 
 - Public website beyond the Home, Temple detail, Districts directory,

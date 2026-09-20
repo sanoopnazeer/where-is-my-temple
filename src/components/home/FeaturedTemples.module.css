@@ -43,6 +43,27 @@
   margin-bottom: 0.9rem;
 }
 
+/* Mobile design shows these as distinct white cards (rounded corners,
+   shadow, image bleeding to the card edge) rather than plain stacked
+   image+text — desktop's borderless layout above is unchanged. */
+@media (max-width: 480px) {
+  .card {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  }
+
+  .imageWrapper {
+    border-radius: 0;
+    margin-bottom: 0;
+  }
+
+  .body {
+    padding: 1rem 1.1rem 1.25rem;
+  }
+}
+
 .image {
   object-fit: cover;
 }

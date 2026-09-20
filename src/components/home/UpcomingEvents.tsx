@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
 import type { Event } from '@/payload-types'
 import { resolveMediaUrl } from '@/utilities/media'
@@ -20,7 +21,19 @@ export function UpcomingEvents({ events }: { events: Event[] }) {
 
   return (
     <section className={styles.section}>
-      <h2 className={styles.heading}>Upcoming Festivals &amp; Events</h2>
+      {/* The "More" link and subheading are shown only on mobile (CSS) —
+          design/mobile has a left-aligned heading with an inline "More"
+          link to the full Events page and a subheading; design/desktop
+          just centers the heading with neither. */}
+      <div className={styles.headingRow}>
+        <div>
+          <h2 className={styles.heading}>Upcoming Festivals &amp; Events</h2>
+          <p className={styles.subheading}>Immerse in divine traditions &amp; temple celebrations</p>
+        </div>
+        <Link href="/events" className={styles.moreLink}>
+          More →
+        </Link>
+      </div>
       <div className={styles.grid}>
         {events.map((event) => {
           const temple = typeof event.temple === 'object' ? event.temple : undefined

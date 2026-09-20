@@ -40,6 +40,11 @@ export function ComingSoonCta({
       )}
       <div className={styles.inner}>
         <h2 className={styles.title}>List your temple</h2>
+        {/* Shown only on mobile (CSS) — design/mobile's version of this
+            banner has this line, design/desktop's doesn't. */}
+        <p className={styles.subtitle}>
+          Help devotees across the globe connect with your sacred sanctuary
+        </p>
         <span className={styles.button} aria-disabled="true">
           Upload your temple details
           <span className={styles.badge}>Coming Soon</span>

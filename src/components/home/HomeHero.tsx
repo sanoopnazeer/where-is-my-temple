@@ -30,14 +30,16 @@ export function HomeHero() {
           heritage of Kerala&apos;s sacred temples.
         </p>
         <div className={styles.searchBar}>
-          <SearchIcon className={styles.searchIcon} />
-          <input
-            type="search"
-            placeholder="Search for Temples, Poojas, or Locations"
-            disabled
-            aria-label="Search (coming soon)"
-            className={styles.searchInput}
-          />
+          <div className={styles.searchField}>
+            <SearchIcon className={styles.searchIcon} />
+            <input
+              type="search"
+              placeholder="Search for Temples, Poojas, or Locations"
+              disabled
+              aria-label="Search (coming soon)"
+              className={styles.searchInput}
+            />
+          </div>
           <span className={styles.exploreButton} aria-disabled="true">
             Explore
           </span>

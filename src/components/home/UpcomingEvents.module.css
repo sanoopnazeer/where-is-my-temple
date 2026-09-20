@@ -4,11 +4,59 @@
   padding: 0 1.5rem;
 }
 
+.headingRow {
+  display: block;
+}
+
 .heading {
   text-align: center;
   font-size: 1.75rem;
   margin: 0 0 2rem;
   color: #222;
+}
+
+.subheading {
+  display: none;
+}
+
+.moreLink {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .headingRow {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .heading {
+    text-align: left;
+    font-size: 1.4rem;
+    margin: 0 0 0.35rem;
+  }
+
+  .subheading {
+    display: block;
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: #666;
+  }
+
+  .moreLink {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+    color: #f5841f;
+    font-weight: 700;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    text-decoration: none;
+  }
 }
 
 .grid {
@@ -23,9 +71,22 @@
   }
 }
 
-@media (max-width: 520px) {
+/* Mobile design shows these as a horizontally scrollable row (the second
+   card visibly cropped at the edge), not a wrapping grid — cards keep a
+   fixed width and the row scrolls instead of stacking to 1 column. */
+@media (max-width: 480px) {
   .grid {
-    grid-template-columns: 1fr;
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.25rem;
+    scrollbar-width: none;
+  }
+
+  .grid::-webkit-scrollbar {
+    display: none;
   }
 }
 
@@ -34,6 +95,13 @@
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 480px) {
+  .card {
+    flex: 0 0 62%;
+    scroll-snap-align: start;
+  }
 }
 
 .imageWrapper {

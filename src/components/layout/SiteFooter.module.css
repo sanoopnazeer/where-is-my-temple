@@ -12,6 +12,35 @@
   gap: 2rem;
 }
 
+/* Mobile design pairs Quick Links/Resources side by side, with the brand
+   block and newsletter each spanning the full width. */
+@media (max-width: 480px) {
+  .columns {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'brand brand'
+      'quick resources'
+      'newsletter newsletter';
+    gap: 1.75rem;
+  }
+
+  .brandColumn {
+    grid-area: brand;
+  }
+
+  .quickColumn {
+    grid-area: quick;
+  }
+
+  .resourcesColumn {
+    grid-area: resources;
+  }
+
+  .newsletterColumn {
+    grid-area: newsletter;
+  }
+}
+
 .brand {
   color: #fff;
   margin: 0 0 0.75rem;

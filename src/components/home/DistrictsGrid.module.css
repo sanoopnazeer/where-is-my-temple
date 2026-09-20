@@ -53,7 +53,9 @@
   }
 }
 
-@media (max-width: 520px) {
+/* The mobile design keeps this at 2 columns down to common phone widths
+   (375-430px) — only true edge-case narrow screens drop to 1. */
+@media (max-width: 359px) {
   .grid {
     grid-template-columns: 1fr;
   }
@@ -139,4 +141,12 @@
   font-weight: 700;
   font-size: 0.95rem;
   text-decoration: none;
+}
+
+@media (max-width: 480px) {
+  .viewAllButton {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
 }

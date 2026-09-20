@@ -830,6 +830,52 @@ via Payload Admin or `DELETE /api/temples/<id>` / `DELETE /api/districts/<id>`.
     rendered-browser/visual mobile pass at exact pixel widths (same
     Playwright-binary limitation as prior tasks) — verified via computed
     CSS/media-query logic and the compiled bundle, not a live screenshot.
+  - Follow-up (same session, undocumented until now): `UpcomingEvents`'s
+    grid became a horizontally scrollable row on mobile (`overflow-x:
+    auto`, cards fixed at `62%` width, snap points) instead of wrapping to
+    1 column, matching the design's cropped second card; `FeaturedTemples`
+    ("Top Visited Temples") cards got an actual mobile card treatment
+    (white background, rounded corners, shadow, image bleeding to the
+    card's top edge) instead of borderless stacked image+text. Both
+    changes are scoped to `@media (max-width: 480px)`; desktop unchanged.
+
+- **District Directory mobile implementation** (2026-09-20): adapted
+  `DistrictsDirectory` (the `/districts` page) with responsive CSS to
+  match `design/mobile/All District.jpg` at 375/390/430px — same
+  component, same `getDistrictsData()` data fetching, no schema change.
+  District → District Temple List navigation (`/districts/[slug]`) is
+  unchanged; no Temple cards/links were added.
+  - Added a mobile-only "Sacred Heritage Directory" eyebrow badge and a
+    presentational, disabled search input ("Search district, temple or
+    region...", `SearchIcon`) — both present in design/mobile, absent
+    from design/desktop's version of this page (verified against
+    `design/desktop/District wise temples.jpg`), so both are `display:
+    none` above 480px. The search input has no backend/route, matching
+    the Home hero's existing disabled-search convention (CLAUDE.md §6,
+    deferred feature) — not a new capability.
+  - Grid fixed at 2 columns down to 360px (was collapsing to 1 column at
+    ≤520px, which covered the required 375-430px test range) — same fix
+    already applied to the Home page's district teaser grid.
+  - Verified against the local dev server: the new eyebrow/search markup
+    renders in the HTML and both are present in the compiled CSS bundle
+    under a `display: none` default plus a `@media (max-width: 480px)`
+    override (confirmed by inspecting the built stylesheet directly, not
+    assumed); all 7 public pages still return `200`; each district card's
+    link still resolves to `/districts/[slug]`. `tsc --noEmit`, `pnpm
+    lint` (0 errors, same 5 pre-existing warnings), `pnpm test:int`, and
+    `pnpm build` all pass with an unchanged route table.
+  - Known, intentionally out-of-scope gaps: the design's per-district
+    region tags ("SOUTH KERALA", etc.) remain omitted, same established
+    precedent as the tagline overlays above (no data source). This page's
+    mobile design shows a different "List your temple" subtitle/footer
+    link set (extra Quick Links/Resources items, a copyright line) than
+    the Home page's mobile design already implemented for the same shared
+    `ComingSoonCta`/`SiteFooter` components — left as already-implemented
+    (Home's copy) rather than fragmented per-page, since these are shared
+    components and the difference is a cosmetic copy variation between
+    design frames, not a responsive-layout defect. Not done in this task:
+    a rendered-browser/visual mobile pass at exact pixel widths (same
+    Playwright-binary limitation as prior tasks).
 
 ## Not Started
 

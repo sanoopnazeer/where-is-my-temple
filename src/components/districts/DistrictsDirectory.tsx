@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import type { DistrictListItem } from '@/app/(frontend)/districts/getDistrictsData'
-import { BuildingIcon } from '@/components/icons/TempleIcons'
+import { BuildingIcon, SearchIcon } from '@/components/icons/TempleIcons'
 import { resolveMediaUrl } from '@/utilities/media'
 import styles from './DistrictsDirectory.module.css'
 
@@ -18,11 +18,27 @@ import styles from './DistrictsDirectory.module.css'
 export function DistrictsDirectory({ items }: { items: DistrictListItem[] }) {
   return (
     <section className={styles.section}>
+      {/* Eyebrow badge and search field are shown only on mobile (CSS) —
+          design/mobile has both, design/desktop has neither. The search
+          field is presentational only, matching the Home hero's disabled
+          search bar (no search backend exists yet — CLAUDE.md §6). */}
+      <p className={styles.eyebrow}>Sacred Heritage Directory</p>
       <h1 className={styles.heading}>Explore Temples Across Kerala</h1>
       <p className={styles.subheading}>
         Journey through Kerala&apos;s spiritual landscape, district by district, each offering
         unique architectural styles and local legends.
       </p>
+
+      <div className={styles.searchBar}>
+        <SearchIcon className={styles.searchIcon} />
+        <input
+          type="search"
+          placeholder="Search district, temple or region..."
+          disabled
+          aria-label="Search (coming soon)"
+          className={styles.searchInput}
+        />
+      </div>
 
       {items.length === 0 ? (
         <p className={styles.empty}>No districts are available yet.</p>

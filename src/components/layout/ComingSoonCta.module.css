@@ -1,9 +1,35 @@
 .banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 30vh;
   background: linear-gradient(135deg, #6fa3d8, #a9c9e8);
   margin-top: 3rem;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.bgWrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.bgImage {
+  object-fit: cover;
+  object-position: center;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(20, 30, 45, 0.6), rgba(20, 30, 45, 0.45));
 }
 
 .inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 2.5rem 1.5rem;

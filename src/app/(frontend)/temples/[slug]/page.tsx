@@ -12,11 +12,10 @@ import { TempleGallery } from '@/components/temple/TempleGallery'
 import { TemplePlanYourVisit } from '@/components/temple/TemplePlanYourVisit'
 import { TempleContact } from '@/components/temple/TempleContact'
 import { resolveMediaUrl } from '@/utilities/media'
+import { SITE_URL } from '@/utilities/site'
 import { getTemple } from './getTemple'
 import { resolveLocale } from './locale'
 import styles from './page.module.css'
-
-const SITE_URL = 'https://whereismytemple.com'
 
 type PageParams = { slug: string }
 type PageSearchParams = { lang?: string | string[] }

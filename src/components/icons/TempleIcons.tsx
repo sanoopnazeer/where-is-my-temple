@@ -63,6 +63,15 @@ export function PinIcon(props: SVGProps<SVGSVGElement>) {
   )
 }
 
+export function SearchIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBase {...props}>
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-3.5-3.5" />
+    </IconBase>
+  )
+}
+
 export function DirectionsIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <IconBase {...props}>

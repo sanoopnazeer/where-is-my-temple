@@ -1,59 +1,55 @@
-import { headers as getHeaders } from 'next/headers.js'
-import Image from 'next/image'
-import { getPayload } from 'payload'
-import React from 'react'
-import { fileURLToPath } from 'url'
+import type { Metadata } from 'next'
 
-import config from '@/payload.config'
-import './styles.css'
+import { SiteHeader } from '@/components/layout/SiteHeader'
+import { SiteFooter } from '@/components/layout/SiteFooter'
+import { ComingSoonCta } from '@/components/layout/ComingSoonCta'
+import { HomeHero } from '@/components/home/HomeHero'
+import { UpcomingEvents } from '@/components/home/UpcomingEvents'
+import { HeritageBanner } from '@/components/home/HeritageBanner'
+import { DistrictsGrid } from '@/components/home/DistrictsGrid'
+import { FeaturedTemples } from '@/components/home/FeaturedTemples'
+import { SITE_URL } from '@/utilities/site'
+import { getHomeData } from './getHomeData'
+import styles from './page.module.css'
+
+// No request-specific data is used, so Next would otherwise fully
+// prerender this page once at build time and never reflect newly
+// published content. Revalidate periodically instead — cache-friendly
+// (docs/architecture.md §14) while keeping published changes reasonably
+// fresh, without forcing every request to hit the database.
+export const revalidate = 60
+
+const TITLE = 'Where Is My Temple — Discover Kerala’s Sacred Temples'
+const DESCRIPTION =
+  'Discover thousands of ancient sanctuaries, timeless rituals, and the rich cultural heritage of Kerala’s sacred temples, organized by district.'
+
+export const metadata: Metadata = {
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: SITE_URL },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: SITE_URL,
+    type: 'website',
+  },
+}
 
 export default async function HomePage() {
-  const headers = await getHeaders()
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-  const { user } = await payload.auth({ headers })
-
-  const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
+  const { upcomingEvents, districtCards, featuredTemples } = await getHomeData()
 
   return (
-    <div className="home">
-      <div className="content">
-        <picture>
-          <source srcSet="https://raw.githubusercontent.com/payloadcms/payload/3.x/packages/ui/src/assets/payload-favicon.svg" />
-          <Image
-            alt="Payload Logo"
-            height={65}
-            src="https://raw.githubusercontent.com/payloadcms/payload/3.x/packages/ui/src/assets/payload-favicon.svg"
-            width={65}
-          />
-        </picture>
-        {!user && <h1>Welcome to your new project.</h1>}
-        {user && <h1>Welcome back, {user.email}</h1>}
-        <div className="links">
-          <a
-            className="admin"
-            href={payloadConfig.routes.admin}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Go to admin panel
-          </a>
-          <a
-            className="docs"
-            href="https://payloadcms.com/docs"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Documentation
-          </a>
-        </div>
-      </div>
-      <div className="footer">
-        <p>Update this page by editing</p>
-        <a className="codeLink" href={fileURL}>
-          <code>app/(frontend)/page.tsx</code>
-        </a>
-      </div>
+    <div className={styles.page}>
+      <SiteHeader />
+      <main>
+        <HomeHero />
+        <UpcomingEvents events={upcomingEvents} />
+        <HeritageBanner />
+        <DistrictsGrid cards={districtCards} />
+        <FeaturedTemples temples={featuredTemples} />
+        <ComingSoonCta />
+      </main>
+      <SiteFooter />
     </div>
   )
 }

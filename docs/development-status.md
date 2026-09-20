@@ -192,10 +192,90 @@ filled in — English will show via locale fallback). To remove later:
 delete the Temple first (it references the District), then the District,
 via Payload Admin or `DELETE /api/temples/<id>` / `DELETE /api/districts/<id>`.
 
+- Public Home Page implemented (2026-09-20), route `src/app/(frontend)/page.tsx`
+  (the existing `/` route — the old Payload-starter welcome content it
+  replaced is gone). Server-rendered via one `getHomeData()` call
+  (`src/app/(frontend)/getHomeData.ts`) that issues exactly three Local API
+  queries total — upcoming Events, all published Districts, and all
+  published Temples (used to compute a per-district Temple count and
+  representative photo in memory) — plus a fourth for the most-recently-
+  published Temples, regardless of how many cards are rendered from them
+  (no per-card queries). All four use `overrideAccess: false` with no
+  `user`, applying the same public `publishedOrAdmin` rule as the REST API.
+  `export const revalidate = 60` makes the page ISR-cached rather than
+  frozen at build time (Next would otherwise fully prerender it once, since
+  it has no request-specific data) or fetched on every single request —
+  matching `docs/architecture.md` §14's cache-first guidance.
+  - Sections, in design order (`design/desktop/Landing Page.jpg`): hero
+    (headline/subtext + a presentational search bar), Upcoming Festivals &
+    Events (next 4 Events by `endDate`), a static heritage quote banner,
+    Explore by Districts (up to 8 published Districts), Top Visited
+    Temples (3 cards), and the shared "List your temple" `ComingSoonCta`.
+    Reused `SiteHeader`/`SiteFooter`/`ComingSoonCta` unchanged — no
+    duplicate header/footer was created.
+  - Components: `src/components/home/` (`HomeHero`, `UpcomingEvents`,
+    `HeritageBanner`, `DistrictsGrid`, `FeaturedTemples`), each hiding
+    itself entirely when it has no data (same empty-state pattern as the
+    Temple page).
+  - Small reusable extractions (not Temple-specific behavior changes):
+    `src/utilities/site.ts` (`SITE_URL` constant, now shared by the Home
+    and Temple pages instead of being duplicated), `src/utilities/richText.ts`
+    (`excerpt()`, a plain-text card-preview helper built on Payload's own
+    `@payloadcms/richtext-lexical/plaintext` converter — not a hand-rolled
+    Lexical walker), and one new icon (`SearchIcon`) added to the existing
+    `src/components/icons/TempleIcons.tsx` set.
+  - Content-model gaps resolved by owner decision (asked before building,
+    not assumed): (1) District has no image/tagline field — each district
+    card's photo is borrowed from one published Temple in that district via
+    the existing `Temple.district` relationship (no schema change); the
+    design's decorative taglines ("Northern Gate", etc.) have no data
+    source and are omitted rather than invented. (2) "Top Visited Temples"
+    implied view-count analytics that don't exist anywhere in this
+    architecture — this section shows the most recently published Temples
+    instead (`sort: '-createdAt'`), under the design's original heading.
+  - Other assumptions: the hero search bar and "View All Districts"/"Upload
+    your temple details" affordances are presentational only (disabled
+    input/button, non-interactive label) since search and a districts-
+    listing page are both still "Not Started" below — same treatment as
+    the Temple page's not-yet-built nav targets; Event cards borrow their
+    linked Temple's `heroImage` (Event has no image field) and are not
+    links (no event detail route exists yet); Temple cards link to the
+    real `/temples/[slug]` route.
+  - **(2026-09-20 follow-up)** Hero, heritage-quote, and "List your temple"
+    backgrounds replaced with static photos supplied directly as website
+    assets under `public/images/home/` (`hero-banner.jpg`,
+    `heritage-banner.png`, `list-temple-banner.jpg`) — **not** Payload
+    Media, **not** uploaded to R2, no CMS field added, per explicit
+    instruction. Rendered via `next/image` `fill` + `object-fit: cover`
+    with a dark gradient overlay (in each component's own CSS module) for
+    text readability, matching the existing hero/banner layouts unchanged.
+    `ComingSoonCta` (`src/components/layout/ComingSoonCta.tsx`, shared by
+    the Home and Temple pages) gained a `backgroundImageSrc` prop defaulting
+    to `list-temple-banner.jpg`, so the "List your temple" CTA now shows
+    this photo on every page it appears on (Home and Temple detail) without
+    either call site needing to pass it explicitly. `pnpm lint`,
+    `tsc --noEmit`, `pnpm test:int`, `pnpm build` re-run and pass.
+  - Verified against the local dev server: `/` returns 200 with the real
+    published Temple/District/Event content the owner has been adding via
+    Payload Admin; a newly-created **draft** District (`test-district-draft-home-check`,
+    left in place, not deleted) does not appear on the Home page; the
+    Temple detail page, invalid-slug 404, and unauthenticated-write `403`
+    all still work unchanged; a temporary future-dated Event (`TEST Upcoming
+    Event — Home Page Preview`, left in place, not deleted) confirmed the
+    Upcoming Events section's populated state, including the borrowed
+    Temple photo via `next/image`/R2. `pnpm generate:types`, `tsc --noEmit`,
+    `pnpm lint` (0 errors, same 5 pre-existing warnings), `pnpm test:int`,
+    `pnpm build` all pass.
+  - Not done in this task: detailed mobile visual matching against
+    `design/mobile/` (a CSS-based review found only `max-width` usage and
+    wrapping grids, no fixed pixel widths, so no overflow is expected — not
+    a rendered-browser mobile pass); a real districts-listing page; real
+    search; sitewide SEO (sitemap/robots.txt).
+
 ## Not Started
 
-- Public website beyond the Temple detail page (district listing, landing
-  page, about/contact pages)
+- Public website beyond the Home and Temple detail pages (district
+  listing, about/contact pages)
 - Search
 - Sitewide SEO (sitemap, robots.txt)
 - Excel importer

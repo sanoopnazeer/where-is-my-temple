@@ -12,6 +12,11 @@ const nextConfig: NextConfig = {
       {
         pathname: '/api/media/file/**',
       },
+      // Static website assets (not Payload Media/R2) — e.g. Home page
+      // section backgrounds under public/images/home.
+      {
+        pathname: '/images/**',
+      },
     ],
     // Media files are served from Cloudflare R2 via the public domain
     // configured in ADR-007 (`R2_PUBLIC_URL` / `docs/deployment.md`).

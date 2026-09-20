@@ -1,0 +1,109 @@
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding: 3rem 1.5rem;
+  color: #fff;
+  text-align: center;
+  overflow: hidden;
+}
+
+.bgWrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.bgImage {
+  object-fit: cover;
+  object-position: center;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(20, 12, 6, 0.55) 0%, rgba(20, 12, 6, 0.65) 100%);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+}
+
+.title {
+  margin: 0 0 1rem;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+.subtitle {
+  margin: 0 0 2rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #fff;
+  border-radius: 999px;
+  padding: 0.5rem 0.5rem 0.5rem 1.25rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.searchIcon {
+  flex-shrink: 0;
+  width: 1.2rem;
+  height: 1.2rem;
+  color: #999;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+  color: #333;
+  background: transparent;
+}
+
+.searchInput::placeholder {
+  color: #999;
+}
+
+.exploreButton {
+  flex-shrink: 0;
+  padding: 0.65rem 1.5rem;
+  background: #f5841f;
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .searchBar {
+    flex-wrap: wrap;
+    border-radius: 20px;
+    padding: 1rem;
+  }
+
+  .searchInput {
+    flex-basis: 100%;
+    order: 1;
+  }
+
+  .exploreButton {
+    order: 2;
+    flex: 1;
+    text-align: center;
+  }
+}

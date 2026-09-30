@@ -3,11 +3,12 @@ import Link from 'next/link'
 
 import type { Event } from '@/payload-types'
 import { resolveMediaUrl } from '@/utilities/media'
+import { formatIstDate } from '@/utilities/ist'
 import { excerpt } from '@/utilities/richText'
 import styles from './UpcomingEvents.module.css'
 
 function formatEventDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })
+  return formatIstDate(iso, { month: 'long', day: 'numeric' })
 }
 
 /**

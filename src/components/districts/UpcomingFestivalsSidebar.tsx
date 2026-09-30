@@ -1,14 +1,11 @@
 import type { Event } from '@/payload-types'
 import { CalendarIcon } from '@/components/icons/TempleIcons'
+import { formatIstDate } from '@/utilities/ist'
 import { excerpt } from '@/utilities/richText'
 import styles from './UpcomingFestivalsSidebar.module.css'
 
 function formatFestivalDate(startDate: string): string {
-  return new Date(startDate).toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  })
+  return formatIstDate(startDate, { month: 'long', day: 'numeric', year: 'numeric' })
 }
 
 /**
@@ -32,7 +29,7 @@ export function UpcomingFestivalsSidebar({ events }: { events: Event[] }) {
       <ul className={styles.list}>
         {events.map((event) => {
           const description = excerpt(event.description, 110)
-          const day = new Date(event.startDate).getDate()
+          const day = formatIstDate(event.startDate, { day: 'numeric' })
 
           return (
             <li key={event.id} className={styles.item}>

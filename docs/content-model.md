@@ -101,6 +101,8 @@ Daily rituals are a **repeatable structured array inside Temple**, not a separat
 
 The exact Payload field type for time should follow Payload's current capabilities and the application's existing conventions. Store consistent time values; do not store arbitrary display strings if a structured time representation is practical.
 
+Ritual and darshan times are IST (`Asia/Kolkata`) wall-clock times and are always displayed in IST (`src/utilities/ist.ts`), never in the server's time zone.
+
 Example conceptual data:
 
 ```text
@@ -313,6 +315,8 @@ startDate <= today <= endDate
 startDate > today
 → Upcoming
 ```
+
+Dates and "today" are compared as IST (`Asia/Kolkata`) calendar days, so an Event is ongoing for the whole of its start and end days in Kerala, regardless of the server's time zone or the time of day Payload stores with a day-only date. Implemented once in `src/utilities/eventDate.ts` (virtual `status` field and the Home/Events/District queries).
 
 This powers automatic upcoming-event sections.
 

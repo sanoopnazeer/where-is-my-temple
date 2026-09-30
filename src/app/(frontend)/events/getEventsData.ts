@@ -2,6 +2,7 @@ import { getPayload } from 'payload'
 
 import config from '@/payload.config'
 import type { Event, Temple } from '@/payload-types'
+import { notEndedEventsWhere, upcomingEventsWhere } from '@/utilities/eventDate'
 
 const MAX_UPCOMING_EVENTS = 12
 
@@ -40,25 +41,24 @@ function hasPublicTemple(event: Event): event is PublicEvent {
  * ranking mechanism) that hasn't fully ended yet, and the next batch of
  * upcoming Events. Both use `overrideAccess: false` with no `user`,
  * applying the same public `publishedOrAdmin` rule the REST API uses, so
- * draft/review/archived Events are excluded automatically. "Upcoming" is
- * expressed as `startDate: { greater_than: now }` — the same condition the
- * Event collection's own virtual `status` field
- * (`src/collections/Events.ts`) already uses for its 'upcoming' value, not
- * a second, divergent definition (virtual fields aren't queryable). No
+ * draft/review/archived Events are excluded automatically. "Not ended" and
+ * "upcoming" come from `src/utilities/eventDate.ts` — the query form of the
+ * same whole-IST-day definition the Event collection's virtual `status`
+ * field uses, not a second, divergent one (virtual fields aren't queryable). No
  * `isUpcoming` field, no District field on Events — District is always
  * read via the populated `temple.district`.
  */
 export async function getEventsData(): Promise<EventsData> {
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
-  const nowIso = new Date().toISOString()
+  const now = new Date()
 
   const [spotlightResult, upcomingResult] = await Promise.all([
     payload.find({
       collection: 'events',
       where: {
         spotlight: { equals: true },
-        endDate: { greater_than_equal: nowIso },
+        ...notEndedEventsWhere(now),
       },
       sort: 'startDate',
       limit: 1,
@@ -67,7 +67,7 @@ export async function getEventsData(): Promise<EventsData> {
     }),
     payload.find({
       collection: 'events',
-      where: { startDate: { greater_than: nowIso } },
+      where: upcomingEventsWhere(now),
       sort: 'startDate',
       limit: MAX_UPCOMING_EVENTS,
       depth: 2,

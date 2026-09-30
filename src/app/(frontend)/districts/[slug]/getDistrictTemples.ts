@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 
 import config from '@/payload.config'
 import type { District, Event, Media, Temple } from '@/payload-types'
+import { upcomingEventsWhere } from '@/utilities/eventDate'
 
 const MAX_UPCOMING_FESTIVALS = 3
 
@@ -114,25 +115,23 @@ export async function getDistrictTemplesMeta(districtId: string): Promise<Distri
  * `getDistrictTemplesMeta`, itself `overrideAccess: false`), filtering
  * Events by `temple: { in: templeIds }` cannot expose an Event whose Temple
  * isn't publicly available — that Temple's ID would never be in the list.
- * "Upcoming" is expressed as `startDate: { greater_than: now }`, the same
- * condition the Event collection's own virtual `status` field already uses
- * for its 'upcoming' value (`src/collections/Events.ts`) — not a second,
- * divergent definition, just the one usable as a DB query (virtual fields
- * aren't queryable). `overrideAccess: false` additionally excludes
- * draft/review/archived Events, same public `publishedOrAdmin` rule.
+ * "Upcoming" comes from `upcomingEventsWhere` (`src/utilities/eventDate.ts`),
+ * the query form of the same whole-IST-day definition the Event collection's
+ * virtual `status` field uses for its 'upcoming' value — not a second,
+ * divergent definition (virtual fields aren't queryable). `overrideAccess:
+ * false` additionally excludes draft/review/archived Events, same public
+ * `publishedOrAdmin` rule.
  */
 export async function getUpcomingFestivals(templeIds: string[]): Promise<Event[]> {
   if (templeIds.length === 0) return []
 
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
-  const nowIso = new Date().toISOString()
-
   const result = await payload.find({
     collection: 'events',
     where: {
       temple: { in: templeIds },
-      startDate: { greater_than: nowIso },
+      ...upcomingEventsWhere(),
     },
     sort: 'startDate',
     limit: MAX_UPCOMING_FESTIVALS,

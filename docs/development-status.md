@@ -38,6 +38,49 @@
   errors, 5 pre-existing warnings in `src/app/my-route/route.ts` and the
   Playwright e2e stubs, unrelated to this work).
 
+- Fixed IST date/time handling (2026-09-30). No schema or stored-data
+  changes.
+  - Times: darshan times (`TempleQuickInfo`) and all Event dates (Home
+    cards, Events grid/spotlight, District festival sidebar incl. its
+    day badge) were formatted in the server process's time zone, so a
+    UTC host would show times 5h30m early (e.g. "03:00 am – 12:30 pm"
+    as "09:30 pm – 07:00 am") and IST-midnight dates a day early. All
+    now format in `Asia/Kolkata` via `src/utilities/ist.ts`.
+  - Event final day: status compared raw instants, but day-only dates
+    are stored at an incidental time (the admin pins them to ~17:00 IST),
+    so an Event turned "past" partway through its last day and stayed
+    "upcoming" into its first. Status is now whole IST calendar days
+    (`getEventStatus` in `src/utilities/eventDate.ts`), used by the
+    virtual `status` field; the Home, Events-spotlight, Events-upcoming
+    and District-sidebar queries use its query form
+    (`notEndedEventsWhere` / `upcomingEventsWhere`) instead of four
+    hand-written `now` comparisons. Duration labels count IST days.
+  - Tests: `tests/int/istDateTime.int.spec.ts` (runs under server
+    `TZ=UTC` and `America/Los_Angeles`) and a read-only
+    `tests/int/eventLoaders.int.spec.ts` for the Home/Events loaders.
+    Verified with `next start` under `TZ=UTC` against real data.
+  - Ritual times (`dailyRituals[].startTime/endTime`) weren't rendered
+    anywhere at the time; see the next entry.
+
+- Daily Ritual timings on the Temple page (2026-09-30).
+  `TempleDailyRituals` now shows each ritual's time as the mobile
+  design's time pill (`design/mobile/Temple single.jpg`: orange uppercase
+  time on a peach pill above the ritual name; colours `#e65d17` on
+  `#fff6ed` sampled from the design), at every breakpoint — the desktop
+  design had no timing, so desktop reuses the same pill scaled to the
+  desktop card text. One component, CSS-only sizing per breakpoint.
+  - Formatted with `formatIstTime` (IST regardless of server TZ); shows
+    "start – end" when `endTime` exists, start only otherwise, and no
+    pill when a ritual has no `startTime`. The pill always uses the
+    English typeface, including on `?lang=ml` pages.
+  - No schema or data changes. Covered in
+    `tests/int/istDateTime.int.spec.ts`; checked in Chrome at 1280px and
+    390px (en and ml).
+  - Not implemented from the mobile design (outside this change's
+    timing scope): the English sub-name under the Malayalam ritual name
+    (conflicts with the one-language-at-a-time rule) and the decorative
+    pale-yellow quarter circle in each card's corner.
+
 ## In Progress
 
 - Pre-implementation context review completed (2026-09-18). Confirmed the

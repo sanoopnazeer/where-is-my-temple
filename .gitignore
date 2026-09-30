@@ -48,3 +48,6 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Real import data and source images (never commit)
+/data/import/

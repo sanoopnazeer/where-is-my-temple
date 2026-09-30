@@ -1,10 +1,7 @@
 import type { Temple } from '@/payload-types'
 import { ClockIcon, RuleIcon, ShirtIcon } from '@/components/icons/TempleIcons'
+import { formatIstTime } from '@/utilities/ist'
 import styles from './TempleQuickInfo.module.css'
-
-function formatTime(value: string): string {
-  return new Date(value).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })
-}
 
 export function TempleQuickInfo({ temple, locale }: { temple: Temple; locale: string }) {
   const darshanTimings = temple.darshanTimings ?? []
@@ -30,7 +27,7 @@ export function TempleQuickInfo({ temple, locale }: { temple: Temple; locale: st
             {darshanTimings.map((timing, index) => (
               <li key={timing.id ?? index}>
                 <span className={styles.label}>{timing.label}:</span>{' '}
-                {formatTime(timing.openTime)} – {formatTime(timing.closeTime)}
+                {formatIstTime(timing.openTime)} – {formatIstTime(timing.closeTime)}
               </li>
             ))}
           </ul>

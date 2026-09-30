@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload'
 import { isAdmin } from '../access/isAdmin'
 import { publishedOrAdmin } from '../access/publishedOrAdmin'
 import { publicationStatusField } from '../fields/publicationStatus'
+import { getEventStatus } from '../utilities/eventDate'
 
 export const Events: CollectionConfig = {
   slug: 'events',
@@ -107,17 +108,8 @@ export const Events: CollectionConfig = {
         afterRead: [
           ({ siblingData }) => {
             const data = siblingData as { startDate?: string; endDate?: string } | undefined
-            const start = data?.startDate ? new Date(data.startDate) : null
-            const end = data?.endDate ? new Date(data.endDate) : null
-            const now = new Date()
-
-            if (end && end.getTime() < now.getTime()) return 'past'
-            if (start && end && start.getTime() <= now.getTime() && now.getTime() <= end.getTime()) {
-              return 'ongoing'
-            }
-            if (start && start.getTime() > now.getTime()) return 'upcoming'
-
-            return undefined
+            // Whole IST calendar days — see src/utilities/eventDate.ts
+            return getEventStatus(data?.startDate, data?.endDate)
           },
         ],
       },

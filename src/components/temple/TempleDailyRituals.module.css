@@ -24,6 +24,24 @@
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
 }
 
+/* Time pill from the mobile design (`design/mobile/Temple single.jpg`),
+   used at every breakpoint: orange uppercase time on a peach pill above
+   the ritual name. Always the English typeface — the time is English/IST
+   text even inside a Malayalam card. */
+.time {
+  display: inline-block;
+  margin-bottom: 0.6rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  background: #fff6ed;
+  color: #e65d17;
+  font-family: var(--font-english), system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
 .name {
   margin: 0 0 0.5rem;
   font-size: 1rem;
@@ -48,6 +66,13 @@
 
   .card {
     padding: 0.9rem 1rem;
+  }
+
+  /* Mobile design size: ~61×19px pill, ~11px text */
+  .time {
+    margin-bottom: 0.45rem;
+    padding: 0.13rem 0.48rem;
+    font-size: 0.6rem;
   }
 
   .name {

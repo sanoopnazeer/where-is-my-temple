@@ -2,6 +2,7 @@ import { getPayload } from 'payload'
 
 import config from '@/payload.config'
 import type { District, Event, Media, Temple } from '@/payload-types'
+import { notEndedEventsWhere } from '@/utilities/eventDate'
 
 export interface DistrictCard {
   district: District
@@ -46,12 +47,11 @@ export async function getHomeData(): Promise<HomeData> {
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
 
-  const todayIso = new Date().toISOString()
-
   const [eventsResult, districtsResult, templesResult, featuredTemplesResult] = await Promise.all([
     payload.find({
       collection: 'events',
-      where: { endDate: { greater_than_equal: todayIso } },
+      // Ongoing or upcoming, in whole IST calendar days
+      where: notEndedEventsWhere(),
       sort: 'startDate',
       limit: MAX_UPCOMING_EVENTS,
       // depth 2 so `temple.heroImage` is populated — Events have no image

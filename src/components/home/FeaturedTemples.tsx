@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-import type { Temple } from '@/payload-types'
+import type { FeaturedTemple } from '@/app/(frontend)/getHomeData'
 import { resolveMediaUrl } from '@/utilities/media'
 import { excerpt } from '@/utilities/richText'
 import styles from './FeaturedTemples.module.css'
@@ -13,7 +13,7 @@ import styles from './FeaturedTemples.module.css'
  * change) under the design's original heading. Links go to the real,
  * already-working `/temples/[slug]` route.
  */
-export function FeaturedTemples({ temples }: { temples: Temple[] }) {
+export function FeaturedTemples({ temples }: { temples: FeaturedTemple[] }) {
   if (temples.length === 0) return null
 
   return (

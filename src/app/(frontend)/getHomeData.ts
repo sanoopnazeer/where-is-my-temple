@@ -9,15 +9,31 @@ export interface DistrictCard {
   image?: Media
 }
 
+/** Only the Temple fields the Featured Temples cards render. */
+export type FeaturedTemple = Pick<
+  Temple,
+  'id' | 'name' | 'slug' | 'district' | 'heroImage' | 'historyNarrative'
+>
+
 export interface HomeData {
   upcomingEvents: Event[]
   districtCards: DistrictCard[]
-  featuredTemples: Temple[]
+  featuredTemples: FeaturedTemple[]
 }
 
 const MAX_UPCOMING_EVENTS = 4
 const MAX_DISTRICT_CARDS = 8
 const MAX_FEATURED_TEMPLES = 3
+
+// Payload runs field hooks for every returned field, so fetching only what
+// the Home Page renders keeps the Local API work proportional to the page.
+const FEATURED_TEMPLE_SELECT = {
+  name: true,
+  slug: true,
+  district: true,
+  heroImage: true,
+  historyNarrative: true,
+} as const
 
 /**
  * All Home Page data in three Local API calls (not one per rendered card):
@@ -41,6 +57,9 @@ export async function getHomeData(): Promise<HomeData> {
       // depth 2 so `temple.heroImage` is populated — Events have no image
       // field of their own, so the card visual borrows the linked Temple's.
       depth: 2,
+      // Only the linked Temple's heroImage is rendered, so skip populating
+      // the rest of the Temple (district, gallery, SEO image, ...).
+      populate: { temples: { heroImage: true } },
       overrideAccess: false,
     }),
     payload.find({
@@ -53,6 +72,8 @@ export async function getHomeData(): Promise<HomeData> {
       collection: 'temples',
       limit: 1000,
       depth: 1,
+      // Only used for per-district counts and a representative photo.
+      select: { district: true, heroImage: true },
       overrideAccess: false,
     }),
     payload.find({
@@ -60,6 +81,8 @@ export async function getHomeData(): Promise<HomeData> {
       sort: '-createdAt',
       limit: MAX_FEATURED_TEMPLES,
       depth: 1,
+      select: FEATURED_TEMPLE_SELECT,
+      populate: { districts: { name: true } },
       overrideAccess: false,
     }),
   ])

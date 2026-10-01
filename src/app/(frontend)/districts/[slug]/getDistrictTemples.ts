@@ -1,11 +1,14 @@
 import { cache } from 'react'
-import { getPayload } from 'payload'
+import { getPayload, type Where } from 'payload'
 
 import config from '@/payload.config'
 import type { District, Event, Media, Temple } from '@/payload-types'
-import { upcomingEventsWhere } from '@/utilities/eventDate'
+import { notEndedEventsWhere, upcomingEventsWhere } from '@/utilities/eventDate'
+import { EVENT_SEARCH_FIELDS, TEMPLE_SEARCH_FIELDS, textSearchWhere } from '@/utilities/search'
+import { hasPublicTemple, type PublicEvent } from '@/app/(frontend)/events/getEventsData'
 
 const MAX_UPCOMING_FESTIVALS = 3
+const MAX_EVENT_SEARCH_RESULTS = 6
 
 export const TEMPLES_PER_PAGE = 8
 
@@ -41,17 +44,21 @@ export interface DistrictTemplesPage {
  * client-side fetching — page number comes from the `?page=` query param,
  * resolved server-side). `overrideAccess: false` applies the same public
  * `publishedOrAdmin` rule, so draft/review/archived Temples are excluded
- * automatically alongside the `district` filter. */
+ * automatically alongside the `district` filter. With a search `query`
+ * (`?q=`), only this District's Temples matching it are listed. */
 export async function getDistrictTemples(
   districtId: string,
   page: number,
+  query?: string,
 ): Promise<DistrictTemplesPage> {
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
 
+  const inDistrict: Where = { district: { equals: districtId } }
+
   const result = await payload.find({
     collection: 'temples',
-    where: { district: { equals: districtId } },
+    where: query ? { and: [inDistrict, textSearchWhere(TEMPLE_SEARCH_FIELDS, query)] } : inDistrict,
     sort: 'name',
     page,
     limit: TEMPLES_PER_PAGE,
@@ -140,4 +147,36 @@ export async function getUpcomingFestivals(templeIds: string[]): Promise<Event[]
   })
 
   return result.docs
+}
+
+/**
+ * District-scoped Event search: ongoing/upcoming Events matching `query`
+ * whose Temple belongs to this District — Event → Temple → District, via
+ * the same published-Temple ID list as `getUpcomingFestivals` (one query,
+ * not one per Temple). Events at other Districts' Temples can't match.
+ */
+export async function searchDistrictEvents(
+  templeIds: string[],
+  query: string,
+): Promise<PublicEvent[]> {
+  if (templeIds.length === 0) return []
+
+  const payloadConfig = await config
+  const payload = await getPayload({ config: payloadConfig })
+  const result = await payload.find({
+    collection: 'events',
+    where: {
+      and: [
+        { temple: { in: templeIds } },
+        notEndedEventsWhere(),
+        textSearchWhere(EVENT_SEARCH_FIELDS, query),
+      ],
+    },
+    sort: 'startDate',
+    limit: MAX_EVENT_SEARCH_RESULTS,
+    depth: 1,
+    overrideAccess: false,
+  })
+
+  return result.docs.filter(hasPublicTemple)
 }

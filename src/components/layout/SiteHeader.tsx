@@ -17,8 +17,7 @@ const NAV_ITEMS = [
 /** Minimal global nav matching design/desktop's header. All nav items now
  * have pages. Sticky on desktop; on mobile the same nav items collapse into
  * a hamburger-triggered menu, matching design/mobile's header (logo, search
- * icon, hamburger). The search icon is presentational only — no search
- * backend exists yet (CLAUDE.md §6). */
+ * icon, hamburger). The search icon opens the site-wide `/search` page. */
 export function SiteHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -38,9 +37,14 @@ export function SiteHeader() {
         </nav>
 
         <div className={styles.mobileControls}>
-          <span className={styles.searchIcon} aria-hidden="true">
-            <SearchIcon />
-          </span>
+          <Link
+            href="/search"
+            className={styles.searchIcon}
+            aria-label="Search"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <SearchIcon aria-hidden="true" />
+          </Link>
           <button
             type="button"
             className={styles.menuButton}

@@ -9,6 +9,16 @@
   color: #222;
 }
 
+.searchNote {
+  margin: -1rem 0 1.5rem;
+  font-size: 0.9rem;
+}
+
+.clearLink {
+  color: #b5651d;
+  font-weight: 600;
+}
+
 .empty {
   color: #666;
   font-size: 0.95rem;

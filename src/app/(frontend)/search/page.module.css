@@ -1,0 +1,152 @@
+.page {
+  background: #fdf6f0;
+  min-height: 100vh;
+  /* The shared (frontend) stylesheet defaults body text to white; override
+     it for this light page (same fix as the other public pages). */
+  color: #222;
+}
+
+/* overflow-x on `main`, not `.page`, so the sticky SiteHeader keeps
+   working (see the Home page's page.module.css). */
+.page main {
+  overflow-x: hidden;
+}
+
+.main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1rem 4rem;
+}
+
+/* Heading/subheading follow the Districts directory page's intro. */
+.intro {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.heading {
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 0.75rem;
+  color: #222;
+  overflow-wrap: anywhere;
+}
+
+.subheading {
+  margin: 0 auto 2rem;
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.form {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.state {
+  text-align: center;
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  padding: 1rem 0 3rem;
+}
+
+.state p {
+  margin: 0 0 0.75rem;
+}
+
+.stateLinks {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.stateLinks a,
+.more a {
+  color: #b5651d;
+  font-weight: 600;
+}
+
+.summary {
+  margin: 0 0 1.5rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.group {
+  margin-bottom: 2.5rem;
+}
+
+.groupHeading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #222;
+}
+
+.groupIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex-shrink: 0;
+  color: #f5841f;
+}
+
+.more {
+  margin: 1rem 0 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.districtList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.districtCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  color: inherit;
+  text-decoration: none;
+}
+
+.districtCard:hover,
+.districtCard:focus-visible {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.districtName {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #222;
+}
+
+.districtLink {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #f5841f;
+}
+
+@media (max-width: 480px) {
+  .main {
+    padding: 2rem 1rem 3rem;
+  }
+
+  .districtList {
+    grid-template-columns: 1fr;
+  }
+}

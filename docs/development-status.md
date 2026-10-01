@@ -81,6 +81,41 @@
     (conflicts with the one-language-at-a-time rule) and the decorative
     pale-yellow quarter circle in each card's corner.
 
+- Search (2026-10-01). Plain Payload Local API/MongoDB queries — no
+  search service, no new dependency, no schema change. No design exists
+  for results; owner decisions: a dedicated `/search?q=` page for Home
+  search, District search filters `/districts/[slug]?q=` in place, Event
+  results link to their Temple's page (no Event Detail route), and only
+  ongoing/upcoming Events are searchable.
+  - Matching: `src/utilities/search.ts` — case-insensitive `like` (every
+    word must appear in the same field; Payload escapes regex), OR'd
+    across fields; queries are trimmed/collapsed, 2–100 characters.
+    Temples: `name` (en + `name.ml`), `locality`, `taluk`,
+    `dailyRituals.name` (en + ml). Events: `name`, `keyRitual`,
+    `keywords.keyword`. Districts: `name`.
+  - `/search` (`src/app/(frontend)/search/`): three concurrent queries,
+    grouped Temples (12) / Festivals & Events (6) / Districts (6) with
+    counts; overflow points to existing pages (`/events`, `/districts`).
+    Dynamic and `noindex`. Home stays static (ISR).
+  - District search: Temples filtered by `district` + text (existing
+    pagination keeps `?q=`); Events via `temple in <published Temple IDs
+    of this District>` + text + not ended — Event → Temple → District,
+    one query. The Upcoming Festivals sidebar is unchanged.
+  - Public access: every query is `overrideAccess: false`; site-wide
+    Events also require `temple.publicationStatus = published` and are
+    re-checked in memory (`hasPublicTemple`).
+  - The Home/District hero search bars are now one shared
+    `src/components/search/SearchForm.tsx` (`next/form` GET form; CSS
+    moved from both heroes). The mobile header search icon and the
+    mobile Districts-directory field now go to `/search`.
+  - Tests: `tests/int/search.int.spec.ts` (query helpers; read-only
+    invariants: results are published, Events not past, district
+    results never leave their District). Checked at 375/390/430/1280px.
+  - Scaling: `like` is an unanchored regex, so MongoDB can't use an index
+    for it and scans each collection's published documents. Fine for
+    the expected V1 dataset (thousands of Temples); revisit with a
+    MongoDB text index or Atlas Search if it gets slow.
+
 ## In Progress
 
 - Pre-implementation context review completed (2026-09-18). Confirmed the

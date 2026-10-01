@@ -1,13 +1,12 @@
 import Image from 'next/image'
 
-import { SearchIcon } from '@/components/icons/TempleIcons'
+import { SearchForm } from '@/components/search/SearchForm'
 import styles from './HomeHero.module.css'
 
 /**
  * Background is a static website asset under public/images/home (not
- * Payload Media/R2 — see docs/development-status.md). The search bar is
- * presentational only — search is a separate, not-yet-built phase, so it's
- * rendered disabled rather than wired to a route that doesn't exist yet.
+ * Payload Media/R2 — see docs/development-status.md). The search bar
+ * submits to `/search?q=` (site-wide Temples/Events/Districts search).
  */
 export function HomeHero() {
   return (
@@ -29,21 +28,7 @@ export function HomeHero() {
           Discover thousands of ancient sanctuaries, timeless rituals, and the rich cultural
           heritage of Kerala&apos;s sacred temples.
         </p>
-        <div className={styles.searchBar}>
-          <div className={styles.searchField}>
-            <SearchIcon className={styles.searchIcon} />
-            <input
-              type="search"
-              placeholder="Search for Temples, Poojas, or Locations"
-              disabled
-              aria-label="Search (coming soon)"
-              className={styles.searchInput}
-            />
-          </div>
-          <span className={styles.exploreButton} aria-disabled="true">
-            Explore
-          </span>
-        </div>
+        <SearchForm action="/search" label="Search temples, events and districts" />
       </div>
     </section>
   )

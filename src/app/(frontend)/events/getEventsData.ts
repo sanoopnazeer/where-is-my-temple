@@ -27,7 +27,7 @@ export interface EventsData {
  * locality, District via Temple → District), so this one check protects
  * all of it.
  */
-function hasPublicTemple(event: Event): event is PublicEvent {
+export function hasPublicTemple(event: Event): event is PublicEvent {
   return (
     typeof event.temple === 'object' &&
     event.temple !== null &&

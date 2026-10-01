@@ -1,7 +1,8 @@
 import Image from 'next/image'
 
 import type { District, Media } from '@/payload-types'
-import { PinIcon, SearchIcon } from '@/components/icons/TempleIcons'
+import { PinIcon } from '@/components/icons/TempleIcons'
+import { SearchForm } from '@/components/search/SearchForm'
 import { resolveMediaUrl } from '@/utilities/media'
 import styles from './DistrictHero.module.css'
 
@@ -10,10 +11,18 @@ import styles from './DistrictHero.module.css'
  * background photo is borrowed from one of the district's Temples (same
  * precedent as the Districts directory page). `description` is real
  * editorial CMS content (added 2026-09-20) — shown only when populated, no
- * invented fallback text. The search bar is presentational only, same as
- * the Home page's hero — search isn't built yet.
+ * invented fallback text. The search bar searches within this District
+ * only (`/districts/[slug]?q=`).
  */
-export function DistrictHero({ district, image }: { district: District; image?: Media }) {
+export function DistrictHero({
+  district,
+  image,
+  query = '',
+}: {
+  district: District
+  image?: Media
+  query?: string
+}) {
   const imageUrl = resolveMediaUrl(image)
 
   return (
@@ -33,21 +42,11 @@ export function DistrictHero({ district, image }: { district: District; image?: 
         </p>
         <h1 className={styles.title}>{district.name}</h1>
         {district.description && <p className={styles.description}>{district.description}</p>}
-        <div className={styles.searchBar}>
-          <div className={styles.searchField}>
-            <SearchIcon className={styles.searchIcon} />
-            <input
-              type="search"
-              placeholder="Search for Temples, Poojas, or Locations"
-              disabled
-              aria-label="Search (coming soon)"
-              className={styles.searchInput}
-            />
-          </div>
-          <span className={styles.exploreButton} aria-disabled="true">
-            Explore
-          </span>
-        </div>
+        <SearchForm
+          action={`/districts/${district.slug}`}
+          defaultValue={query}
+          label={`Search temples and events in ${district.name}`}
+        />
       </div>
     </section>
   )

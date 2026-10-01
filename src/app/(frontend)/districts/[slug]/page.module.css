@@ -30,3 +30,7 @@
     grid-template-columns: 1fr;
   }
 }
+
+.mainColumn {
+  min-width: 0;
+}

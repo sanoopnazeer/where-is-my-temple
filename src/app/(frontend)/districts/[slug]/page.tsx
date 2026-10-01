@@ -8,8 +8,9 @@ import { DistrictHero } from '@/components/districts/DistrictHero'
 import { DistrictTempleList } from '@/components/districts/DistrictTempleList'
 import { UpcomingFestivalsSidebar } from '@/components/districts/UpcomingFestivalsSidebar'
 import { EventResults } from '@/components/search/EventResults'
+import { resolveMediaUrl } from '@/utilities/media'
 import { isSearchable, normalizeSearchQuery } from '@/utilities/search'
-import { SITE_URL } from '@/utilities/site'
+import { SITE_NAME, pageMetadata } from '@/utilities/site'
 import {
   getDistrictBySlug,
   getDistrictTemples,
@@ -35,28 +36,27 @@ function parsePage(pageParam: string | string[] | undefined): number {
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<PageParams>
+  searchParams: Promise<PageSearchParams>
 }): Promise<Metadata> {
   const { slug } = await params
   const district = await getDistrictBySlug(slug)
   if (!district) return {}
 
-  const title = `Temples in ${district.name} — Where Is My Temple`
-  const description = district.description || `Browse published temples in ${district.name}, Kerala.`
-  const canonicalUrl = `${SITE_URL}/districts/${district.slug}`
+  const { image } = await getDistrictTemplesMeta(district.id)
+  const { q } = await searchParams
 
-  return {
-    title,
-    description,
-    alternates: { canonical: canonicalUrl },
-    openGraph: {
-      title,
-      description,
-      url: canonicalUrl,
-      type: 'website',
-    },
-  }
+  // Canonical is always the plain District URL; `?q=` search results are
+  // not public content of their own, so they're kept out of indexes.
+  return pageMetadata({
+    title: `Temples in ${district.name} — ${SITE_NAME}`,
+    description: district.description || `Browse published temples in ${district.name}, Kerala.`,
+    path: `/districts/${district.slug}`,
+    image: resolveMediaUrl(image),
+    noIndex: isSearchable(normalizeSearchQuery(q)),
+  })
 }
 
 export default async function DistrictTemplePage({

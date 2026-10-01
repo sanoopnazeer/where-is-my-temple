@@ -7,24 +7,18 @@ import { ContactHero } from '@/components/contact/ContactHero'
 import { ContactForm } from '@/components/contact/ContactForm'
 import { FaqSection } from '@/components/contact/FaqSection'
 import { ContactSidebar } from '@/components/contact/ContactSidebar'
-import { SITE_URL } from '@/utilities/site'
+import { pageMetadata } from '@/utilities/site'
 import styles from './page.module.css'
 
 const TITLE = 'Contact — Where Is My Temple'
 const DESCRIPTION =
   'Get in touch with Where Is My Temple for inquiries about temple rituals, heritage preservation, or contributing to our mission.'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: `${SITE_URL}/contact` },
-  openGraph: {
-    title: TITLE,
-    description: DESCRIPTION,
-    url: `${SITE_URL}/contact`,
-    type: 'website',
-  },
-}
+  path: '/contact',
+})
 
 export default function ContactPage() {
   return (

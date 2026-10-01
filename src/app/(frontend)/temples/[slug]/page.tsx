@@ -11,14 +11,24 @@ import { TempleDailyRituals } from '@/components/temple/TempleDailyRituals'
 import { TempleGallery } from '@/components/temple/TempleGallery'
 import { TemplePlanYourVisit } from '@/components/temple/TemplePlanYourVisit'
 import { TempleContact } from '@/components/temple/TempleContact'
+import { JsonLd } from '@/components/seo/JsonLd'
+import type { Temple } from '@/payload-types'
 import { resolveMediaUrl } from '@/utilities/media'
-import { SITE_URL } from '@/utilities/site'
+import { excerpt } from '@/utilities/richText'
+import { SITE_NAME, pageMetadata } from '@/utilities/site'
+import { templeJsonLd } from '@/utilities/structuredData'
 import { getTemple } from './getTemple'
 import { resolveLocale } from './locale'
 import styles from './page.module.css'
 
 type PageParams = { slug: string }
 type PageSearchParams = { lang?: string | string[] }
+
+/** The editor's SEO description, else an excerpt of the Temple's own
+ * history in the selected language — never invented copy. */
+function templeDescription(temple: Temple): string | undefined {
+  return temple.seo?.metaDescription || excerpt(temple.historyNarrative, 160)
+}
 
 export async function generateMetadata({
   params,
@@ -34,23 +44,15 @@ export async function generateMetadata({
   const temple = await getTemple(slug, locale)
   if (!temple) return {}
 
-  const title = temple.seo?.seoTitle || temple.name
-  const description = temple.seo?.metaDescription || undefined
-  const canonicalUrl = `${SITE_URL}/temples/${temple.slug}`
-  const ogImage = resolveMediaUrl(temple.seo?.socialImage) ?? resolveMediaUrl(temple.heroImage)
-
-  return {
-    title,
-    description,
-    alternates: { canonical: canonicalUrl },
-    openGraph: {
-      title,
-      description,
-      url: canonicalUrl,
-      type: 'website',
-      images: ogImage ? [{ url: ogImage }] : undefined,
-    },
-  }
+  // One URL per Temple in both languages (CLAUDE.md §4): the canonical never
+  // carries `?lang=`, while title/description follow the selected language.
+  return pageMetadata({
+    title: temple.seo?.seoTitle || `${temple.name} — ${SITE_NAME}`,
+    description: templeDescription(temple),
+    path: `/temples/${temple.slug}`,
+    image: resolveMediaUrl(temple.seo?.socialImage) ?? resolveMediaUrl(temple.heroImage),
+    locale,
+  })
 }
 
 export default async function TemplePage({
@@ -71,6 +73,7 @@ export default async function TemplePage({
 
   return (
     <div className={styles.page}>
+      <JsonLd data={templeJsonLd(temple, templeDescription(temple))} />
       <SiteHeader />
       <main>
         <TempleHero temple={temple} locale={locale} />

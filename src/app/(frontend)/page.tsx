@@ -8,7 +8,9 @@ import { UpcomingEvents } from '@/components/home/UpcomingEvents'
 import { HeritageBanner } from '@/components/home/HeritageBanner'
 import { DistrictsGrid } from '@/components/home/DistrictsGrid'
 import { FeaturedTemples } from '@/components/home/FeaturedTemples'
-import { SITE_URL } from '@/utilities/site'
+import { JsonLd } from '@/components/seo/JsonLd'
+import { pageMetadata } from '@/utilities/site'
+import { websiteJsonLd } from '@/utilities/structuredData'
 import { getHomeData } from './getHomeData'
 import styles from './page.module.css'
 
@@ -23,23 +25,18 @@ const TITLE = 'Where Is My Temple — Discover Kerala’s Sacred Temples'
 const DESCRIPTION =
   'Discover thousands of ancient sanctuaries, timeless rituals, and the rich cultural heritage of Kerala’s sacred temples, organized by district.'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: SITE_URL },
-  openGraph: {
-    title: TITLE,
-    description: DESCRIPTION,
-    url: SITE_URL,
-    type: 'website',
-  },
-}
+  path: '/',
+})
 
 export default async function HomePage() {
   const { upcomingEvents, districtCards, featuredTemples } = await getHomeData()
 
   return (
     <div className={styles.page}>
+      <JsonLd data={websiteJsonLd()} />
       <SiteHeader />
       <main>
         <HomeHero />

@@ -91,29 +91,33 @@ export interface DistrictTemplesMeta {
  * directory page borrows one — District has no image field of its own
  * (docs/content-model.md §2). Independent of the paginated Temple list, so
  * the hero image stays the same across pages. `overrideAccess: false`
- * means only published Temples are ever included here.
+ * means only published Temples are ever included here. Wrapped in `cache()`
+ * so `generateMetadata` (share image) and the page share one query.
  */
-export async function getDistrictTemplesMeta(districtId: string): Promise<DistrictTemplesMeta> {
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
+export const getDistrictTemplesMeta = cache(
+  async (districtId: string): Promise<DistrictTemplesMeta> => {
+    const payloadConfig = await config
+    const payload = await getPayload({ config: payloadConfig })
 
-  const result = await payload.find({
-    collection: 'temples',
-    where: { district: { equals: districtId } },
-    select: { heroImage: true },
-    sort: 'name',
-    depth: 1,
-    limit: 1000,
-    pagination: false,
-    overrideAccess: false,
-  })
+    const result = await payload.find({
+      collection: 'temples',
+      where: { district: { equals: districtId } },
+      select: { heroImage: true },
+      sort: 'name',
+      depth: 1,
+      limit: 1000,
+      pagination: false,
+      overrideAccess: false,
+    })
 
-  const templeIds = result.docs.map((temple) => temple.id)
-  const first = result.docs[0]
-  const image = first && typeof first.heroImage === 'object' && first.heroImage ? first.heroImage : undefined
+    const templeIds = result.docs.map((temple) => temple.id)
+    const first = result.docs[0]
+    const image =
+      first && typeof first.heroImage === 'object' && first.heroImage ? first.heroImage : undefined
 
-  return { templeIds, image }
-}
+    return { templeIds, image }
+  },
+)
 
 /**
  * Upcoming festivals for one district, via Event → Temple → District

@@ -36,7 +36,9 @@ describe('search query helpers', () => {
     expect(textSearchWhere(['name', 'name.ml'], 'tali')).toEqual({
       or: [{ name: { like: 'tali' } }, { 'name.ml': { like: 'tali' } }],
     })
-    expect(TEMPLE_SEARCH_FIELDS).toEqual(expect.arrayContaining(['name', 'name.ml', 'dailyRituals.name']))
+    expect(TEMPLE_SEARCH_FIELDS).toEqual(
+      expect.arrayContaining(['name', 'name.ml', 'dailyRituals.name']),
+    )
   })
 })
 
@@ -48,20 +50,28 @@ describe('search query helpers', () => {
  */
 const QUERIES = ['te', 'temple', 'test', 'festival', 'pooja']
 
-describe('site-wide search (/search)', () => {
-  it('returns only published, matching-type records', async () => {
-    for (const query of QUERIES) {
-      const results = await getSearchResults(query)
+// Several sequential Atlas round-trips per test
+const DB_TIMEOUT = 30_000
 
-      for (const temple of results.temples) expect(temple.publicationStatus).toBe('published')
-      for (const district of results.districts) expect(district.publicationStatus).toBe('published')
-      for (const event of results.events) {
-        expect(event.publicationStatus).toBe('published')
-        expect(event.temple.publicationStatus).toBe('published')
-        expect(getEventStatus(event.startDate, event.endDate)).not.toBe('past')
+describe('site-wide search (/search)', () => {
+  it(
+    'returns only published, matching-type records',
+    async () => {
+      for (const query of QUERIES) {
+        const results = await getSearchResults(query)
+
+        for (const temple of results.temples) expect(temple.publicationStatus).toBe('published')
+        for (const district of results.districts)
+          expect(district.publicationStatus).toBe('published')
+        for (const event of results.events) {
+          expect(event.publicationStatus).toBe('published')
+          expect(event.temple.publicationStatus).toBe('published')
+          expect(getEventStatus(event.startDate, event.endDate)).not.toBe('past')
+        }
       }
-    }
-  })
+    },
+    DB_TIMEOUT,
+  )
 
   it('matches nothing for text no record contains', async () => {
     const results = await getSearchResults('zz-no-such-temple-zz')
@@ -76,38 +86,51 @@ describe('district-scoped search (/districts/[slug]?q=)', () => {
 
   beforeAll(async () => {
     const payload = await getPayload({ config: await config })
-    const result = await payload.find({ collection: 'districts', limit: 100, overrideAccess: false })
+    const result = await payload.find({
+      collection: 'districts',
+      limit: 100,
+      overrideAccess: false,
+    })
     districts = result.docs
   })
 
-  it('only returns Temples and Events belonging to that District', async () => {
-    expect(districts.length).toBeGreaterThan(0)
+  it(
+    'only returns Temples and Events belonging to that District',
+    async () => {
+      expect(districts.length).toBeGreaterThan(0)
 
-    for (const district of districts) {
-      const { templeIds } = await getDistrictTemplesMeta(district.id)
+      for (const district of districts) {
+        const { templeIds } = await getDistrictTemplesMeta(district.id)
 
-      for (const query of QUERIES) {
-        const { temples } = await getDistrictTemples(district.id, 1, query)
-        for (const temple of temples) {
-          const districtId = typeof temple.district === 'object' ? temple.district.id : temple.district
-          expect(districtId).toBe(district.id)
-          expect(temple.publicationStatus).toBe('published')
-        }
+        for (const query of QUERIES) {
+          const { temples } = await getDistrictTemples(district.id, 1, query)
+          for (const temple of temples) {
+            const districtId =
+              typeof temple.district === 'object' ? temple.district.id : temple.district
+            expect(districtId).toBe(district.id)
+            expect(temple.publicationStatus).toBe('published')
+          }
 
-        const events = await searchDistrictEvents(templeIds, query)
-        for (const event of events) {
-          expect(templeIds).toContain(event.temple.id)
-          expect(getEventStatus(event.startDate, event.endDate)).not.toBe('past')
+          const events = await searchDistrictEvents(templeIds, query)
+          for (const event of events) {
+            expect(templeIds).toContain(event.temple.id)
+            expect(getEventStatus(event.startDate, event.endDate)).not.toBe('past')
+          }
         }
       }
-    }
-  })
+    },
+    DB_TIMEOUT,
+  )
 
-  it('without a query lists the same Temples as before', async () => {
-    for (const district of districts) {
-      const unfiltered = await getDistrictTemples(district.id, 1)
-      const emptyQuery = await getDistrictTemples(district.id, 1, '')
-      expect(emptyQuery.temples.map((t) => t.id)).toEqual(unfiltered.temples.map((t) => t.id))
-    }
-  })
+  it(
+    'without a query lists the same Temples as before',
+    async () => {
+      for (const district of districts) {
+        const unfiltered = await getDistrictTemples(district.id, 1)
+        const emptyQuery = await getDistrictTemples(district.id, 1, '')
+        expect(emptyQuery.temples.map((t) => t.id)).toEqual(unfiltered.temples.map((t) => t.id))
+      }
+    },
+    DB_TIMEOUT,
+  )
 })

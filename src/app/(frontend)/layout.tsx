@@ -1,5 +1,8 @@
+import type { Metadata } from 'next'
 import { Anek_Malayalam, Plus_Jakarta_Sans } from 'next/font/google'
 import React from 'react'
+
+import { SITE_NAME, SITE_URL } from '@/utilities/site'
 import './styles.css'
 
 // Site-wide typefaces: Plus Jakarta Sans for English, Anek Malayalam for
@@ -20,9 +23,14 @@ const anekMalayalam = Anek_Malayalam({
   axes: ['wdth'],
 })
 
-export const metadata = {
-  description: 'A blank template using Payload in a Next.js app.',
-  title: 'Payload Blank Template',
+// Site-wide fallbacks only; every public page sets its own full metadata
+// via `pageMetadata()` (src/utilities/site.ts).
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  title: SITE_NAME,
+  description:
+    'Discover thousands of ancient sanctuaries, timeless rituals, and the rich cultural heritage of Kerala’s sacred temples, organized by district.',
+  applicationName: SITE_NAME,
 }
 
 export default async function RootLayout(props: { children: React.ReactNode }) {

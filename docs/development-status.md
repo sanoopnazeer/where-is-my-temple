@@ -116,6 +116,64 @@
     the expected V1 dataset (thousands of Temples); revisit with a
     MongoDB text index or Atlas Search if it gets slow.
 
+- SEO foundation (2026-10-01). Next.js Metadata API only — no plugin,
+  service or client JS; no schema change.
+  - Metadata: `pageMetadata()` in `src/utilities/site.ts` (next to
+    `SITE_URL`) gives every public page title, description, a canonical
+    `https://whereismytemple.com/...` URL, Open Graph (incl. site name
+    and `en_IN`/`ml_IN` locale) and Twitter/X (`summary_large_image`).
+    Static pages keep their existing copy; pages without a content image
+    share `public/images/home/hero-banner.jpg`. The `(frontend)` layout's
+    leftover Payload-template title/description were replaced with site
+    fallbacks plus `metadataBase`.
+    - Temples: title `seoTitle` or "<name> — Where Is My Temple";
+      description `seo.metaDescription` or an excerpt of the selected
+      language's `historyNarrative`; image `seo.socialImage` or
+      `heroImage`. `?lang=ml` changes title/description/`og:locale` only —
+      the canonical is always `/temples/<slug>` (one URL per Temple).
+    - Districts: canonical is always `/districts/<slug>` (not `?page=`);
+      `?q=` search views are `noindex`. Share image = the hero photo the
+      page already borrows from one of its Temples.
+    - `/search` stays `noindex`, with no canonical/OG.
+  - `/sitemap.xml` (`src/app/sitemap.ts`, revalidated hourly): Home,
+    About, Contact, Districts, Events, plus every published District and
+    Temple (`lastmod` = `updatedAt`) from two `select`-narrowed public
+    queries. No Event URLs (no Event Detail route) and no `/search`.
+  - `/robots.txt` (`src/app/robots.ts`): allows `/`, disallows `/admin`,
+    `/api`; points to the sitemap.
+    `/search` is deliberately not blocked so crawlers can see `noindex`.
+  - JSON-LD (`src/utilities/structuredData.ts`, rendered by
+    `src/components/seo/JsonLd.tsx`, `<` escaped): Temple pages get a
+    `HinduTemple` (name, URL, description, address/locality, geo
+    coordinates, hero + gallery images, published District as
+    `containedInPlace`, phone/email, valid http(s) website/social links as
+    `sameAs`) and a Home → Districts → District → Temple `BreadcrumbList`;
+    Home gets a `WebSite` with a `SearchAction` for `/search`. Region
+    "Kerala"/country "IN" come from the platform's fixed scope. Darshan
+    timings are not emitted as opening hours (no day-of-week data).
+  - Tests: `tests/int/seo.int.spec.ts` (metadata helper, JSON-LD, robots,
+    and a read-only check that the sitemap lists exactly the published
+    Districts/Temples). DB-backed search tests got an explicit timeout.
+
+- Final SEO cleanup (2026-10-01).
+  - Removed the clearly-identified development TEST content from the
+    (only) configured database via the Payload Local API, after checking
+    each record and that nothing kept referenced it: Districts
+    `test-district-zero-temples`, `test-district-draft-home-check`,
+    `test-district-temple-page`; Temple `test-temple-page-preview2`;
+    Events "TEST Spotlight Event — Verification", "TEST Past Event —
+    Verification", "TEST Upcoming Event — Home Page Preview"; and the 6
+    TEST placeholder Media (`test-hero-preview.png`,
+    `test-gallery-*.png`), whose files the storage adapter also deleted
+    from R2 (now 404). The "Tali Shiva Temple" record
+    (`/temples/test-temple-page-preview`), Vishu Festival, Kozhikode and
+    their photos were kept (owner decision: real content).
+  - Deleted the Payload starter endpoint `src/app/my-route/route.ts`
+    (`/my-route` now 404; nothing else used it) and its robots.txt entry.
+    `/api` and `/admin` unchanged. Lint warnings drop from 5 to 3.
+  - Temple JSON-LD keeps `addressRegion: Kerala` / `addressCountry: IN`
+    (owner decision; no new CMS fields).
+
 ## In Progress
 
 - Pre-implementation context review completed (2026-09-18). Confirmed the
@@ -250,25 +308,15 @@
     correction; re-ran `pnpm lint`, `tsc --noEmit`, `pnpm test:int`,
     `pnpm build` — all pass.
 
-## CMS test data (currently in the dev database)
+## CMS test data
 
-Per owner instruction, temporary TEST content created while verifying the
-Temple Detail Page is being **kept** (not deleted) for ongoing frontend
-review — this supersedes the earlier "clean up after verification" pattern
-for this specific record set. All content is clearly prefixed `TEST` and
-uses placeholder contact info (`*@example.invalid` / `+91-00000-00000`) and
-placeholder coordinates, never real temple data:
-
-| Collection | Identifier | Notes |
-|---|---|---|
-| Districts | slug `test-district-temple-page` | published |
-| Temples | slug `test-temple-page-preview` | published; 5 gallery images (4 form the mosaic, 1 is the leftover-grid case), hero image, daily ritual, darshan timing, dress code, important rule, transit point, contact, one social link |
-
-View it at `/temples/test-temple-page-preview` (and `?lang=ml` for the
-Malayalam pass, though this record's Malayalam translations were not
-filled in — English will show via locale fallback). To remove later:
-delete the Temple first (it references the District), then the District,
-via Payload Admin or `DELETE /api/temples/<id>` / `DELETE /api/districts/<id>`.
+All temporary development TEST content was removed on 2026-10-01 (see
+"Final SEO cleanup" under Completed). The dev database now holds only the
+owner's content: District `kozhikode-district`, Temple
+`test-temple-page-preview` ("Tali Shiva Temple" — real content kept by owner
+decision, despite its test slug and placeholder contact details), Event
+"Vishu Festival", and that Temple's 6 photos. The earlier TEST record
+tables in this file are historical.
 
 - Public Home Page implemented (2026-09-20), route `src/app/(frontend)/page.tsx`
   (the existing `/` route — the old Payload-starter welcome content it
@@ -1125,22 +1173,6 @@ What was checked (all passed):
   Temple/District context for public readers until the Temple is
   republished. Worth keeping in mind for the eventual publish workflow.
 
-Test records intentionally left in the dev database (all `publicationStatus:
-"published"`, clearly named/prefixed, using placeholder contact info
-`*@example.invalid` / `+91-00000-00000` and placeholder coordinates
-`0, 0` — not real temple data) so they can be inspected in Payload Admin:
-
-| Collection | Identifier | Notes |
-|---|---|---|
-| Districts | slug `test-district-verification` | name "TEST District — Verification (Do Not Use)" |
-| Temples | slug `test-temple-verification` | name "TEST Temple — Verification (Do Not Use)"; 2 daily rituals, 1 transit point, 2 darshan timings, dress code, 2 important rules, contact/social links |
-| Events | name "TEST Event — Ongoing (Verification)" | spans today, `spotlight: true` |
-| Events | name "TEST Event — Past (Verification)" | fully in the past, `spotlight: false` |
-
-**To remove:** open Payload Admin (`/admin`) and delete, in this order
-(Events first, since they reference the Temple): both Events named above,
-then the Temple (`test-temple-verification`), then the District
-(`test-district-verification`). Equivalently, as an authenticated admin,
-`DELETE /api/events/<id>`, `DELETE /api/temples/<id>`,
-`DELETE /api/districts/<id>` for each record's ID (visible in its admin
-edit-screen URL).
+The verification TEST records seeded here (`test-district-verification`,
+`test-temple-verification` and its two TEST Events) are no longer in the
+database; all remaining TEST content was removed on 2026-10-01.

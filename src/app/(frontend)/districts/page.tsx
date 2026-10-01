@@ -4,7 +4,7 @@ import { SiteHeader } from '@/components/layout/SiteHeader'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { ComingSoonCta } from '@/components/layout/ComingSoonCta'
 import { DistrictsDirectory } from '@/components/districts/DistrictsDirectory'
-import { SITE_URL } from '@/utilities/site'
+import { pageMetadata } from '@/utilities/site'
 import { getDistrictsData } from './getDistrictsData'
 import styles from './page.module.css'
 
@@ -18,17 +18,11 @@ const TITLE = 'Districts — Where Is My Temple'
 const DESCRIPTION =
   "Explore temples across Kerala's districts. Browse every district to discover the number of temples documented in each."
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: `${SITE_URL}/districts` },
-  openGraph: {
-    title: TITLE,
-    description: DESCRIPTION,
-    url: `${SITE_URL}/districts`,
-    type: 'website',
-  },
-}
+  path: '/districts',
+})
 
 export default async function DistrictsPage() {
   const items = await getDistrictsData()

@@ -6,7 +6,7 @@ import { ComingSoonCta } from '@/components/layout/ComingSoonCta'
 import { EventsHero } from '@/components/events/EventsHero'
 import { SpotlightEvent } from '@/components/events/SpotlightEvent'
 import { EventsGrid } from '@/components/events/EventsGrid'
-import { SITE_URL } from '@/utilities/site'
+import { pageMetadata } from '@/utilities/site'
 import { getEventsData } from './getEventsData'
 import styles from './page.module.css'
 
@@ -20,17 +20,11 @@ const TITLE = 'Festivals & Events — Where Is My Temple'
 const DESCRIPTION =
   'Discover upcoming temple festivals and Utsavams across Kerala, with details on rituals, dates, and the temples that host them.'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: `${SITE_URL}/events` },
-  openGraph: {
-    title: TITLE,
-    description: DESCRIPTION,
-    url: `${SITE_URL}/events`,
-    type: 'website',
-  },
-}
+  path: '/events',
+})
 
 export default async function EventsPage() {
   const { spotlightEvent, upcomingEvents } = await getEventsData()

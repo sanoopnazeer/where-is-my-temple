@@ -4,11 +4,10 @@ import Link from 'next/link'
 import styles from './SiteFooter.module.css'
 
 /**
- * Minimal global footer matching design/desktop. "About Us" links to the
- * About page. Other link targets (Directory/Festivals/Preservation/Privacy/
- * Terms) have no pages yet, so they render as inactive labels rather than
- * dead links. The newsletter field is presentational only — no
- * subscription backend exists.
+ * Minimal global footer matching design/desktop. Quick Links point to
+ * the About, Districts and Events pages. The Resources entries (Fact Check/
+ * Privacy/Terms) have no pages yet, so they render as inactive labels
+ * rather than dead links.
  */
 export function SiteFooter() {
   return (
@@ -16,10 +15,10 @@ export function SiteFooter() {
       <div className={styles.columns}>
         <div className={styles.brandColumn}>
           <Image
-            src="/images/logo/logo-light.png"
+            src="/images/logo/logo-wordmark.png"
             alt="Where Is My Temple"
-            width={2987}
-            height={551}
+            width={2408}
+            height={447}
             className={styles.brand}
           />
           <p className={styles.tagline}>
@@ -33,35 +32,26 @@ export function SiteFooter() {
             <li>
               <Link href="/about">About Us</Link>
             </li>
-            <li>Temple Directory</li>
-            <li>Cultural Festivals</li>
+            <li>
+              <Link href="/districts">District</Link>
+            </li>
+            <li>
+              <Link href="/events">Festivals &amp; Events</Link>
+            </li>
           </ul>
         </div>
         <div className={styles.resourcesColumn}>
           <h3 className={styles.columnTitle}>Resources</h3>
           <ul className={styles.linkList}>
-            <li>Preservation Initiatives</li>
+            <li>Fact Check</li>
             <li>Privacy Policy</li>
             <li>Terms of Service</li>
           </ul>
         </div>
-        <div className={styles.newsletterColumn}>
-          <h3 className={styles.columnTitle}>Newsletter</h3>
-          <p className={styles.tagline}>Subscribe for spiritual updates and festival alerts.</p>
-          <div className={styles.subscribeRow}>
-            <input
-              type="email"
-              placeholder="Your email"
-              disabled
-              aria-label="Email address (newsletter signup coming soon)"
-              className={styles.emailInput}
-            />
-            <button type="button" disabled className={styles.joinButton}>
-              Join
-            </button>
-          </div>
-        </div>
       </div>
+      <p className={styles.copyright}>
+        &copy; {new Date().getFullYear()} Where&nbsp;Is&nbsp;My&nbsp;Temple. All rights reserved.
+      </p>
     </footer>
   )
 }

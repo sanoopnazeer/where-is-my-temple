@@ -4,7 +4,7 @@ import styles from './ContactForm.module.css'
  * No backend submission flow exists (no email service/API/collection) —
  * per the task brief, this is UI-only. Every field and the submit button
  * are disabled, same non-functional pattern already used for the search
- * bars and the newsletter form (`SiteFooter`), with an explicit "Coming
+ * bars, with an explicit "Coming
  * Soon" badge since a form (unlike a search box) could otherwise mislead a
  * visitor into thinking a message was actually sent.
  */

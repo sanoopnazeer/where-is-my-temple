@@ -141,7 +141,7 @@
 
 @media (max-width: 480px) {
   .name {
-    margin-bottom: 0.35rem;
+    margin-bottom: 0;
   }
 }
 
@@ -152,5 +152,18 @@
 
   .description {
     font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .exploreLink {
+    color: #f5841f;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .exploreLink::after {
+    content: ' →';
   }
 }

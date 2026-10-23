@@ -191,9 +191,9 @@
   }
 
   .name {
-    margin: 0;
+    margin: 0 0 0.2rem;
     line-height: 1.1;
-    font-size: 14px;
+    font-size: 15px;
     color: #222;
   }
 
@@ -212,5 +212,20 @@
   .inner {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section {
+    margin-top: 2rem;
+    padding-bottom: 3rem;
+  }
+
+  .section::after {
+    height: 3rem;
+  }
+
+  .inner {
+    padding-top: 2rem;
   }
 }

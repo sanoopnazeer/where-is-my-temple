@@ -1,6 +1,7 @@
 .footer {
-  background: #1b1b1b;
-  color: #ccc;
+  background: #fff;
+  color: #555;
+  border-top: 1px solid #eee;
 }
 
 .columns {
@@ -13,14 +14,13 @@
 }
 
 /* Mobile design pairs Quick Links/Resources side by side, with the brand
-   block and newsletter each spanning the full width. */
+   block spanning the full width. */
 @media (max-width: 480px) {
   .columns {
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
       'brand brand'
-      'quick resources'
-      'newsletter newsletter';
+      'quick resources';
     gap: 1.75rem;
   }
 
@@ -34,10 +34,6 @@
 
   .resourcesColumn {
     grid-area: resources;
-  }
-
-  .newsletterColumn {
-    grid-area: newsletter;
   }
 }
 
@@ -60,6 +56,10 @@
   margin: 0 0 0.75rem;
 }
 
+.linkList a {
+  text-decoration: none;
+}
+
 .linkList {
   list-style: none;
   margin: 0;
@@ -70,26 +70,12 @@
   font-size: 0.85rem;
 }
 
-.subscribeRow {
-  display: flex;
-  margin-top: 0.75rem;
-  max-width: 260px;
-}
-
-.emailInput {
-  flex: 1;
-  padding: 0.5rem 0.75rem;
-  border: none;
-  border-radius: 4px 0 0 4px;
-  font-size: 0.85rem;
-}
-
-.joinButton {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 0 4px 4px 0;
-  background: #6b4fa0;
-  color: #fff;
-  font-weight: 600;
-  font-size: 0.85rem;
+.copyright {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  text-align: center;
+  font-size: 0.75rem;
+  color: #777;
 }

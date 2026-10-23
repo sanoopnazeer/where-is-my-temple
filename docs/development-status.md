@@ -934,7 +934,7 @@ tables in this file are historical.
     that reuse it, which is a consistency improvement, not a regression.
   - `SiteFooter` (shared): "Quick Links" and "Resources" pair up
     side-by-side below 480px via `grid-template-areas` (new
-    `brandColumn`/`quickColumn`/`resourcesColumn`/`newsletterColumn`
+    `brandColumn`/`quickColumn`/`resourcesColumn`
     classes on the existing four wrapper `div`s), with the brand block and
     newsletter each spanning the full width — matching design/mobile;
     desktop's existing `auto-fit` grid is unchanged.

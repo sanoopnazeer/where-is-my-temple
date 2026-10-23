@@ -27,10 +27,10 @@ export function SiteHeader() {
       <div className={styles.inner}>
         <Link href="/" className={styles.logo} onClick={() => setIsMenuOpen(false)}>
           <Image
-            src="/images/logo/logo-dark.png"
+            src="/images/logo/logo-wordmark.png"
             alt="Where Is My Temple"
-            width={2987}
-            height={551}
+            width={2408}
+            height={447}
             priority
             className={styles.logoImage}
           />

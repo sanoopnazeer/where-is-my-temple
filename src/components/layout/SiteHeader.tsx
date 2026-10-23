@@ -25,7 +25,7 @@ export function SiteHeader() {
     <header className={styles.header}>
       <div className={styles.inner}>
         <Link href="/" className={styles.logo} onClick={() => setIsMenuOpen(false)}>
-          Where Is My Temple
+          Where&nbsp;Is&nbsp;My&nbsp;Temple
         </Link>
 
         <nav className={styles.nav} aria-label="Primary">

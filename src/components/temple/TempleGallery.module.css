@@ -99,3 +99,9 @@
     gap: 0.6rem;
   }
 }
+
+@media (max-width: 480px) {
+  .heading {
+    font-size: 20px;
+  }
+}

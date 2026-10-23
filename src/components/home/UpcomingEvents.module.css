@@ -34,7 +34,8 @@
 
   .heading {
     text-align: left;
-    font-size: 1.4rem;
+    font-size: 20px;
+    line-height: 1.4;
     margin: 0 0 0.35rem;
   }
 
@@ -53,7 +54,7 @@
     margin-top: 0.2rem;
     color: #f5841f;
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.78rem;
     white-space: nowrap;
     text-decoration: none;
   }
@@ -146,4 +147,21 @@
   font-size: 0.85rem;
   line-height: 1.5;
   color: #666;
+}
+
+@media (max-width: 480px) {
+  .name {
+    font-size: 0.88rem;
+  }
+
+  .description {
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }

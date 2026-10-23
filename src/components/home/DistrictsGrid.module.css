@@ -147,6 +147,70 @@
   .viewAllButton {
     display: block;
     width: 100%;
+    margin-top: 1.25rem;
     text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .heading {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .subheading {
+    font-size: 14px;
+  }
+}
+
+/* Mobile design: white card, photo on top, name + orange temple count
+   below on white (no overlay, no icon). */
+@media (max-width: 480px) {
+  .grid {
+    gap: 0.9rem;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .imageWrapper {
+    aspect-ratio: 3 / 2;
+  }
+
+  .overlay {
+    display: none;
+  }
+
+  .cardBody {
+    position: static;
+    padding: 0.8rem 0.9rem 0.9rem;
+  }
+
+  .name {
+    margin: 0;
+    line-height: 1.1;
+    font-size: 14px;
+    color: #222;
+  }
+
+  .count {
+    font-size: 11px;
+    line-height: 1.1;
+    color: #e0580c;
+  }
+
+  .countIcon {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .inner {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }

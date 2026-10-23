@@ -95,3 +95,9 @@
   font-size: 0.95rem;
   cursor: not-allowed;
 }
+
+@media (max-width: 480px) {
+  .heading {
+    font-size: 20px;
+  }
+}

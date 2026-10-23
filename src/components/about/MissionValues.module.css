@@ -74,3 +74,9 @@
   line-height: 1.6;
   color: #666;
 }
+
+@media (max-width: 480px) {
+  .heading {
+    font-size: 20px;
+  }
+}

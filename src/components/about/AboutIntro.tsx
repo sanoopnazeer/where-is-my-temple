@@ -12,7 +12,7 @@ export function AboutIntro() {
       </h2>
       <div className={styles.body}>
         <p>
-          Where Is My Temple Heritage Trust emerged from a collective of architects, historians,
+          Where&nbsp;Is&nbsp;My&nbsp;Temple Heritage Trust emerged from a collective of architects, historians,
           and devotees who recognized the fragile state of Kerala&apos;s unique temple traditions.
           We operate at the intersection of spiritual reverence and academic rigor.
         </p>

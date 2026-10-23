@@ -144,3 +144,9 @@
 .link:hover {
   text-decoration: underline;
 }
+
+@media (max-width: 480px) {
+  .headingText {
+    font-size: 20px;
+  }
+}

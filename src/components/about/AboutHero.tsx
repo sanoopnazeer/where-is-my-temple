@@ -27,7 +27,7 @@ export function AboutHero() {
       <div className={styles.content}>
         <h1 className={styles.title}>Preserving the Spiritual Architecture of Kerala</h1>
         <p className={styles.subtitle}>
-          Where Is My Temple Heritage Trust is dedicated to the documentation, preservation, and
+          Where&nbsp;Is&nbsp;My&nbsp;Temple Heritage Trust is dedicated to the documentation, preservation, and
           celebration of the sacred architectural marvels that define the cultural landscape of
           Kerala.
         </p>

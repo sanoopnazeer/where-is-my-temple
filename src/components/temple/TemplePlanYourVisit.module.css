@@ -125,3 +125,9 @@
   height: 100% !important;
   aspect-ratio: auto !important;
 }
+
+@media (max-width: 480px) {
+  .heading {
+    font-size: 20px;
+  }
+}

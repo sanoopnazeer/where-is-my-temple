@@ -23,9 +23,9 @@ export function HeritageBanner() {
             "SACRED LEGACY" eyebrow badge — design/desktop's version of this
             section doesn't have one, so it stays hidden there. */}
         <p className={styles.eyebrow}>Sacred Legacy</p>
-        <h2 className={styles.title}>The Sacred Heritage of Where Is My Temple</h2>
+        <h2 className={styles.title}>The Sacred Heritage of Where&nbsp;Is&nbsp;My&nbsp;Temple</h2>
         <p className={styles.quote}>
-          &ldquo;Where Is My Temple is more than just a directory &mdash; it is a living archive
+          &ldquo;Where&nbsp;Is&nbsp;My&nbsp;Temple is more than just a directory &mdash; it is a living archive
           dedicated to the preservation and discovery of Kerala&apos;s profound temple culture.
           Our mission is to bridge ancient architecture with modern accessibility, ensuring that
           the stories, rituals, and spiritual significance of every sacred grove and grand gopuram

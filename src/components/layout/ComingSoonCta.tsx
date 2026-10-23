@@ -43,7 +43,8 @@ export function ComingSoonCta({
         {/* Shown only on mobile (CSS) — design/mobile's version of this
             banner has this line, design/desktop's doesn't. */}
         <p className={styles.subtitle}>
-          Help devotees across the globe connect with your sacred sanctuary
+          Help devotees across the globe{' '}
+          <span className={styles.subtitleLine}>connect with your sacred sanctuary</span>
         </p>
         <span className={styles.button} aria-disabled="true">
           Upload your temple details

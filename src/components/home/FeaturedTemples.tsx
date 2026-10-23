@@ -19,6 +19,9 @@ export function FeaturedTemples({ temples }: { temples: FeaturedTemple[] }) {
   return (
     <section className={styles.section}>
       <h2 className={styles.heading}>Top Visited Temples</h2>
+      {/* Shown only on mobile (CSS) — design/mobile has this line under a
+          left-aligned heading; design/desktop centers the heading alone. */}
+      <p className={styles.subheading}>Most revered spiritual centers in God&apos;s Own Country</p>
       <div className={styles.grid}>
         {temples.map((temple) => {
           const heroImage = typeof temple.heroImage === 'object' ? temple.heroImage : undefined

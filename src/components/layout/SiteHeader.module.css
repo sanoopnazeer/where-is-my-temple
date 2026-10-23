@@ -17,11 +17,21 @@
 }
 
 .logo {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #222;
-  text-decoration: none;
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.logoImage {
+  display: block;
+  width: auto;
+  height: 2.25rem;
+}
+
+@media (max-width: 480px) {
+  .logoImage {
+    height: 1.75rem;
+  }
 }
 
 .nav {

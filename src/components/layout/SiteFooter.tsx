@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
 import styles from './SiteFooter.module.css'
@@ -14,7 +15,13 @@ export function SiteFooter() {
     <footer className={styles.footer}>
       <div className={styles.columns}>
         <div className={styles.brandColumn}>
-          <h2 className={styles.brand}>Where&nbsp;Is&nbsp;My&nbsp;Temple</h2>
+          <Image
+            src="/images/logo/logo-light.png"
+            alt="Where Is My Temple"
+            width={2987}
+            height={551}
+            className={styles.brand}
+          />
           <p className={styles.tagline}>
             Preserving the echoes of ancient stones and the spirit of timeless devotion across the
             land of Kerala.

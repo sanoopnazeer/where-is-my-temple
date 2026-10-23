@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 
 import { CloseIcon, MenuIcon, SearchIcon } from '@/components/icons/TempleIcons'
@@ -25,7 +26,14 @@ export function SiteHeader() {
     <header className={styles.header}>
       <div className={styles.inner}>
         <Link href="/" className={styles.logo} onClick={() => setIsMenuOpen(false)}>
-          Where&nbsp;Is&nbsp;My&nbsp;Temple
+          <Image
+            src="/images/logo/logo-dark.png"
+            alt="Where Is My Temple"
+            width={2987}
+            height={551}
+            priority
+            className={styles.logoImage}
+          />
         </Link>
 
         <nav className={styles.nav} aria-label="Primary">

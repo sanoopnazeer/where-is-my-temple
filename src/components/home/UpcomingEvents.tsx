@@ -17,7 +17,11 @@ function formatEventDate(iso: string): string {
  * not a new field. No event detail page exists yet, so cards are
  * presentational only (no link).
  */
-export function UpcomingEvents({ events }: { events: Event[] }) {
+export function UpcomingEvents({ events: allEvents }: { events: Event[] }) {
+  // Dates are optional in the CMS; an event without a start date can't be shown.
+  const events = allEvents.filter(
+    (event): event is Event & { startDate: string } => typeof event.startDate === 'string',
+  )
   if (events.length === 0) return null
 
   return (

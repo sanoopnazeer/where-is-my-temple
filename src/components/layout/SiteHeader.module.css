@@ -96,7 +96,7 @@
 
   .mobileNav {
     flex-direction: column;
-    padding: 0.5rem 1.5rem 1.25rem;
+    padding: 0.5rem 1rem 1.25rem;
     border-top: 1px solid #eee;
   }
 
@@ -116,5 +116,12 @@
 
   .mobileNav a:last-child {
     border-bottom: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .inner {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }

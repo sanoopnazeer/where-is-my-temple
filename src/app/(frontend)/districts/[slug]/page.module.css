@@ -34,3 +34,10 @@
 .mainColumn {
   min-width: 0;
 }
+
+@media (max-width: 480px) {
+  .contentGrid {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}

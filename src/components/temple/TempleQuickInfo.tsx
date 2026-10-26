@@ -4,7 +4,12 @@ import { formatIstTime } from '@/utilities/ist'
 import styles from './TempleQuickInfo.module.css'
 
 export function TempleQuickInfo({ temple, locale }: { temple: Temple; locale: string }) {
-  const darshanTimings = temple.darshanTimings ?? []
+  const darshanTimings = (temple.darshanTimings ?? []).flatMap((timing) =>
+    // Times are optional in the CMS; a timing missing either can't be shown.
+    timing.openTime && timing.closeTime
+      ? [{ ...timing, openTime: timing.openTime, closeTime: timing.closeTime }]
+      : [],
+  )
   const dressCode = temple.dressCode
   const hasDressCode = Boolean(dressCode?.men || dressCode?.women)
   const importantRules = temple.importantRules ?? []

@@ -9,7 +9,6 @@ import type { SelectField } from 'payload'
 export const publicationStatusField = (): SelectField => ({
   name: 'publicationStatus',
   type: 'select',
-  required: true,
   defaultValue: 'draft',
   options: [
     { label: 'Draft', value: 'draft' },

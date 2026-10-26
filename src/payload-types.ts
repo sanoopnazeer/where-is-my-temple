@@ -154,7 +154,7 @@ export interface User {
  */
 export interface Media {
   id: string;
-  alt: string;
+  alt?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -179,7 +179,7 @@ export interface District {
    * Editorial description shown on the district page. English only for V1.
    */
   description?: string | null;
-  publicationStatus: 'draft' | 'review' | 'published' | 'archived';
+  publicationStatus?: ('draft' | 'review' | 'published' | 'archived') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -191,13 +191,13 @@ export interface Temple {
   id: string;
   name: string;
   slug: string;
-  district: string | District;
+  district?: (string | null) | District;
   locality?: string | null;
   taluk?: string | null;
-  address: string;
-  latitude: number;
-  longitude: number;
-  historyNarrative: {
+  address?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  historyNarrative?: {
     root: {
       type: string;
       children: {
@@ -211,12 +211,12 @@ export interface Temple {
       version: number;
     };
     [k: string]: unknown;
-  };
+  } | null;
   dailyRituals?:
     | {
-        name: string;
-        description: string;
-        startTime: string;
+        name?: string | null;
+        description?: string | null;
+        startTime?: string | null;
         endTime?: string | null;
         id?: string | null;
       }[]
@@ -240,18 +240,18 @@ export interface Temple {
   } | null;
   transitPoints?:
     | {
-        type: string;
-        name: string;
-        distance: number;
-        unit: 'm' | 'km';
+        type?: string | null;
+        name?: string | null;
+        distance?: number | null;
+        unit?: ('m' | 'km') | null;
         id?: string | null;
       }[]
     | null;
   darshanTimings?:
     | {
-        label: string;
-        openTime: string;
-        closeTime: string;
+        label?: string | null;
+        openTime?: string | null;
+        closeTime?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -261,7 +261,7 @@ export interface Temple {
   };
   importantRules?:
     | {
-        rule: string;
+        rule?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -276,8 +276,8 @@ export interface Temple {
     facebook?: string | null;
     youtube?: string | null;
   };
-  publicationStatus: 'draft' | 'review' | 'published' | 'archived';
-  verificationStatus: 'unverified' | 'verified';
+  publicationStatus?: ('draft' | 'review' | 'published' | 'archived') | null;
+  verificationStatus?: ('unverified' | 'verified') | null;
   sourceType?: string | null;
   sourceUrl?: string | null;
   lastVerifiedAt?: string | null;
@@ -297,7 +297,7 @@ export interface Temple {
 export interface Event {
   id: string;
   name: string;
-  description: {
+  description?: {
     root: {
       type: string;
       children: {
@@ -311,14 +311,14 @@ export interface Event {
       version: number;
     };
     [k: string]: unknown;
-  };
-  temple: string | Temple;
+  } | null;
+  temple?: (string | null) | Temple;
   keyRitual?: string | null;
-  startDate: string;
-  endDate: string;
+  startDate?: string | null;
+  endDate?: string | null;
   keywords?:
     | {
-        keyword: string;
+        keyword?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -330,7 +330,7 @@ export interface Event {
    * Derived automatically from start/end dates.
    */
   status?: ('past' | 'ongoing' | 'upcoming') | null;
-  publicationStatus: 'draft' | 'review' | 'published' | 'archived';
+  publicationStatus?: ('draft' | 'review' | 'published' | 'archived') | null;
   updatedAt: string;
   createdAt: string;
 }

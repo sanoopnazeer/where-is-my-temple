@@ -60,3 +60,10 @@
   font-weight: 600;
   color: #222;
 }
+
+@media (max-width: 480px) {
+  .grid {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}

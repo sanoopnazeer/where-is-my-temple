@@ -13,7 +13,7 @@ import { getEventStatus } from '@/utilities/eventDate'
  */
 
 const expectSortedByStart = (events: Event[]) => {
-  const starts = events.map((event) => new Date(event.startDate).getTime())
+  const starts = events.map((event) => new Date(event.startDate ?? 0).getTime())
   expect(starts).toEqual([...starts].sort((a, b) => a - b))
 }
 

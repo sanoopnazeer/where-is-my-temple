@@ -133,3 +133,20 @@ custom map styling, this can be swapped for another provider — the
 `TempleMap` component's props (`latitude`, `longitude`) stay the same
 either way, since it already isolates the map from `Temple`'s stored
 coordinates.
+
+## ADR-009 — Make CMS fields optional except identity fields (owner-directed)
+
+- **Date:** 2026-10-26
+- **Decision:** remove `required: true` from every Payload field except
+  `name` and `slug` on Districts/Temples and `name` on Events. This
+  includes nested array sub-fields, Media `alt`, `publicationStatus` and
+  `verificationStatus` (their `defaultValue`s are kept).
+- **Why:** editors need to save partially filled records while data is
+  still being researched/imported.
+- **Consequences:** the public site must not assume these fields exist.
+  Events without both dates (or without a published Temple) are skipped
+  by `hasPublicTemple`; Temples without a District are skipped in district
+  counts; missing times/alt/coordinates are handled at render time.
+  `publicationStatus` is not enforced, so a record saved without one is
+  treated as not published (public read only returns `published`).
+  `src/payload-types.ts` was regenerated.

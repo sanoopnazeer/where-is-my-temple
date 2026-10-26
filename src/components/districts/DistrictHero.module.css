@@ -76,3 +76,10 @@
   line-height: 1.6;
   opacity: 0.95;
 }
+
+@media (max-width: 480px) {
+  .hero {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}

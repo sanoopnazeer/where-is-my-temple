@@ -79,3 +79,11 @@
   font-size: 0.75rem;
   color: #777;
 }
+
+@media (max-width: 480px) {
+  .columns,
+  .copyright {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

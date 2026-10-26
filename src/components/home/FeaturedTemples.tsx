@@ -26,7 +26,7 @@ export function FeaturedTemples({ temples }: { temples: FeaturedTemple[] }) {
         {temples.map((temple) => {
           const heroImage = typeof temple.heroImage === 'object' ? temple.heroImage : undefined
           const imageUrl = resolveMediaUrl(heroImage)
-          const districtName = typeof temple.district === 'object' ? temple.district.name : undefined
+          const districtName = typeof temple.district === 'object' && temple.district ? temple.district.name : undefined
           const description = excerpt(temple.historyNarrative, 110)
 
           return (

@@ -17,7 +17,11 @@ function formatFestivalDate(startDate: string): string {
  * design doesn't present these as clickable (no "View Details"-style
  * affordance, unlike the Temple cards next to them).
  */
-export function UpcomingFestivalsSidebar({ events }: { events: Event[] }) {
+export function UpcomingFestivalsSidebar({ events: allEvents }: { events: Event[] }) {
+  // Dates are optional in the CMS; an event without a start date can't be shown.
+  const events = allEvents.filter(
+    (event): event is Event & { startDate: string } => typeof event.startDate === 'string',
+  )
   if (events.length === 0) return null
 
   return (

@@ -22,7 +22,9 @@ export function SpotlightEvent({ event }: { event: PublicEvent }) {
   const heroImage =
     typeof event.temple.heroImage === 'object' && event.temple.heroImage ? event.temple.heroImage : undefined
   const imageUrl = resolveMediaUrl(event.temple.heroImage)
-  const districtName = typeof event.temple.district === 'object' ? event.temple.district.name : undefined
+  const districtName = typeof event.temple.district === 'object' && event.temple.district
+      ? event.temple.district.name
+      : undefined
   const description = excerpt(event.description, 220)
 
   return (

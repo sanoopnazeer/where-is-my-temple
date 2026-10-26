@@ -39,7 +39,7 @@ function GalleryTile({
 
   return (
     <div className={className}>
-      <Image src={url} alt={media.alt} fill loading="lazy" sizes={sizes} className={styles.image} />
+      <Image src={url} alt={media.alt ?? ''} fill loading="lazy" sizes={sizes} className={styles.image} />
     </div>
   )
 }

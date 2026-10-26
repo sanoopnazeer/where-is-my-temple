@@ -8,7 +8,7 @@ const MAX_UPCOMING_EVENTS = 12
 
 /** An Event whose linked Temple is confirmed populated and published —
  * the only shape these components ever render (see `hasPublicTemple`). */
-export type PublicEvent = Event & { temple: Temple }
+export type PublicEvent = Event & { temple: Temple; startDate: string; endDate: string }
 
 export interface EventsData {
   spotlightEvent?: PublicEvent
@@ -31,7 +31,10 @@ export function hasPublicTemple(event: Event): event is PublicEvent {
   return (
     typeof event.temple === 'object' &&
     event.temple !== null &&
-    event.temple.publicationStatus === 'published'
+    event.temple.publicationStatus === 'published' &&
+    // Dates are optional in the CMS; an event without both can't be shown.
+    typeof event.startDate === 'string' &&
+    typeof event.endDate === 'string'
   )
 }
 

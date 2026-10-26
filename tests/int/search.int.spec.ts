@@ -106,7 +106,7 @@ describe('district-scoped search (/districts/[slug]?q=)', () => {
           const { temples } = await getDistrictTemples(district.id, 1, query)
           for (const temple of temples) {
             const districtId =
-              typeof temple.district === 'object' ? temple.district.id : temple.district
+              typeof temple.district === 'object' ? temple.district?.id : temple.district
             expect(districtId).toBe(district.id)
             expect(temple.publicationStatus).toBe('published')
           }

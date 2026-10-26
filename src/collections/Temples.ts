@@ -37,7 +37,6 @@ export const Temples: CollectionConfig = {
       name: 'district',
       type: 'relationship',
       relationTo: 'districts',
-      required: true,
     },
     {
       name: 'locality',
@@ -50,19 +49,16 @@ export const Temples: CollectionConfig = {
     {
       name: 'address',
       type: 'textarea',
-      required: true,
     },
     {
       name: 'latitude',
       type: 'number',
-      required: true,
       min: -90,
       max: 90,
     },
     {
       name: 'longitude',
       type: 'number',
-      required: true,
       min: -180,
       max: 180,
     },
@@ -71,7 +67,6 @@ export const Temples: CollectionConfig = {
     {
       name: 'historyNarrative',
       type: 'richText',
-      required: true,
       localized: true,
     },
 
@@ -83,19 +78,16 @@ export const Temples: CollectionConfig = {
         {
           name: 'name',
           type: 'text',
-          required: true,
           localized: true,
         },
         {
           name: 'description',
           type: 'textarea',
-          required: true,
           localized: true,
         },
         {
           name: 'startTime',
           type: 'date',
-          required: true,
           admin: {
             date: {
               pickerAppearance: 'timeOnly',
@@ -141,22 +133,18 @@ export const Temples: CollectionConfig = {
         {
           name: 'type',
           type: 'text',
-          required: true,
         },
         {
           name: 'name',
           type: 'text',
-          required: true,
         },
         {
           name: 'distance',
           type: 'number',
-          required: true,
         },
         {
           name: 'unit',
           type: 'select',
-          required: true,
           options: [
             { label: 'Meters', value: 'm' },
             { label: 'Kilometers', value: 'km' },
@@ -173,12 +161,10 @@ export const Temples: CollectionConfig = {
         {
           name: 'label',
           type: 'text',
-          required: true,
         },
         {
           name: 'openTime',
           type: 'date',
-          required: true,
           admin: {
             date: {
               pickerAppearance: 'timeOnly',
@@ -188,7 +174,6 @@ export const Temples: CollectionConfig = {
         {
           name: 'closeTime',
           type: 'date',
-          required: true,
           admin: {
             date: {
               pickerAppearance: 'timeOnly',
@@ -224,7 +209,6 @@ export const Temples: CollectionConfig = {
         {
           name: 'rule',
           type: 'textarea',
-          required: true,
           localized: true,
         },
       ],
@@ -258,7 +242,6 @@ export const Temples: CollectionConfig = {
     {
       name: 'verificationStatus',
       type: 'select',
-      required: true,
       defaultValue: 'unverified',
       options: [
         { label: 'Unverified', value: 'unverified' },

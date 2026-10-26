@@ -386,6 +386,16 @@ The R2 integration is a separate implementation step after the basic collections
 
 # 8. Validation Expectations
 
+> **Update (2026-10-26, owner-directed — see ADR-009):** the only fields
+> Payload still enforces as required are the identity fields: `name` and
+> `slug` on Districts and Temples, and `name` on Events. Every other
+> `required` flag listed in the tables and rules below (district,
+> latitude/longitude, address, history, ritual/transit/darshan sub-fields,
+> event temple/dates/description, Media `alt`, `publicationStatus`,
+> `verificationStatus`) is now optional in the CMS. Validation *rules*
+> (coordinate ranges, end date not before start date) still apply when a
+> value is present.
+
 At minimum:
 
 ### District

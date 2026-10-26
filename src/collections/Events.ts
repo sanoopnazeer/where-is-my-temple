@@ -26,13 +26,11 @@ export const Events: CollectionConfig = {
     {
       name: 'description',
       type: 'richText',
-      required: true,
     },
     {
       name: 'temple',
       type: 'relationship',
       relationTo: 'temples',
-      required: true,
     },
     {
       name: 'keyRitual',
@@ -41,7 +39,6 @@ export const Events: CollectionConfig = {
     {
       name: 'startDate',
       type: 'date',
-      required: true,
       admin: {
         date: {
           pickerAppearance: 'dayOnly',
@@ -51,14 +48,13 @@ export const Events: CollectionConfig = {
     {
       name: 'endDate',
       type: 'date',
-      required: true,
       admin: {
         date: {
           pickerAppearance: 'dayOnly',
         },
       },
       validate: (value, { siblingData }) => {
-        if (!value) return 'End date is required'
+        if (!value) return true
 
         const startDate = (siblingData as { startDate?: string } | undefined)?.startDate
         if (startDate && new Date(value).getTime() < new Date(startDate).getTime()) {
@@ -76,7 +72,6 @@ export const Events: CollectionConfig = {
         {
           name: 'keyword',
           type: 'text',
-          required: true,
         },
       ],
     },

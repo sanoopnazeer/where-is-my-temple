@@ -18,3 +18,10 @@
   line-height: 1.6;
   color: #666;
 }
+
+@media (max-width: 480px) {
+  .hero {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

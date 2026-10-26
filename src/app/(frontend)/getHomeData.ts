@@ -91,6 +91,8 @@ export async function getHomeData(): Promise<HomeData> {
   const imageByDistrict = new Map<string, Media>()
 
   for (const temple of templesResult.docs) {
+    // District is optional in the CMS; a Temple without one can't be counted.
+    if (!temple.district) continue
     const districtId = typeof temple.district === 'object' ? temple.district.id : temple.district
     templeCountByDistrict.set(districtId, (templeCountByDistrict.get(districtId) ?? 0) + 1)
 

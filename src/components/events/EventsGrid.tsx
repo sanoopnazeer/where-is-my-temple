@@ -40,7 +40,9 @@ export function EventsGrid({ events }: { events: PublicEvent[] }) {
               : undefined
           const imageUrl = resolveMediaUrl(event.temple.heroImage)
           const districtName =
-            typeof event.temple.district === 'object' ? event.temple.district.name : undefined
+            typeof event.temple.district === 'object' && event.temple.district
+              ? event.temple.district.name
+              : undefined
           const description = excerpt(event.description, 100)
           const keywords = (event.keywords ?? []).map((k) => k.keyword).filter(Boolean)
           const [badge, ...pills] = keywords

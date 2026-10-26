@@ -9,7 +9,9 @@ import styles from './TempleHero.module.css'
 
 export function TempleHero({ temple, locale }: { temple: Temple; locale: TempleLocale }) {
   const heroUrl = resolveMediaUrl(temple.heroImage)
-  const heroAlt = typeof temple.heroImage === 'object' && temple.heroImage ? temple.heroImage.alt : temple.name
+  const heroAlt = typeof temple.heroImage === 'object' && temple.heroImage
+      ? (temple.heroImage.alt ?? temple.name)
+      : temple.name
   const districtName = typeof temple.district === 'object' && temple.district ? temple.district.name : undefined
 
   return (

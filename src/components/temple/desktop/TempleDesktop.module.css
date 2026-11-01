@@ -340,7 +340,7 @@
 
 /* How to reach */
 
-.reachList {
+.root .reachList {
   padding: 0 16px;
   border: 1px solid #eadcd0;
   border-radius: 12px;

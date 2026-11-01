@@ -4,6 +4,8 @@ import Link from 'next/link'
 import type { Temple } from '@/payload-types'
 import type { TempleLocale } from '@/app/(frontend)/temples/[slug]/locale'
 import { resolveMediaUrl } from '@/utilities/media'
+import { PinIcon } from '@/components/icons/TempleIcons'
+import { hasText } from '../templeView'
 import styles from './MobileHero.module.css'
 
 export function MobileHero({ temple, locale }: { temple: Temple; locale: TempleLocale }) {
@@ -12,6 +14,10 @@ export function MobileHero({ temple, locale }: { temple: Temple; locale: TempleL
     typeof temple.heroImage === 'object' && temple.heroImage
       ? (temple.heroImage.alt ?? temple.name)
       : temple.name
+
+  const district =
+    typeof temple.district === 'object' && temple.district ? temple.district.name : undefined
+  const locationLine = [temple.locality, district, 'Kerala'].filter(hasText).join(', ')
 
   return (
     <section className={styles.hero}>
@@ -49,6 +55,12 @@ export function MobileHero({ temple, locale }: { temple: Temple; locale: TempleL
       </div>
 
       <div className={styles.content} lang={locale}>
+        {locationLine && (
+          <span className={styles.locationChip} lang="en">
+            <PinIcon className={styles.chipPin} />
+            {locationLine}
+          </span>
+        )}
         <h1 className={styles.title}>{temple.name}</h1>
         {temple.tagline && <p className={styles.tagline}>{temple.tagline}</p>}
       </div>

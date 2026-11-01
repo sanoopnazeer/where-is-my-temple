@@ -1,9 +1,6 @@
-import { createElement } from 'react'
-import { renderToStaticMarkup } from 'react-dom/server'
 import { afterAll, describe, expect, it } from 'vitest'
 
-import { TempleDailyRituals } from '@/components/temple/TempleDailyRituals'
-import { TempleQuickInfo } from '@/components/temple/TempleQuickInfo'
+import { buildTempleView } from '@/components/temple/templeView'
 import type { Temple } from '@/payload-types'
 import {
   eventDurationLabel,
@@ -61,8 +58,7 @@ describeInServerTimeZones('IST time display', () => {
       darshanTimings: [{ id: 'd1', label: 'Morning', openTime: DARSHAN_MORNING.open, closeTime: DARSHAN_MORNING.close }],
     } as unknown as Temple
 
-    const html = renderToStaticMarkup(createElement(TempleQuickInfo, { temple, locale: 'en' }))
-    expect(html).toContain('03:00 am – 12:30 pm')
+    expect(buildTempleView(temple).darshan.map((item) => item.time)).toEqual(['3:00 AM – 12:30 PM'])
   })
 
   it('renders Daily Ritual times in IST on the Temple page', () => {
@@ -74,12 +70,11 @@ describeInServerTimeZones('IST time display', () => {
       ],
     } as unknown as Temple
 
-    const html = renderToStaticMarkup(createElement(TempleDailyRituals, { temple, locale: 'ml' }))
-    const times = [...html.matchAll(/<span[^>]*lang="en"[^>]*>([^<]*)<\/span>/g)].map((m) => m[1])
+    const { rituals } = buildTempleView(temple)
 
-    // start–end range, start only (no end time), and no pill at all without a start time
-    expect(times).toEqual(['03:00 am – 03:30 am', '03:00 pm'])
-    expect(html).toContain('Untimed')
+    // start–end range, start only (no end time), and no time at all without a start time
+    expect(rituals.map((ritual) => ritual.time)).toEqual(['3:00 AM – 3:30 AM', '3:00 PM', null])
+    expect(rituals.map((ritual) => ritual.name)).toContain('Untimed')
   })
 })
 

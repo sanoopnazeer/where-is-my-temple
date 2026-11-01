@@ -1199,3 +1199,29 @@ new desktop design (`design/desktop/Temple Page.png`) is implemented.
   gallery or contact/social links because the design has none; map zoom +/-
   reload the Google embed at a new zoom, and the design's stylised map look
   needs the embed API key to show a real map.
+
+## Desktop Temple page redesign (2026-11-01)
+
+Implemented `design/desktop/Temple Page.png` (1280px frame) as the Temple page
+layout from 768px up (two columns from 1024px, one column of the same cards
+between 768px and 1023px). The site header, "List your temple" CTA and footer
+are unchanged and shared with the mobile layout.
+
+- Components: `src/components/temple/desktop/` (`TempleDesktop`, `DesktopCard`).
+  Both layouts read their content through `src/components/temple/templeView.ts`
+  so they always show the same data; `MobileMap` is reused for the map.
+- Removed the previous desktop components (`TempleHero`, `TempleQuickInfo`,
+  `TempleHistory`, `TempleDailyRituals`, `TempleGallery`, `TemplePlanYourVisit`,
+  `TempleContact`). The new design has no gallery or contact/social block, so
+  those no longer appear on the Temple page (the fields remain in the CMS).
+  `TempleMap` is now unused.
+- Times now render as "5:00 AM" (was "05:00 am"); rituals without a start time
+  still list by name. `tests/int/istDateTime.int.spec.ts` now checks the IST
+  times through `buildTempleView`.
+- No new CMS fields. The hero location line is built from `locality`, the
+  district name and "Kerala"; the Direction chip and map caption use
+  `locality`. Festival and guideline icons cycle through the design's set
+  because the CMS has no icon field for them.
+- Checked against the design at 1280px with the design's own content (type,
+  spacing, colours) and for overflow at 800, 1024 and 1600px. Not yet checked
+  against real CMS content.

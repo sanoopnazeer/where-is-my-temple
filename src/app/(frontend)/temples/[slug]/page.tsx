@@ -5,13 +5,7 @@ import { SiteHeader } from '@/components/layout/SiteHeader'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { ComingSoonCta } from '@/components/layout/ComingSoonCta'
 import { TempleMobile } from '@/components/temple/mobile/TempleMobile'
-import { TempleHero } from '@/components/temple/TempleHero'
-import { TempleQuickInfo } from '@/components/temple/TempleQuickInfo'
-import { TempleHistory } from '@/components/temple/TempleHistory'
-import { TempleDailyRituals } from '@/components/temple/TempleDailyRituals'
-import { TempleGallery } from '@/components/temple/TempleGallery'
-import { TemplePlanYourVisit } from '@/components/temple/TemplePlanYourVisit'
-import { TempleContact } from '@/components/temple/TempleContact'
+import { TempleDesktop } from '@/components/temple/desktop/TempleDesktop'
 import { JsonLd } from '@/components/seo/JsonLd'
 import type { Temple } from '@/payload-types'
 import { resolveMediaUrl } from '@/utilities/media'
@@ -76,9 +70,9 @@ export default async function TemplePage({
     <div className={styles.page}>
       <JsonLd data={templeJsonLd(temple, templeDescription(temple))} />
       <SiteHeader />
-      {/* Phones get the dedicated mobile layout (design/mobile/Temple Page.png);
-          the layout in desktopOnly is shown from 768px up until the new
-          desktop design is implemented. Header, CTA and footer are shared. */}
+      {/* Two layouts from the designs: design/mobile/Temple Page.png below
+          768px, design/desktop/Temple Page.png from 768px up. Header, CTA and
+          footer are shared. */}
       <div className={styles.mobileOnly}>
         <TempleMobile
           temple={temple}
@@ -87,15 +81,11 @@ export default async function TemplePage({
         />
       </div>
       <div className={styles.desktopOnly}>
-        <main>
-          <TempleHero temple={temple} locale={locale} />
-          <TempleQuickInfo temple={temple} locale={locale} />
-          <TempleHistory temple={temple} locale={locale} />
-          <TempleDailyRituals temple={temple} locale={locale} />
-          <TempleGallery temple={temple} />
-          <TemplePlanYourVisit temple={temple} />
-          <TempleContact temple={temple} />
-        </main>
+        <TempleDesktop
+          temple={temple}
+          locale={locale}
+          mapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_API_KEY}
+        />
       </div>
       <ComingSoonCta />
       <SiteFooter />

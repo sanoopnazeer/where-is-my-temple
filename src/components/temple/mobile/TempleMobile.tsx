@@ -3,7 +3,12 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 
 import type { Temple } from '@/payload-types'
 import type { TempleLocale } from '@/app/(frontend)/temples/[slug]/locale'
-import { formatIstTimeShort, istHour } from '@/utilities/ist'
+import {
+  buildTempleView,
+  hasText,
+  type HighlightIcon,
+  type TransitKind,
+} from '../templeView'
 import { BusIcon } from '@/components/icons/TempleIcons'
 import { MobileCard } from './MobileCard'
 import { MobileHero } from './MobileHero'
@@ -34,10 +39,7 @@ import {
 } from './MobileIcons'
 import styles from './TempleMobile.module.css'
 
-type Highlight = NonNullable<Temple['spiritualHighlights']>[number]
-type TransitPoint = NonNullable<Temple['transitPoints']>[number]
-
-const HIGHLIGHT_ICONS: Record<NonNullable<Highlight['icon']>, ReactNode> = {
+const HIGHLIGHT_ICONS: Record<HighlightIcon, ReactNode> = {
   sacred: <SacredSymbolIcon />,
   gathering: <GatheringIcon />,
   offering: <OfferingIcon />,
@@ -45,33 +47,10 @@ const HIGHLIGHT_ICONS: Record<NonNullable<Highlight['icon']>, ReactNode> = {
   bathing: <BathingIcon />,
 }
 
-function paragraphs(text: string | null | undefined): string[] {
-  return (text ?? '')
-    .split(/\n\s*\n/)
-    .map((part) => part.trim())
-    .filter(Boolean)
-}
-
-function timeRange(start?: string | null, end?: string | null): string | null {
-  if (!start) return null
-  return end ? `${formatIstTimeShort(start)} – ${formatIstTimeShort(end)}` : formatIstTimeShort(start)
-}
-
-function transitIcon(type: string | null | undefined): ReactNode {
-  const value = (type ?? '').toLowerCase()
-  if (/(train|rail|metro)/.test(value)) return <TrainIcon />
-  if (/(air|flight|plane)/.test(value)) return <PlaneIcon />
-  return <BusIcon />
-}
-
-function transitHeading(point: TransitPoint): string {
-  const label = `By ${point.type ?? 'road'}`
-  if (typeof point.distance !== 'number') return label
-  return `${label} (${Number(point.distance.toFixed(2))} ${point.unit ?? 'km'})`
-}
-
-function hasText(value: string | null | undefined): value is string {
-  return Boolean(value && value.trim())
+const TRANSIT_ICONS: Record<TransitKind, ReactNode> = {
+  train: <TrainIcon />,
+  air: <PlaneIcon />,
+  road: <BusIcon />,
 }
 
 export function TempleMobile({
@@ -83,46 +62,10 @@ export function TempleMobile({
   locale: TempleLocale
   mapsApiKey?: string
 }) {
-  const darshan = (temple.darshanTimings ?? []).flatMap((timing) => {
-    const time = timeRange(timing.openTime, timing.closeTime)
-    return time && timing.openTime ? [{ id: timing.id, label: timing.label, time, open: timing.openTime }] : []
-  })
-  const advisory = hasText(temple.advisory) ? temple.advisory : undefined
-
-  const rituals = (temple.dailyRituals ?? []).flatMap((ritual) => {
-    const time = timeRange(ritual.startTime, ritual.endTime)
-    return ritual.name && time ? [{ id: ritual.id, name: ritual.name, time }] : []
-  })
-
-  const significance = paragraphs(temple.spiritualSignificance)
-  const hasSpiritualDetails =
-    hasText(temple.presidingDeity) || hasText(temple.sacredLocation) || significance.length > 0
-  const highlights = (temple.spiritualHighlights ?? []).filter((item) => hasText(item.title))
-  const festivals = (temple.festivals ?? []).filter((item) => hasText(item.name))
-
-  const guidelines: { id?: string | null; title?: string | null; text: string }[] = []
-  const men = temple.dressCode?.men
-  const women = temple.dressCode?.women
-  if (hasText(men) || hasText(women)) {
-    guidelines.push({
-      id: 'dress-code',
-      title: 'Dress Code',
-      text: [hasText(men) ? `Men: ${men}` : '', hasText(women) ? `Women: ${women}` : '']
-        .filter(Boolean)
-        .join(' '),
-    })
-  }
-  for (const rule of temple.importantRules ?? []) {
-    if (hasText(rule.rule)) guidelines.push({ id: rule.id, title: rule.title, text: rule.rule })
-  }
-
-  const transitPoints = (temple.transitPoints ?? []).filter((point) => point.type || point.name)
-  const hasReachContent = Boolean(temple.howToReach) || hasText(temple.address) || transitPoints.length > 0
-
+  const view = buildTempleView(temple)
+  const { darshan, advisory, rituals, significance, highlights, festivals, guidelines } = view
   const hasCoordinates =
     typeof temple.latitude === 'number' && typeof temple.longitude === 'number'
-  const coordinates = hasCoordinates ? `${temple.latitude},${temple.longitude}` : undefined
-  const hasDirection = hasCoordinates || hasText(temple.directionNote)
 
   return (
     <div className={styles.root}>
@@ -137,11 +80,11 @@ export function TempleMobile({
             title="Darshan & Timings"
           >
             <ul className={styles.rows}>
-              {darshan.map((item, index) => (
-                <li key={item.id ?? index} className={`${styles.row} ${styles.darshanRow}`}>
+              {darshan.map((item) => (
+                <li key={item.id} className={`${styles.row} ${styles.darshanRow}`}>
                   <span className={styles.rowLabel} lang={locale}>
                     <span className={styles.rowIcon}>
-                      {istHour(item.open) < 12 ? <SunriseIcon /> : <MoonIcon />}
+                      {item.isMorning ? <SunriseIcon /> : <MoonIcon />}
                     </span>
                     {item.label}
                   </span>
@@ -168,18 +111,18 @@ export function TempleMobile({
             title="Ritual Schedule"
           >
             <ul className={styles.rows}>
-              {rituals.map((ritual, index) => (
-                <li key={ritual.id ?? index} className={styles.row}>
+              {rituals.map((ritual) => (
+                <li key={ritual.id} className={styles.row}>
                   <span className={styles.rowLabel} lang={locale}>
                     {ritual.name}
                   </span>
-                  <span className={styles.time}>{ritual.time}</span>
+                  {ritual.time && <span className={styles.time}>{ritual.time}</span>}
                 </li>
               ))}
             </ul>
-            {hasText(temple.ritualNote) && (
+            {view.ritualNote && (
               <p className={styles.note} lang={locale}>
-                {temple.ritualNote}
+                {view.ritualNote}
               </p>
             )}
           </MobileCard>
@@ -198,7 +141,7 @@ export function TempleMobile({
           </MobileCard>
         )}
 
-        {hasSpiritualDetails && (
+        {view.hasSpiritualDetails && (
           <MobileCard
             icon={<MeditationIcon />}
             tone="peach"
@@ -314,7 +257,7 @@ export function TempleMobile({
           </MobileCard>
         )}
 
-        {hasReachContent && (
+        {view.hasReach && (
           <MobileCard
             icon={<SendIcon />}
             tone="lavender"
@@ -336,14 +279,12 @@ export function TempleMobile({
                   </div>
                 </div>
               )}
-              {transitPoints.map((point, index) => (
-                <div key={point.id ?? index} className={styles.box}>
-                  <span className={styles.boxIcon}>{transitIcon(point.type)}</span>
+              {view.transit.map((point) => (
+                <div key={point.id} className={styles.box}>
+                  <span className={styles.boxIcon}>{TRANSIT_ICONS[point.kind]}</span>
                   <div>
-                    <p className={styles.boxTitle}>{transitHeading(point)}</p>
-                    <p className={styles.boxText}>
-                      {hasText(point.description) ? point.description : point.name}
-                    </p>
+                    <p className={styles.boxTitle}>{point.heading}</p>
+                    <p className={styles.boxText}>{point.text}</p>
                   </div>
                 </div>
               ))}
@@ -351,7 +292,7 @@ export function TempleMobile({
           </MobileCard>
         )}
 
-        {hasDirection && (
+        {view.hasDirection && (
           <MobileCard
             icon={<SendIcon />}
             tone="lavender"
@@ -359,7 +300,7 @@ export function TempleMobile({
             title="Direction"
           >
             {hasText(temple.directionNote) && <p className={styles.intro}>{temple.directionNote}</p>}
-            {hasCoordinates && coordinates && (
+            {hasCoordinates && view.directionsUrl && view.mapsUrl && (
               <>
                 <MobileMap
                   latitude={temple.latitude as number}
@@ -368,7 +309,7 @@ export function TempleMobile({
                   apiKey={mapsApiKey}
                 />
                 <a
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${coordinates}`}
+                  href={view.directionsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`${styles.button} ${styles.buttonPrimary}`}
@@ -377,7 +318,7 @@ export function TempleMobile({
                   Get Navigation Route
                 </a>
                 <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${coordinates}`}
+                  href={view.mapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`${styles.button} ${styles.buttonSecondary}`}

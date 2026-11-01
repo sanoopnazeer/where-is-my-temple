@@ -23,16 +23,19 @@ export function MobileMap({
   longitude,
   name,
   apiKey,
+  height,
 }: {
   latitude: number
   longitude: number
   name: string
   apiKey?: string
+  /** Overrides the 192px mobile height. */
+  height?: number
 }) {
   const [zoom, setZoom] = useState(DEFAULT_ZOOM)
 
   return (
-    <div className={styles.map}>
+    <div className={styles.map} style={height ? { height } : undefined}>
       {apiKey ? (
         <iframe
           className={styles.frame}

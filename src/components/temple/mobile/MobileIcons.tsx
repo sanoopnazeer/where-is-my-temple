@@ -224,3 +224,79 @@ export function MarkerTempleIcon(props: IconProps) {
     </Base>
   )
 }
+
+export function DropletIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="M12 3c3.500 4 6 7 6 10a6 6 0 0 1-12 0c0-3 2.500-6 6-10z" />
+    </Base>
+  )
+}
+
+export function HangerIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="M12 8V6.500a2 2 0 1 1 2 2M12 8 3 15.500a1 1 0 0 0 .6 1.800h16.800a1 1 0 0 0 .6-1.800z" />
+    </Base>
+  )
+}
+
+export function HandIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="M8 13V6a1.500 1.500 0 0 1 3 0v5M11 11V4.500a1.500 1.500 0 0 1 3 0V11M14 11V6a1.500 1.500 0 0 1 3 0v8a7 7 0 0 1-7 7c-3 0-4.500-1.500-6-4l-1.500-2.500a1.500 1.500 0 0 1 2.500-1.500L8 14" />
+    </Base>
+  )
+}
+
+export function WarningIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="M12 3.500 2.500 20h19z" />
+      <path d="M12 10v4.500M12 17.200v.01" />
+    </Base>
+  )
+}
+
+export function CompassIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <circle cx="12" cy="12" r="9.500" />
+      <path d="m15.500 8.500-2 5-5 2 2-5z" />
+    </Base>
+  )
+}
+
+export function ChecklistIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="M3 6h9M3 12h6M3 18h9M15 14l5 5M20 14l-5 5M15 6.500l1.500 1.500 3-3" />
+    </Base>
+  )
+}
+
+export function LotusIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="M12 4c2.500 2.500 3.500 5 3.500 7.500S14 17 12 19c-2-2-3.500-4-3.500-7.500S9.500 6.500 12 4z" />
+      <path d="M8.500 11c-3 0-5 1.500-5.500 4 3 .5 5-.2 6.500-2M15.500 11c3 0 5 1.500 5.500 4-3 .5-5-.2-6.500-2M5 19.500c3 1.500 11 1.500 14 0" />
+    </Base>
+  )
+}
+
+export function PinOutlineIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="M12 21s-7-5.700-7-11a7 7 0 0 1 14 0c0 5.300-7 11-7 11z" />
+      <circle cx="12" cy="10" r="2.500" />
+    </Base>
+  )
+}
+
+export function MapFoldIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="m3 6 6-2.500 6 2.500 6-2.500v14.500L15 20.500 9 18l-6 2.500zM9 3.500V18M15 6v14.500" />
+    </Base>
+  )
+}

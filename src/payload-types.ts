@@ -191,6 +191,7 @@ export interface Temple {
   id: string;
   name: string;
   slug: string;
+  tagline?: string | null;
   district?: (string | null) | District;
   locality?: string | null;
   taluk?: string | null;
@@ -212,6 +213,26 @@ export interface Temple {
     };
     [k: string]: unknown;
   } | null;
+  presidingDeity?: string | null;
+  sacredLocation?: string | null;
+  spiritualSignificance?: string | null;
+  spiritualHighlights?:
+    | {
+        icon?: ('sacred' | 'gathering' | 'offering' | 'water' | 'bathing') | null;
+        title?: string | null;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  festivals?:
+    | {
+        name?: string | null;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  advisory?: string | null;
+  ritualNote?: string | null;
   dailyRituals?:
     | {
         name?: string | null;
@@ -238,8 +259,10 @@ export interface Temple {
     };
     [k: string]: unknown;
   } | null;
+  directionNote?: string | null;
   transitPoints?:
     | {
+        description?: string | null;
         type?: string | null;
         name?: string | null;
         distance?: number | null;
@@ -259,8 +282,10 @@ export interface Temple {
     men?: string | null;
     women?: string | null;
   };
+  visitorGuidelinesIntro?: string | null;
   importantRules?:
     | {
+        title?: string | null;
         rule?: string | null;
         id?: string | null;
       }[]
@@ -479,6 +504,7 @@ export interface DistrictsSelect<T extends boolean = true> {
 export interface TemplesSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
+  tagline?: T;
   district?: T;
   locality?: T;
   taluk?: T;
@@ -486,6 +512,26 @@ export interface TemplesSelect<T extends boolean = true> {
   latitude?: T;
   longitude?: T;
   historyNarrative?: T;
+  presidingDeity?: T;
+  sacredLocation?: T;
+  spiritualSignificance?: T;
+  spiritualHighlights?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  festivals?:
+    | T
+    | {
+        name?: T;
+        description?: T;
+        id?: T;
+      };
+  advisory?: T;
+  ritualNote?: T;
   dailyRituals?:
     | T
     | {
@@ -498,9 +544,11 @@ export interface TemplesSelect<T extends boolean = true> {
   heroImage?: T;
   gallery?: T;
   howToReach?: T;
+  directionNote?: T;
   transitPoints?:
     | T
     | {
+        description?: T;
         type?: T;
         name?: T;
         distance?: T;
@@ -521,9 +569,11 @@ export interface TemplesSelect<T extends boolean = true> {
         men?: T;
         women?: T;
       };
+  visitorGuidelinesIntro?: T;
   importantRules?:
     | T
     | {
+        title?: T;
         rule?: T;
         id?: T;
       };

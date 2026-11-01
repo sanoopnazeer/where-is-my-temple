@@ -1176,3 +1176,26 @@ What was checked (all passed):
 The verification TEST records seeded here (`test-district-verification`,
 `test-temple-verification` and its two TEST Events) are no longer in the
 database; all remaining TEST content was removed on 2026-10-01.
+
+## Mobile Temple page redesign (2026-10-31)
+
+Implemented `design/mobile/Temple Page.png` (390px frame) as the Temple page
+layout below 768px. From 768px up the previous layout is unchanged until the
+new desktop design (`design/desktop/Temple Page.png`) is implemented.
+
+- Components: `src/components/temple/mobile/` (`TempleMobile`, `MobileHeader`,
+  `MobileHero`, `MobileCard`, `MobileMap`, `MobileIcons`). `page.tsx` renders
+  the mobile and desktop trees side by side and `page.module.css` shows one
+  per breakpoint (the hidden one is `display: none`).
+- Content model: new optional Temple fields, see `docs/content-model.md` §3.15
+  (owner approved). No migration needed; `payload-types.ts` regenerated.
+- Checked by rendering a fixture of the design's content at 390px against the
+  design (type sizes, spacing, colours), and at 320px and 600px for
+  overflow. Not yet checked against real CMS content.
+- Choices to confirm: the mobile page uses the shared site header, "List your
+  temple" CTA and footer (the design's own app bar was dropped); the EN /
+  Malayalam switch stays in the hero's top-right corner (it is not in the
+  design) so Malayalam remains reachable on phones; the mobile body has no
+  gallery or contact/social links because the design has none; map zoom +/-
+  reload the Google embed at a new zoom, and the design's stylised map look
+  needs the embed API key to show a real map.

@@ -32,6 +32,13 @@ export const Temples: CollectionConfig = {
       index: true,
     },
 
+    // Short summary shown under the name in the mobile hero
+    {
+      name: 'tagline',
+      type: 'textarea',
+      localized: true,
+    },
+
     // Location
     {
       name: 'district',
@@ -67,6 +74,66 @@ export const Temples: CollectionConfig = {
     {
       name: 'historyNarrative',
       type: 'richText',
+      localized: true,
+    },
+
+    // Spiritual details (mobile Temple page). Paragraphs in textareas are
+    // separated by a blank line.
+    {
+      name: 'presidingDeity',
+      type: 'text',
+      localized: true,
+    },
+    {
+      name: 'sacredLocation',
+      type: 'text',
+      localized: true,
+    },
+    {
+      name: 'spiritualSignificance',
+      type: 'textarea',
+      localized: true,
+    },
+    {
+      name: 'spiritualHighlights',
+      type: 'array',
+      fields: [
+        {
+          name: 'icon',
+          type: 'select',
+          defaultValue: 'sacred',
+          options: [
+            { label: 'Sacred symbol', value: 'sacred' },
+            { label: 'Gathering', value: 'gathering' },
+            { label: 'Offering', value: 'offering' },
+            { label: 'Water', value: 'water' },
+            { label: 'Holy bath', value: 'bathing' },
+          ],
+        },
+        { name: 'title', type: 'text', localized: true },
+        { name: 'description', type: 'textarea', localized: true },
+      ],
+    },
+
+    // Festival summaries (editorial, undated — dated occurrences are Events)
+    {
+      name: 'festivals',
+      type: 'array',
+      fields: [
+        { name: 'name', type: 'text', localized: true },
+        { name: 'description', type: 'textarea', localized: true },
+      ],
+    },
+
+    // Notes shown with the darshan timings and the ritual schedule
+    {
+      name: 'advisory',
+      type: 'textarea',
+      localized: true,
+    },
+    {
+      name: 'ritualNote',
+      type: 'textarea',
       localized: true,
     },
 
@@ -125,11 +192,21 @@ export const Temples: CollectionConfig = {
       type: 'richText',
     },
 
+    // Direction blurb above the map (English only)
+    {
+      name: 'directionNote',
+      type: 'textarea',
+    },
+
     // Transit points
     {
       name: 'transitPoints',
       type: 'array',
       fields: [
+        {
+          name: 'description',
+          type: 'textarea',
+        },
         {
           name: 'type',
           type: 'text',
@@ -201,11 +278,21 @@ export const Temples: CollectionConfig = {
       ],
     },
 
-    // Important rules
+    // Important rules (optional bold title, e.g. "River Safety Precautions")
+    {
+      name: 'visitorGuidelinesIntro',
+      type: 'textarea',
+      localized: true,
+    },
     {
       name: 'importantRules',
       type: 'array',
       fields: [
+        {
+          name: 'title',
+          type: 'text',
+          localized: true,
+        },
         {
           name: 'rule',
           type: 'textarea',

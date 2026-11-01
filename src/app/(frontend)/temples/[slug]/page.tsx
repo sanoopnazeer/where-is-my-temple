@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { SiteHeader } from '@/components/layout/SiteHeader'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { ComingSoonCta } from '@/components/layout/ComingSoonCta'
+import { TempleMobile } from '@/components/temple/mobile/TempleMobile'
 import { TempleHero } from '@/components/temple/TempleHero'
 import { TempleQuickInfo } from '@/components/temple/TempleQuickInfo'
 import { TempleHistory } from '@/components/temple/TempleHistory'
@@ -75,16 +76,28 @@ export default async function TemplePage({
     <div className={styles.page}>
       <JsonLd data={templeJsonLd(temple, templeDescription(temple))} />
       <SiteHeader />
-      <main>
-        <TempleHero temple={temple} locale={locale} />
-        <TempleQuickInfo temple={temple} locale={locale} />
-        <TempleHistory temple={temple} locale={locale} />
-        <TempleDailyRituals temple={temple} locale={locale} />
-        <TempleGallery temple={temple} />
-        <TemplePlanYourVisit temple={temple} />
-        <TempleContact temple={temple} />
-        <ComingSoonCta />
-      </main>
+      {/* Phones get the dedicated mobile layout (design/mobile/Temple Page.png);
+          the layout in desktopOnly is shown from 768px up until the new
+          desktop design is implemented. Header, CTA and footer are shared. */}
+      <div className={styles.mobileOnly}>
+        <TempleMobile
+          temple={temple}
+          locale={locale}
+          mapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_API_KEY}
+        />
+      </div>
+      <div className={styles.desktopOnly}>
+        <main>
+          <TempleHero temple={temple} locale={locale} />
+          <TempleQuickInfo temple={temple} locale={locale} />
+          <TempleHistory temple={temple} locale={locale} />
+          <TempleDailyRituals temple={temple} locale={locale} />
+          <TempleGallery temple={temple} />
+          <TemplePlanYourVisit temple={temple} />
+          <TempleContact temple={temple} />
+        </main>
+      </div>
+      <ComingSoonCta />
       <SiteFooter />
     </div>
   )

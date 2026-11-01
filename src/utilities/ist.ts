@@ -18,6 +18,29 @@ export function formatIstTime(value: string | Date): string {
   })
 }
 
+/** Time of day in IST without a leading zero, e.g. "6:30 AM" (mobile Temple page). */
+export function formatIstTimeShort(value: string | Date): string {
+  return new Date(value)
+    .toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+      timeZone: IST_TIME_ZONE,
+    })
+    .replace(/ /g, ' ')
+}
+
+/** Hour of day (0–23) in IST. */
+export function istHour(value: string | Date): number {
+  return Number(
+    new Date(value).toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      hour12: false,
+      timeZone: IST_TIME_ZONE,
+    }).slice(0, 2),
+  )
+}
+
 /** A date formatted as its IST calendar day, e.g. "May 1, 2027". */
 export function formatIstDate(
   value: string | Date,

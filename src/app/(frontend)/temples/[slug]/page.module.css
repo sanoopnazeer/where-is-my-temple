@@ -13,3 +13,23 @@
 .page main {
   overflow-x: hidden;
 }
+
+/* Mobile layout below 768px, existing layout from 768px up. The hidden one
+   is display:none, so it is not rendered or exposed to assistive tech. */
+.mobileOnly {
+  display: block;
+}
+
+.desktopOnly {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .mobileOnly {
+    display: none;
+  }
+
+  .desktopOnly {
+    display: block;
+  }
+}

@@ -254,6 +254,34 @@ Do not add unnecessary SEO fields without a UI/use case.
 
 ---
 
+## 3.15 Mobile Temple Page Fields (added 2026-10-31)
+
+Added for `design/mobile/Temple Page.png`. All optional; the mobile page
+renders each section only when its data exists (no invented copy). Localized
+fields follow the one-language-at-a-time rule (§3.1). Multi-paragraph
+textareas separate paragraphs with a blank line.
+
+| Field | Type | Localized | Used for |
+|---|---|---:|---|
+| `tagline` | textarea | Yes | Hero summary under the name |
+| `advisory` | textarea | Yes | Note under Darshan & Timings |
+| `ritualNote` | textarea | Yes | Note under the Ritual Schedule |
+| `presidingDeity` | text | Yes | Spiritual Details |
+| `sacredLocation` | text | Yes | Spiritual Details |
+| `spiritualSignificance` | textarea | Yes | Spiritual Details paragraphs |
+| `spiritualHighlights[]` | array: `icon` (sacred/gathering/offering/water/bathing), `title`, `description` | title, description | Spiritual Highlights |
+| `festivals[]` | array: `name`, `description` | Yes | Festivals & Celebrations. Editorial, undated summaries; dated occurrences remain Events (§4) |
+| `visitorGuidelinesIntro` | textarea | Yes | Visitor Guidelines intro |
+| `importantRules[].title` | text | Yes | Optional bold lead-in of a guideline |
+| `directionNote` | textarea | No (English) | Text above the map |
+| `transitPoints[].description` | textarea | No (English) | Text inside each How to Reach box |
+
+Existing fields reused by the mobile page: `darshanTimings`, `dailyRituals`,
+`historyNarrative` (About the Temple), `dressCode` + `importantRules`
+(Visitor Guidelines), `howToReach`, `address`, `transitPoints`, coordinates.
+
+---
+
 # 4. Events
 
 Events are first-class CMS records.

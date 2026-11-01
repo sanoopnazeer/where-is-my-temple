@@ -1,0 +1,392 @@
+/* Mobile Temple page - design/mobile/Temple Page.png (390px frame). Sizes
+   below are the design's; layout is fluid so every phone width works, and
+   the column is capped so large phones/small tablets don't stretch it. */
+
+.root {
+  min-height: 100vh;
+  max-width: 640px;
+  margin: 0 auto;
+  background: #fff8f5;
+  color: #564336;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+:where(.root) :where(p, h2, h3, ul) {
+  margin: 0;
+  padding: 0;
+}
+
+:where(.root) ul {
+  list-style: none;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px 16px 32px;
+}
+
+/* Cards */
+
+.card {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid #f7e9e1;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(86, 67, 54, 0.06);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #feeade;
+  color: #924c00;
+}
+
+.badgeLavender {
+  background: #f0dbff;
+  color: #724e95;
+}
+
+.badge svg {
+  width: 20px;
+  height: 20px;
+}
+
+.cardTitles {
+  min-width: 0;
+}
+
+.eyebrow {
+  color: #724e95;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+.cardTitle {
+  color: #231a12;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+/* Timing rows (darshan + rituals) */
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #feeade;
+}
+
+.darshanRow {
+  padding: 12px 0;
+}
+
+.rows > .row:last-child:not(.darshanRow) {
+  border-bottom: 0;
+}
+
+.rowLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  color: #231a12;
+  font-size: 12px;
+}
+
+.rowIcon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: #564336;
+}
+
+.rowIcon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.time {
+  margin-left: auto;
+  color: #924c00;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.advisory {
+  display: flex;
+  gap: 8px;
+  padding-top: 10px;
+}
+
+.advisoryIcon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  color: #724e95;
+}
+
+.advisory strong {
+  color: #564336;
+  font-weight: 700;
+}
+
+.note {
+  margin-top: 16px;
+  padding: 8px;
+  border-radius: 4px;
+  background: #fbe4d8;
+  font-style: italic;
+}
+
+/* Prose (history, spiritual paragraphs, how to reach) */
+
+.prose p {
+  margin: 0 0 12px;
+}
+
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
+  margin: 0 0 8px;
+  color: #231a12;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+}
+
+.prose a {
+  color: #724e95;
+}
+
+.proseDivided {
+  padding-top: 9px;
+}
+
+.intro {
+  margin-bottom: 12px;
+}
+
+/* Icon item lists (spiritual details + highlights) */
+
+.item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #feeade;
+}
+
+.item > span:last-child {
+  min-width: 0;
+}
+
+.itemIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #feeade;
+  color: #924c00;
+}
+
+.itemIcon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.itemLabel,
+.itemTitle,
+.itemText {
+  display: block;
+}
+
+.itemLabel {
+  color: #564336;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.itemTitle {
+  color: #231a12;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+/* Spiritual Details keeps its divider above the paragraphs; Highlights
+   drops the trailing one. */
+.items:last-child > .item:last-child {
+  border-bottom: 0;
+}
+
+/* Festivals */
+
+.festival {
+  padding: 16px 0;
+  border-bottom: 1px solid #feeade;
+}
+
+.festivals > .festival:first-child {
+  padding-top: 0;
+}
+
+.festivals > .festival:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.festivalName {
+  margin-bottom: 4px;
+  color: #924c00;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 26px;
+}
+
+/* Visitor guidelines */
+
+.checks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checks li {
+  display: flex;
+  gap: 8px;
+}
+
+.checks li > span {
+  min-width: 0;
+}
+
+.checks strong {
+  color: #231a12;
+  font-weight: 700;
+}
+
+.checkIcon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  color: #924c00;
+}
+
+/* How to reach */
+
+.boxes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.box {
+  display: flex;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  background: #fff8f5;
+}
+
+.box > div {
+  min-width: 0;
+}
+
+.boxIcon {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 16px;
+  height: 18px;
+  align-items: center;
+  color: #724e95;
+}
+
+.boxIcon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.boxTitle {
+  color: #231a12;
+  font-weight: 700;
+}
+
+.boxText {
+  overflow-wrap: anywhere;
+}
+
+/* Direction */
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  height: 48px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.buttonPrimary {
+  margin-top: 16px;
+  background: #fd8e25;
+  color: #fff;
+}
+
+.buttonSecondary {
+  margin-top: 8px;
+  background: #feeade;
+  color: #724e95;
+}
+
+@media (max-width: 359px) {
+  .content {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .festivalName {
+    font-size: 18px;
+    line-height: 24px;
+  }
+}

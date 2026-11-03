@@ -89,9 +89,9 @@ English + Malayalam:
 - Ritual descriptions
 - Dress code
 - Important rules
-
-How to reach:
-- English only
+- How to reach
+- Transit points (type, name, description)
+- Direction note
 
 The public Temple page shows ONE language at a time.
 Do not display English and Malayalam together.

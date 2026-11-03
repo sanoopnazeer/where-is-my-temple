@@ -72,7 +72,7 @@ export function TempleDesktop({
   locale: TempleLocale
   mapsApiKey?: string
 }) {
-  const view = buildTempleView(temple)
+  const view = buildTempleView(temple, locale)
   const { darshan, advisory, rituals, significance, highlights, festivals, guidelines } = view
 
   const heroUrl = resolveMediaUrl(temple.heroImage)
@@ -190,7 +190,7 @@ export function TempleDesktop({
               title="How to Reach"
             >
               {temple.howToReach && (
-                <div className={`${styles.prose} ${styles.lead} ${styles.reachIntro}`}>
+                <div className={`${styles.prose} ${styles.lead} ${styles.reachIntro}`} lang={locale}>
                   <RichText data={temple.howToReach} />
                 </div>
               )}
@@ -209,7 +209,7 @@ export function TempleDesktop({
                 {view.transit.map((point) => (
                   <li key={point.id} className={styles.reachItem}>
                     <span className={styles.reachIcon}>{TRANSIT_ICONS[point.kind]}</span>
-                    <div>
+                    <div lang={locale}>
                       <p className={styles.reachTitle}>{point.heading}</p>
                       <p className={styles.reachText}>{point.text}</p>
                     </div>
@@ -234,7 +234,8 @@ export function TempleDesktop({
               }
             >
               {hasText(temple.directionNote) && (
-                <p className={`${styles.lead} ${styles.reachIntro}`}>{temple.directionNote}</p>
+                <p className={`${styles.lead} ${styles.reachIntro}`} lang={locale}>
+                  {temple.directionNote}</p>
               )}
               {hasCoordinates && view.directionsUrl && view.mapsUrl && (
                 <div className={styles.mapBox}>

@@ -57,8 +57,9 @@ Only the following Temple content is bilingual:
 - Ritual descriptions
 - Dress code
 - Important rules
-
-How to reach remains English-only in V1.
+- How to reach (`howToReach`)
+- Transit points (`type`, `name`, `description`; `distance`/`unit` are shared)
+- Direction note (`directionNote`)
 
 The public Temple page shows **one language at a time**. English and Malayalam are not displayed side-by-side.
 

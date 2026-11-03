@@ -32,12 +32,23 @@ export function timeRange(start?: string | null, end?: string | null): string | 
 
 function transitKind(type: string | null | undefined): TransitKind {
   const value = (type ?? '').toLowerCase()
-  if (/(train|rail|metro)/.test(value)) return 'train'
-  if (/(air|flight|plane)/.test(value)) return 'air'
+  if (/(train|rail|metro|ട്രെയിൻ|റെയിൽ|മെട്രോ)/.test(value)) return 'train'
+  if (/(air|flight|plane|വിമാന|എയർ)/.test(value)) return 'air'
   return 'road'
 }
 
-export function buildTempleView(temple: Temple) {
+type TransitPoint = NonNullable<Temple['transitPoints']>[number]
+
+/** "By train (2 km)" in English; the Malayalam type is entered as a full label, so no "By". */
+function transitHeading(point: TransitPoint, locale: 'en' | 'ml'): string {
+  const label = hasText(point.type) ? point.type : locale === 'ml' ? '' : 'road'
+  const base = locale === 'ml' ? label : `By ${label}`
+  return typeof point.distance === 'number'
+    ? `${base} (${Number(point.distance.toFixed(2))} ${point.unit ?? 'km'})`
+    : base
+}
+
+export function buildTempleView(temple: Temple, locale: 'en' | 'ml' = 'en') {
   const darshan = (temple.darshanTimings ?? []).flatMap((timing, index) => {
     const time = timeRange(timing.openTime, timing.closeTime)
     return time && timing.openTime
@@ -73,10 +84,7 @@ export function buildTempleView(temple: Temple) {
     .map((point, index) => ({
       id: point.id ?? String(index),
       kind: transitKind(point.type),
-      heading:
-        typeof point.distance === 'number'
-          ? `By ${point.type ?? 'road'} (${Number(point.distance.toFixed(2))} ${point.unit ?? 'km'})`
-          : `By ${point.type ?? 'road'}`,
+      heading: transitHeading(point, locale),
       text: hasText(point.description) ? point.description : (point.name ?? ''),
     }))
 

@@ -186,16 +186,18 @@ export const Temples: CollectionConfig = {
       hasMany: true,
     },
 
-    // Plan your visit (English only)
+    // Plan your visit
     {
       name: 'howToReach',
       type: 'richText',
+      localized: true,
     },
 
-    // Direction blurb above the map (English only)
+    // Direction blurb above the map
     {
       name: 'directionNote',
       type: 'textarea',
+      localized: true,
     },
 
     // Transit points
@@ -206,14 +208,17 @@ export const Temples: CollectionConfig = {
         {
           name: 'description',
           type: 'textarea',
+          localized: true,
         },
         {
           name: 'type',
           type: 'text',
+          localized: true,
         },
         {
           name: 'name',
           type: 'text',
+          localized: true,
         },
         {
           name: 'distance',

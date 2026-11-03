@@ -135,7 +135,7 @@ Actual image binaries are stored outside MongoDB; planned storage is Cloudflare 
 
 | Field | Type | Required | Localized | Notes |
 |---|---|---:|---:|---|
-| `howToReach` | rich text/text | No | No | English only in V1 |
+| `howToReach` | rich text/text | No | Yes | English + Malayalam (made bilingual after the original V1 "English only" decision) |
 
 Do not create route-specific fields such as `fromKozhikode`, `fromKannur`, etc.
 
@@ -147,8 +147,9 @@ Repeatable array.
 
 | Field | Type | Required | Notes |
 |---|---|---:|---|
-| `type` | select/text | Yes | Example: railway, bus, airport |
-| `name` | text | Yes | Transit point name |
+| `type` | select/text | Yes | Localized (en/ml). Example: railway, bus, airport. Drives the icon via keyword match (English and Malayalam keywords) |
+| `name` | text | Yes | Localized (en/ml). Transit point name |
+| `description` | textarea | No | Localized (en/ml). Text inside each How to Reach box |
 | `distance` | number | Yes | Numeric value |
 | `unit` | select | Yes | `m`, `km` |
 
@@ -273,8 +274,8 @@ textareas separate paragraphs with a blank line.
 | `festivals[]` | array: `name`, `description` | Yes | Festivals & Celebrations. Editorial, undated summaries; dated occurrences remain Events (§4) |
 | `visitorGuidelinesIntro` | textarea | Yes | Visitor Guidelines intro |
 | `importantRules[].title` | text | Yes | Optional bold lead-in of a guideline |
-| `directionNote` | textarea | No (English) | Text above the map |
-| `transitPoints[].description` | textarea | No (English) | Text inside each How to Reach box |
+| `directionNote` | textarea | Yes | Text above the map |
+| `transitPoints[].description` | textarea | Yes | Text inside each How to Reach box |
 
 Existing fields reused by the mobile page: `darshanTimings`, `dailyRituals`,
 `historyNarrative` (About the Temple), `dressCode` + `importantRules`

@@ -62,7 +62,7 @@ export function TempleMobile({
   locale: TempleLocale
   mapsApiKey?: string
 }) {
-  const view = buildTempleView(temple)
+  const view = buildTempleView(temple, locale)
   const { darshan, advisory, rituals, significance, highlights, festivals, guidelines } = view
   const hasCoordinates =
     typeof temple.latitude === 'number' && typeof temple.longitude === 'number'
@@ -265,7 +265,7 @@ export function TempleMobile({
             title="How to Reach"
           >
             {temple.howToReach && (
-              <div className={`${styles.prose} ${styles.intro}`}>
+              <div className={`${styles.prose} ${styles.intro}`} lang={locale}>
                 <RichText data={temple.howToReach} />
               </div>
             )}
@@ -282,7 +282,7 @@ export function TempleMobile({
               {view.transit.map((point) => (
                 <div key={point.id} className={styles.box}>
                   <span className={styles.boxIcon}>{TRANSIT_ICONS[point.kind]}</span>
-                  <div>
+                  <div lang={locale}>
                     <p className={styles.boxTitle}>{point.heading}</p>
                     <p className={styles.boxText}>{point.text}</p>
                   </div>
@@ -299,7 +299,11 @@ export function TempleMobile({
             eyebrow="Navigation & Orientation"
             title="Direction"
           >
-            {hasText(temple.directionNote) && <p className={styles.intro}>{temple.directionNote}</p>}
+            {hasText(temple.directionNote) && (
+              <p className={styles.intro} lang={locale}>
+                {temple.directionNote}
+              </p>
+            )}
             {hasCoordinates && view.directionsUrl && view.mapsUrl && (
               <>
                 <MobileMap

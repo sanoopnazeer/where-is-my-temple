@@ -213,6 +213,15 @@ export interface Temple {
     };
     [k: string]: unknown;
   } | null;
+  darshanTimings?:
+    | {
+        label?: string | null;
+        openTime?: string | null;
+        closeTime?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  advisory?: string | null;
   presidingDeity?: string | null;
   sacredLocation?: string | null;
   spiritualSignificance?: string | null;
@@ -231,8 +240,6 @@ export interface Temple {
         id?: string | null;
       }[]
     | null;
-  advisory?: string | null;
-  ritualNote?: string | null;
   dailyRituals?:
     | {
         name?: string | null;
@@ -242,8 +249,7 @@ export interface Temple {
         id?: string | null;
       }[]
     | null;
-  heroImage?: (string | null) | Media;
-  gallery?: (string | Media)[] | null;
+  ritualNote?: string | null;
   howToReach?: {
     root: {
       type: string;
@@ -270,14 +276,6 @@ export interface Temple {
         id?: string | null;
       }[]
     | null;
-  darshanTimings?:
-    | {
-        label?: string | null;
-        openTime?: string | null;
-        closeTime?: string | null;
-        id?: string | null;
-      }[]
-    | null;
   dressCode?: {
     men?: string | null;
     women?: string | null;
@@ -301,6 +299,8 @@ export interface Temple {
     facebook?: string | null;
     youtube?: string | null;
   };
+  heroImage?: (string | null) | Media;
+  gallery?: (string | Media)[] | null;
   publicationStatus?: ('draft' | 'review' | 'published' | 'archived') | null;
   verificationStatus?: ('unverified' | 'verified') | null;
   sourceType?: string | null;
@@ -512,6 +512,15 @@ export interface TemplesSelect<T extends boolean = true> {
   latitude?: T;
   longitude?: T;
   historyNarrative?: T;
+  darshanTimings?:
+    | T
+    | {
+        label?: T;
+        openTime?: T;
+        closeTime?: T;
+        id?: T;
+      };
+  advisory?: T;
   presidingDeity?: T;
   sacredLocation?: T;
   spiritualSignificance?: T;
@@ -530,8 +539,6 @@ export interface TemplesSelect<T extends boolean = true> {
         description?: T;
         id?: T;
       };
-  advisory?: T;
-  ritualNote?: T;
   dailyRituals?:
     | T
     | {
@@ -541,8 +548,7 @@ export interface TemplesSelect<T extends boolean = true> {
         endTime?: T;
         id?: T;
       };
-  heroImage?: T;
-  gallery?: T;
+  ritualNote?: T;
   howToReach?: T;
   directionNote?: T;
   transitPoints?:
@@ -553,14 +559,6 @@ export interface TemplesSelect<T extends boolean = true> {
         name?: T;
         distance?: T;
         unit?: T;
-        id?: T;
-      };
-  darshanTimings?:
-    | T
-    | {
-        label?: T;
-        openTime?: T;
-        closeTime?: T;
         id?: T;
       };
   dressCode?:
@@ -592,6 +590,8 @@ export interface TemplesSelect<T extends boolean = true> {
         facebook?: T;
         youtube?: T;
       };
+  heroImage?: T;
+  gallery?: T;
   publicationStatus?: T;
   verificationStatus?: T;
   sourceType?: T;

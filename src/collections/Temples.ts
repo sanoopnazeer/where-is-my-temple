@@ -77,6 +77,43 @@ export const Temples: CollectionConfig = {
       localized: true,
     },
 
+    // Darshan timings
+    {
+      name: 'darshanTimings',
+      type: 'array',
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+        },
+        {
+          name: 'openTime',
+          type: 'date',
+          admin: {
+            date: {
+              pickerAppearance: 'timeOnly',
+            },
+          },
+        },
+        {
+          name: 'closeTime',
+          type: 'date',
+          admin: {
+            date: {
+              pickerAppearance: 'timeOnly',
+            },
+          },
+        },
+      ],
+    },
+
+    // Advisory shown with the darshan timings
+    {
+      name: 'advisory',
+      type: 'textarea',
+      localized: true,
+    },
+
     // Spiritual details (mobile Temple page). Paragraphs in textareas are
     // separated by a blank line.
     {
@@ -125,18 +162,6 @@ export const Temples: CollectionConfig = {
       ],
     },
 
-    // Notes shown with the darshan timings and the ritual schedule
-    {
-      name: 'advisory',
-      type: 'textarea',
-      localized: true,
-    },
-    {
-      name: 'ritualNote',
-      type: 'textarea',
-      localized: true,
-    },
-
     // Daily rituals (repeatable, embedded — no standalone Ritual collection)
     {
       name: 'dailyRituals',
@@ -173,17 +198,11 @@ export const Temples: CollectionConfig = {
       ],
     },
 
-    // Media
+    // Note shown with the ritual schedule
     {
-      name: 'heroImage',
-      type: 'upload',
-      relationTo: 'media',
-    },
-    {
-      name: 'gallery',
-      type: 'upload',
-      relationTo: 'media',
-      hasMany: true,
+      name: 'ritualNote',
+      type: 'textarea',
+      localized: true,
     },
 
     // Plan your visit
@@ -231,36 +250,6 @@ export const Temples: CollectionConfig = {
             { label: 'Meters', value: 'm' },
             { label: 'Kilometers', value: 'km' },
           ],
-        },
-      ],
-    },
-
-    // Darshan timings
-    {
-      name: 'darshanTimings',
-      type: 'array',
-      fields: [
-        {
-          name: 'label',
-          type: 'text',
-        },
-        {
-          name: 'openTime',
-          type: 'date',
-          admin: {
-            date: {
-              pickerAppearance: 'timeOnly',
-            },
-          },
-        },
-        {
-          name: 'closeTime',
-          type: 'date',
-          admin: {
-            date: {
-              pickerAppearance: 'timeOnly',
-            },
-          },
         },
       ],
     },
@@ -327,6 +316,19 @@ export const Temples: CollectionConfig = {
         { name: 'facebook', type: 'text' },
         { name: 'youtube', type: 'text' },
       ],
+    },
+
+    // Media
+    {
+      name: 'heroImage',
+      type: 'upload',
+      relationTo: 'media',
+    },
+    {
+      name: 'gallery',
+      type: 'upload',
+      relationTo: 'media',
+      hasMany: true,
     },
 
     // Editorial / verification

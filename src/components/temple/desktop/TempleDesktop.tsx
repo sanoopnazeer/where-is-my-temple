@@ -33,9 +33,25 @@ import {
   MedalIcon,
   MeditationIcon,
 } from '../mobile/MobileIcons'
-import { BusIcon } from '@/components/icons/TempleIcons'
+import {
+  BusIcon,
+  FacebookIcon,
+  InstagramIcon,
+  LinkIcon,
+  MailIcon,
+  PhoneIcon,
+  WhatsappIcon,
+  YoutubeIcon,
+} from '@/components/icons/TempleIcons'
 import { MobileMap } from '../mobile/MobileMap'
-import { buildTempleView, hasText, type HighlightIcon, type TransitKind } from '../templeView'
+import {
+  buildContactLinks,
+  buildTempleView,
+  hasText,
+  type ContactKind,
+  type HighlightIcon,
+  type TransitKind,
+} from '../templeView'
 import { DesktopCard } from './DesktopCard'
 import styles from './TempleDesktop.module.css'
 
@@ -51,6 +67,16 @@ const TRANSIT_ICONS: Record<TransitKind, ReactNode> = {
   train: <TrainIcon />,
   air: <PlaneIcon />,
   road: <BusIcon />,
+}
+
+const CONTACT_ICONS: Record<ContactKind, ReactNode> = {
+  phone: <PhoneIcon />,
+  whatsapp: <WhatsappIcon />,
+  email: <MailIcon />,
+  website: <LinkIcon />,
+  instagram: <InstagramIcon />,
+  facebook: <FacebookIcon />,
+  youtube: <YoutubeIcon />,
 }
 
 // The design gives each festival / guideline its own glyph; the CMS has no
@@ -85,6 +111,8 @@ export function TempleDesktop({
   const locationLine = [temple.locality, district, 'Kerala'].filter(hasText).join(', ')
   const hasCoordinates = typeof temple.latitude === 'number' && typeof temple.longitude === 'number'
   const locationName = hasText(temple.locality) ? temple.locality : temple.name
+
+  const contactLinks = buildContactLinks(temple)
 
   const hasSideColumn =
     darshan.length > 0 ||
@@ -279,6 +307,35 @@ export function TempleDesktop({
                   </div>
                 </div>
               )}
+            </DesktopCard>
+          )}
+
+          {contactLinks.length > 0 && (
+            <DesktopCard
+              icon={<PhoneIcon />}
+              tone="teal"
+              eyebrow="Get in Touch"
+              title="Contact & Social Links"
+            >
+              <ul className={styles.reachList}>
+                {contactLinks.map((link) => (
+                  <li key={link.kind} className={styles.reachItem}>
+                    <span className={styles.reachIcon}>{CONTACT_ICONS[link.kind]}</span>
+                    <div>
+                      <p className={styles.reachTitle}>{link.label}</p>
+                      <a
+                        href={link.href}
+                        className={styles.contactLink}
+                        {...(link.href.startsWith('http')
+                          ? { target: '_blank', rel: 'noopener noreferrer' }
+                          : {})}
+                      >
+                        {link.value}
+                      </a>
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </DesktopCard>
           )}
         </div>

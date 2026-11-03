@@ -716,3 +716,21 @@
     padding: 20px;
   }
 }
+
+/* Contact & social links */
+
+.contactLink {
+  display: inline-block;
+  margin-top: 2px;
+  max-width: 100%;
+  color: #924c00;
+  font-size: 12px;
+  line-height: 19px;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.contactLink:hover,
+.contactLink:focus-visible {
+  text-decoration: underline;
+}

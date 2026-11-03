@@ -114,3 +114,39 @@ export function buildTempleView(temple: Temple, locale: 'en' | 'ml' = 'en') {
 }
 
 export type TempleView = ReturnType<typeof buildTempleView>
+
+export type ContactKind =
+  | 'phone'
+  | 'whatsapp'
+  | 'email'
+  | 'website'
+  | 'instagram'
+  | 'facebook'
+  | 'youtube'
+export type ContactLink = { kind: ContactKind; label: string; value: string; href: string }
+
+function webUrl(value: string): string {
+  return /^https?:\/\//i.test(value) ? value : `https://${value}`
+}
+
+/** Contact and social entries the Temple actually has, in display order. */
+export function buildContactLinks(temple: Temple): ContactLink[] {
+  const { contact, socialLinks } = temple
+  const links: ContactLink[] = []
+  const add = (
+    kind: ContactKind,
+    label: string,
+    raw: string | null | undefined,
+    href: (value: string) => string,
+  ) => {
+    if (hasText(raw)) links.push({ kind, label, value: raw.trim(), href: href(raw.trim()) })
+  }
+  add('phone', 'Phone', contact?.phone, (v) => `tel:${v.replace(/[^\d+]/g, '')}`)
+  add('whatsapp', 'WhatsApp', contact?.whatsapp, (v) => `https://wa.me/${v.replace(/\D/g, '')}`)
+  add('email', 'Email', contact?.email, (v) => `mailto:${v}`)
+  add('website', 'Website', contact?.website, webUrl)
+  add('instagram', 'Instagram', socialLinks?.instagram, webUrl)
+  add('facebook', 'Facebook', socialLinks?.facebook, webUrl)
+  add('youtube', 'YouTube', socialLinks?.youtube, webUrl)
+  return links
+}

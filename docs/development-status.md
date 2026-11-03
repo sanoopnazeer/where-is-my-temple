@@ -1225,3 +1225,22 @@ are unchanged and shared with the mobile layout.
 - Checked against the design at 1280px with the design's own content (type,
   spacing, colours) and for overflow at 800, 1024 and 1600px. Not yet checked
   against real CMS content.
+
+## Temple page contact & social links (2026-11-04)
+
+Re-added contact/social links to the Temple page (CLAUDE.md §4 item 8) as a
+"Contact & Social Links" card ("Get in Touch") — the last card in the desktop
+left column and the last section on mobile. Not part of the approved Figma
+frames; it reuses the existing card, `reachItem` (desktop) and `box` (mobile)
+styles.
+
+- Data: existing `contact` (`phone`, `email`, `whatsapp`, `website`) and
+  `socialLinks` (`instagram`, `facebook`, `youtube`) groups — no CMS change.
+  `buildContactLinks` in `src/components/temple/templeView.ts` returns only
+  filled fields; the card is hidden when there are none.
+- Links: `tel:`, `https://wa.me/<digits>`, `mailto:`; website/social URLs get
+  `https://` prepended when missing and open in a new tab.
+- New icons in `src/components/icons/TempleIcons.tsx`: Instagram, Facebook,
+  YouTube, WhatsApp.
+- Corrects the earlier note above that the Temple page has no contact/social
+  block. Type-checked only; not yet verified in a browser or against real data.

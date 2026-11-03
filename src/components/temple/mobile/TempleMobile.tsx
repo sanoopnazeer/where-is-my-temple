@@ -4,12 +4,23 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { Temple } from '@/payload-types'
 import type { TempleLocale } from '@/app/(frontend)/temples/[slug]/locale'
 import {
+  buildContactLinks,
   buildTempleView,
+  type ContactKind,
   hasText,
   type HighlightIcon,
   type TransitKind,
 } from '../templeView'
-import { BusIcon } from '@/components/icons/TempleIcons'
+import {
+  BusIcon,
+  FacebookIcon,
+  InstagramIcon,
+  LinkIcon,
+  MailIcon,
+  PhoneIcon,
+  WhatsappIcon,
+  YoutubeIcon,
+} from '@/components/icons/TempleIcons'
 import { MobileCard } from './MobileCard'
 import { MobileHero } from './MobileHero'
 import { MobileMap } from './MobileMap'
@@ -47,6 +58,16 @@ const HIGHLIGHT_ICONS: Record<HighlightIcon, ReactNode> = {
   bathing: <BathingIcon />,
 }
 
+const CONTACT_ICONS: Record<ContactKind, ReactNode> = {
+  phone: <PhoneIcon />,
+  whatsapp: <WhatsappIcon />,
+  email: <MailIcon />,
+  website: <LinkIcon />,
+  instagram: <InstagramIcon />,
+  facebook: <FacebookIcon />,
+  youtube: <YoutubeIcon />,
+}
+
 const TRANSIT_ICONS: Record<TransitKind, ReactNode> = {
   train: <TrainIcon />,
   air: <PlaneIcon />,
@@ -63,6 +84,7 @@ export function TempleMobile({
   mapsApiKey?: string
 }) {
   const view = buildTempleView(temple, locale)
+  const contactLinks = buildContactLinks(temple)
   const { darshan, advisory, rituals, significance, highlights, festivals, guidelines } = view
   const hasCoordinates =
     typeof temple.latitude === 'number' && typeof temple.longitude === 'number'
@@ -332,6 +354,37 @@ export function TempleMobile({
                 </a>
               </>
             )}
+          </MobileCard>
+        )}
+
+        {contactLinks.length > 0 && (
+          <MobileCard
+            icon={<PhoneIcon />}
+            tone="lavender"
+            eyebrow="Get in Touch"
+            title="Contact & Social Links"
+          >
+            <div className={styles.boxes}>
+              {contactLinks.map((link) => (
+                <div key={link.kind} className={styles.box}>
+                  <span className={styles.boxIcon}>{CONTACT_ICONS[link.kind]}</span>
+                  <div>
+                    <p className={styles.boxTitle}>{link.label}</p>
+                    <p className={styles.boxText}>
+                      <a
+                        href={link.href}
+                        className={styles.contactLink}
+                        {...(link.href.startsWith('http')
+                          ? { target: '_blank', rel: 'noopener noreferrer' }
+                          : {})}
+                      >
+                        {link.value}
+                      </a>
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </MobileCard>
         )}
       </div>

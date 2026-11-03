@@ -206,3 +206,39 @@ export function CloseIcon(props: SVGProps<SVGSVGElement>) {
     </IconBase>
   )
 }
+
+export function InstagramIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBase {...props}>
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="0.6" />
+    </IconBase>
+  )
+}
+
+export function FacebookIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBase {...props}>
+      <path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8z" />
+    </IconBase>
+  )
+}
+
+export function YoutubeIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBase {...props}>
+      <rect x="2.5" y="5" width="19" height="14" rx="4" />
+      <path d="m10 9 5 3-5 3z" />
+    </IconBase>
+  )
+}
+
+export function WhatsappIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBase {...props}>
+      <path d="M3 21l1.6-4.8A9 9 0 1 1 8 19.5L3 21z" />
+      <path d="M9 9c0 3 3 6 6 6l1-1.5-2-1-1 .5c-.8-.4-1.6-1.2-2-2l.5-1-1-2L9 9z" />
+    </IconBase>
+  )
+}

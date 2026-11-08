@@ -85,6 +85,7 @@ export const Temples: CollectionConfig = {
         {
           name: 'label',
           type: 'text',
+          localized: true,
         },
         {
           name: 'openTime',

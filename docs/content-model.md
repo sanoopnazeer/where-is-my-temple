@@ -168,7 +168,7 @@ Repeatable array.
 
 | Field | Type | Required | Notes |
 |---|---|---:|---|
-| `label` | text | Yes | Example: Morning Darshan |
+| `label` | text (EN + ML) | Yes | Example: Morning Darshan |
 | `openTime` | time/text | Yes | Opening time |
 | `closeTime` | time/text | Yes | Closing time |
 

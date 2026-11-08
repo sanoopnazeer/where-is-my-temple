@@ -1,5 +1,6 @@
 import type { Temple } from '@/payload-types'
 import { formatIstTimeShort, istHour } from '@/utilities/ist'
+import { TRANSIT_TYPES, type TransitType } from '@/utilities/transitTypes'
 
 /*
  * Display data derived from a Temple, shared by the mobile and desktop Temple
@@ -30,22 +31,22 @@ export function timeRange(start?: string | null, end?: string | null): string | 
   return end ? `${formatIstTimeShort(start)} – ${formatIstTimeShort(end)}` : formatIstTimeShort(start)
 }
 
-function transitKind(type: string | null | undefined): TransitKind {
-  const value = (type ?? '').toLowerCase()
-  if (/(train|rail|metro|ട്രെയിൻ|റെയിൽ|മെട്രോ)/.test(value)) return 'train'
-  if (/(air|flight|plane|വിമാന|എയർ)/.test(value)) return 'air'
-  return 'road'
+const TRANSIT_KINDS: Record<TransitType, TransitKind> = {
+  road: 'road',
+  bus: 'road',
+  rail: 'train',
+  metro: 'train',
+  air: 'air',
 }
 
 type TransitPoint = NonNullable<Temple['transitPoints']>[number]
 
-/** "By train (2 km)" in English; the Malayalam type is entered as a full label, so no "By". */
+/** "By Rail (2 km)" / "റെയിൽ മാർഗ്ഗം (2 km)"; the heading alone without a distance. */
 function transitHeading(point: TransitPoint, locale: 'en' | 'ml'): string {
-  const label = hasText(point.type) ? point.type : locale === 'ml' ? '' : 'road'
-  const base = locale === 'ml' ? label : `By ${label}`
+  const label = TRANSIT_TYPES.find((type) => type.value === point.type)?.heading[locale] ?? ''
   return typeof point.distance === 'number'
-    ? `${base} (${Number(point.distance.toFixed(2))} ${point.unit ?? 'km'})`
-    : base
+    ? `${label} (${Number(point.distance.toFixed(2))} ${point.unit ?? 'km'})`
+    : label
 }
 
 export function buildTempleView(temple: Temple, locale: 'en' | 'ml' = 'en') {
@@ -79,14 +80,19 @@ export function buildTempleView(temple: Temple, locale: 'en' | 'ml' = 'en') {
     }
   })
 
-  const transit = (temple.transitPoints ?? [])
-    .filter((point) => point.type || point.name)
-    .map((point, index) => ({
-      id: point.id ?? String(index),
-      kind: transitKind(point.type),
-      heading: transitHeading(point, locale),
-      text: hasText(point.description) ? point.description : (point.name ?? ''),
-    }))
+  // Only transit types that have a description are shown.
+  const transit = (temple.transitPoints ?? []).flatMap((point, index) =>
+    point.type && hasText(point.description)
+      ? [
+          {
+            id: point.id ?? String(index),
+            kind: TRANSIT_KINDS[point.type],
+            heading: transitHeading(point, locale),
+            text: point.description,
+          },
+        ]
+      : [],
+  )
 
   const hasCoordinates =
     typeof temple.latitude === 'number' && typeof temple.longitude === 'number'

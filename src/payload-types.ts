@@ -266,13 +266,16 @@ export interface Temple {
     [k: string]: unknown;
   } | null;
   directionNote?: string | null;
+  /**
+   * One entry per transit type. Entries without a description are not shown on the public page.
+   */
   transitPoints?:
     | {
+        type: 'road' | 'bus' | 'rail' | 'air' | 'metro';
         description?: string | null;
-        type?: string | null;
-        name?: string | null;
         distance?: number | null;
         unit?: ('m' | 'km') | null;
+        name?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -554,11 +557,11 @@ export interface TemplesSelect<T extends boolean = true> {
   transitPoints?:
     | T
     | {
-        description?: T;
         type?: T;
-        name?: T;
+        description?: T;
         distance?: T;
         unit?: T;
+        name?: T;
         id?: T;
       };
   dressCode?:

@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload'
 import { isAdmin } from '../access/isAdmin'
 import { publishedOrAdmin } from '../access/publishedOrAdmin'
 import { publicationStatusField } from '../fields/publicationStatus'
+import { TRANSIT_TYPES } from '../utilities/transitTypes'
 
 export const Temples: CollectionConfig = {
   slug: 'temples',
@@ -224,20 +225,25 @@ export const Temples: CollectionConfig = {
     {
       name: 'transitPoints',
       type: 'array',
+      admin: {
+        description: 'One entry per transit type. Entries without a description are not shown on the public page.',
+      },
+      validate: (value: unknown) => {
+        const types = ((value as { type?: string | null }[] | null | undefined) ?? [])
+          .map((point) => point?.type)
+          .filter(Boolean)
+        return new Set(types).size === types.length || 'Each transit type can be added only once.'
+      },
       fields: [
+        {
+          name: 'type',
+          type: 'select',
+          required: true,
+          options: TRANSIT_TYPES.map(({ value, en, ml }) => ({ label: `${en} (${ml})`, value })),
+        },
         {
           name: 'description',
           type: 'textarea',
-          localized: true,
-        },
-        {
-          name: 'type',
-          type: 'text',
-          localized: true,
-        },
-        {
-          name: 'name',
-          type: 'text',
           localized: true,
         },
         {
@@ -251,6 +257,11 @@ export const Temples: CollectionConfig = {
             { label: 'Meters', value: 'm' },
             { label: 'Kilometers', value: 'km' },
           ],
+        },
+        {
+          name: 'name',
+          type: 'text',
+          localized: true,
         },
       ],
     },

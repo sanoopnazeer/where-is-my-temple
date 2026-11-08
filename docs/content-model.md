@@ -147,9 +147,9 @@ Repeatable array.
 
 | Field | Type | Required | Notes |
 |---|---|---:|---|
-| `type` | select/text | Yes | Localized (en/ml). Example: railway, bus, airport. Drives the icon via keyword match (English and Malayalam keywords) |
-| `name` | text | Yes | Localized (en/ml). Transit point name |
-| `description` | textarea | No | Localized (en/ml). Text inside each How to Reach box |
+| `type` | select | Yes | Fixed list: `road`, `bus`, `rail`, `air`, `metro` (shown as Road/റോഡ്, Bus/ബസ്, Rail/റെയിൽ, Air/വിമാനം, Metro/മെട്രോ). One entry per type. Drives the icon and heading; labels live in `src/utilities/transitTypes.ts` |
+| `name` | text | No | Localized (en/ml). Optional; not shown publicly |
+| `description` | textarea | No | Localized (en/ml). Text inside each How to Reach box. Types without a description are not shown |
 | `distance` | number | Yes | Numeric value |
 | `unit` | select | Yes | `m`, `km` |
 

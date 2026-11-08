@@ -740,3 +740,9 @@
 .contactLink:focus-visible {
   text-decoration: underline;
 }
+
+/* Keep line breaks typed in the CMS (advisory + ritual note) */
+.notice p,
+.noticeInline span {
+  white-space: pre-line;
+}

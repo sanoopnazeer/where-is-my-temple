@@ -389,6 +389,7 @@
   margin-top: 2px;
   font-size: 12px;
   line-height: 19px;
+  white-space: pre-line;
 }
 
 /* Direction */
@@ -689,6 +690,7 @@
 }
 
 .root .guidelinesIntro {
+  white-space: pre-line;
   font-size: 12px;
   margin-bottom: 14px;
 }
@@ -704,6 +706,10 @@
   gap: 12px;
   font-size: 12px;
   line-height: 19px;
+}
+
+.guidelines li p {
+  white-space: pre-line;
 }
 
 .guidelineIcon {

@@ -195,6 +195,10 @@
   margin-bottom: 12px;
 }
 
+.multiline {
+  white-space: pre-line;
+}
+
 /* Icon item lists (spiritual details + highlights) */
 
 .item {
@@ -291,6 +295,7 @@
 
 .checks li > span {
   min-width: 0;
+  white-space: pre-line;
 }
 
 .checks strong {
@@ -346,6 +351,7 @@
 
 .boxText {
   overflow-wrap: anywhere;
+  white-space: pre-line;
 }
 
 /* Direction */

@@ -260,7 +260,7 @@ export function TempleMobile({
           >
             <div lang={locale}>
               {hasText(temple.visitorGuidelinesIntro) && (
-                <p className={styles.intro}>{temple.visitorGuidelinesIntro}</p>
+                <p className={`${styles.intro} ${styles.multiline}`}>{temple.visitorGuidelinesIntro}</p>
               )}
               {guidelines.length > 0 && (
                 <ul className={styles.checks}>
